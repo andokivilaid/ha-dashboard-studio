@@ -29,12 +29,15 @@ not mix in npm or yarn.
 ## Running the checks
 
 ```bash
-pnpm typecheck            # tsc across every package
-pnpm test                 # vitest unit tests
-pnpm build                # production build of the web app
+pnpm verify               # everything CI runs except the browser tests
 pnpm test:e2e             # Playwright; starts the built app itself
 pnpm test:e2e --ui        # interactive
 ```
+
+`verify` is `check:imports`, `catalog:validate`, `typecheck`, `test` and
+`build` in that order. Run it before pushing — `pnpm build` alone does **not**
+typecheck the workspace packages' own scripts, so it will happily pass while
+`pnpm typecheck` fails.
 
 End-to-end tests include visual snapshots. Playwright names a baseline after
 the platform that produced it, and font rasterisation differs between macOS and

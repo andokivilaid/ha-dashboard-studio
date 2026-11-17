@@ -23,7 +23,8 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:watch": "vitest",
-    "typecheck": "pnpm -r --no-bail typecheck"
+    "typecheck": "pnpm -r --no-bail typecheck",
+    "verify": "pnpm check:imports && pnpm catalog:validate && pnpm typecheck && pnpm test && pnpm build"
   },
   "devDependencies": {
     "@playwright/test": "1.65.1",

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { providerErrorResponse } from "@/lib/ai/errors";
 import { z } from "zod";
 import { anthropicGenerate } from "@/lib/ai/anthropic";
 import { geminiGenerate } from "@/lib/ai/gemini";
@@ -61,13 +62,6 @@ export async function POST(req: Request) {
           });
     return NextResponse.json(result);
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
-    const status = /api key|unauthor|permission|invalid_api/i.test(message) ? 401 : 502;
-    return NextResponse.json({ error: redact(message) }, { status });
+    return providerErrorResponse(err);
   }
-}
-
-/** Never echo a key back, even inside a provider error string. */
-function redact(message: string): string {
-  return message.replace(/(sk-ant-[\w-]{6})[\w-]+/g, "$1…").replace(/(AIza[\w-]{4})[\w-]+/g, "$1…");
 }

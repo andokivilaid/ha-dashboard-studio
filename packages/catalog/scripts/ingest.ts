@@ -235,6 +235,7 @@ async function main() {
         lastCommit: repo.pushed_at,
         topics: repo.topics ?? [],
         yamlFile,
+        inlineYaml: null,
         yamlOmittedReason: yamlFile
           ? null
           : spdx
