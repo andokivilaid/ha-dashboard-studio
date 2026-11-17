@@ -19,3 +19,4 @@ packages/catalog/data/raw
 # Playwright visual baselines are committed; its scratch output is not.
 /test-results
 /playwright-report
+.env*
