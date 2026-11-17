@@ -62,9 +62,38 @@ export function EntitiesRow({ row }: { row: RowConfig }) {
       </div>
     );
 
-  const entityId = cfg.entity as string | undefined;
+  // A custom row type (fold-entity-row, multiple-entity-row, ...) often wraps
+  // the real entity rather than naming it directly. Showing its `head` or its
+  // children is far more useful than a row that reads "Unknown".
+  const head = cfg.head as Record<string, unknown> | undefined;
+  const nested = cfg.entities as RowConfig[] | undefined;
+  const entityId = (cfg.entity as string | undefined) ?? (head?.entity as string | undefined);
+
+  if (!entityId && type) {
+    return (
+      <>
+        <div className="hui-entities-row" data-row-type={type}>
+          <span className="hui-entities-row__icon">
+            <Icon icon={(cfg.icon as string) ?? (head?.icon as string) ?? "mdi:puzzle-outline"} size={22} />
+          </span>
+          <span className="hui-entities-row__name">
+            {String(cfg.name ?? head?.name ?? type)}
+          </span>
+          <span className="hui-entities-row__state" style={{ color: "var(--secondary-text-color)", fontSize: 12 }}>
+            {type.startsWith("custom:") ? "custom row" : type}
+          </span>
+        </div>
+        {nested?.map((child, i) => (
+          <div key={i} style={{ paddingLeft: 16 }}>
+            <EntitiesRow row={child} />
+          </div>
+        ))}
+      </>
+    );
+  }
+
   const entity = entityId ? hass.states[entityId] : undefined;
-  const name = (cfg.name as string) ?? computeEntityName(entity, entityId);
+  const name = (cfg.name as string) ?? (head?.name as string) ?? computeEntityName(entity, entityId);
   const icon = (cfg.icon as string) ?? stateIcon(entity, entityId);
   const color = isActive(entity) ? (stateColorVar(entity) ?? "var(--state-active-color)") : "var(--state-icon-color)";
   const secondary = cfg.secondary_info as string | undefined;

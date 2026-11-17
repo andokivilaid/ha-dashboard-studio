@@ -71,6 +71,11 @@ cards.
 
 ![A rendered dashboard detail page](docs/screenshots/detail-sections.png)
 
+Here is a dashboard from a stranger's repository — 73 cards, 16 custom card
+types, entity ids that exist in exactly one house — rendered in the browser:
+
+![A harvested dashboard rendering](docs/screenshots/real-dashboard.png)
+
 ## The gallery
 
 ```

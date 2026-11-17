@@ -43,7 +43,9 @@ jobs:
       - run: node scripts/sync-assets.mjs
       - run: pnpm exec playwright install --with-deps chromium
       - run: pnpm build
-      - run: pnpm test:e2e
+      # Visual snapshots are produced per platform; the committed baselines are
+      # macOS. `visual-baselines.yml` regenerates the Linux set on demand.
+      - run: pnpm test:e2e --grep-invert "visual:"
         env:
           CI: "1"
       - uses: actions/upload-artifact@v4
