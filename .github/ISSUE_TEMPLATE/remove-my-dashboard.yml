@@ -1,0 +1,22 @@
+name: Remove my dashboard
+description: You are the author of a catalogued dashboard and want it taken down.
+title: "Remove: "
+labels: ["takedown"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Removal requests from the original author are actioned without discussion
+        and without asking for proof. Just tell us which entry.
+  - type: input
+    id: url
+    attributes:
+      label: Gallery URL
+      placeholder: https://ha-dashboard-studio.vercel.app/gallery/...
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: Optional. For example, if you would rather the link stayed but the YAML went.

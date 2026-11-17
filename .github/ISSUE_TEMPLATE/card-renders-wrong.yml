@@ -1,0 +1,25 @@
+name: A card renders wrong
+description: A dashboard renders differently here than it does in Home Assistant.
+labels: ["renderer"]
+body:
+  - type: input
+    id: url
+    attributes:
+      label: Where
+      description: The gallery URL, or "builder" if you hit it there.
+    validations:
+      required: true
+  - type: textarea
+    id: yaml
+    attributes:
+      label: The card's YAML
+      render: yaml
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What Home Assistant shows
+      description: A screenshot from your own instance is ideal.
+    validations:
+      required: true
