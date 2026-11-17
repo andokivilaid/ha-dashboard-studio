@@ -163,6 +163,7 @@ entity inventory  ──→  generate YAML  ──→  render
   the chat, so you can disagree with it.
 
 Every assistant and critic message carries a **Revert to this version** button.
+The flow is described in more detail in [docs/ai-builder.md](docs/ai-builder.md).
 
 ## Connecting a real Home Assistant
 
