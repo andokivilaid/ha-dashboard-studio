@@ -280,31 +280,34 @@ pnpm catalog:bundle
 ## Testing
 
 ```bash
-pnpm typecheck     # tsc across all four packages
-pnpm test          # 243 unit tests (vitest)
-pnpm build
+pnpm verify        # check:imports + catalog:validate + typecheck + test + build
 pnpm test:e2e      # Playwright, incl. visual snapshots
 ```
 
-**Unit tests** cover the YAML dialect (including anchors, aliases and every
+`pnpm build` alone does not typecheck the workspace packages' own scripts, so
+`verify` is the one to run before pushing.
+
+**243 unit tests** cover the YAML dialect (anchors, aliases and every
 `!include` variant), dashboard analysis and tag derivation, state formatting
-and icon selection across every domain, the read-only guarantees of the mock
-`hass`, entity-inventory filtering, prompt construction, YAML extraction from
-model replies, the HACS registry, entity synthesis (including that it never overwrites a real entity and is
-deterministic), the websocket allow-list that makes live connections
-read-only, and the catalogue — including a test that **fails if any non-permissive entry ever
-stores YAML**, and one that checks every curated dashboard only references
-entities that exist.
+and icon selection across every domain, entity synthesis (that it never
+overwrites a real entity, and is deterministic), the configuration linter
+(every Bubble Card rule, card availability, invented entity ids), HACS resource
+reconciliation (installed-upstream versus renderable-here), prompt
+construction, provider-error classification and key redaction, the websocket
+allow-list that makes live connections read-only, and the catalogue — including
+a test that **fails if any non-permissive entry ever stores YAML**, and one
+that checks every curated dashboard only references entities that exist.
 
 **End-to-end tests** load the real built app and assert on the DOM the renderer
 produces: tile features compute the right percentage, the entities card emits a
 row per entity, the thermostat shows current and target temperature, badges
 render, stacks nest, conditionals dim, unknown cards degrade to placeholders,
 and **real Mushroom elements load through the proxy and reach `ready`**. The
-builder suite drives the chat panel end to end against a stubbed provider and
-asserts the visual self-check actually captures a PNG and displays it. Visual
-snapshots cover the landing page, the gallery, two rendered dashboards, the
-builder and the mobile layout.
+builder suite drives the chat panel end to end against a stubbed provider,
+asserts the visual self-check actually captures a PNG and displays it, and
+checks the linter flags a misplaced Bubble Card pop-up, a pop-up with no hash
+and a non-existent entity. Visual snapshots cover the landing page, the
+gallery, two rendered dashboards, the builder and the mobile layout.
 
 ## Deployment
 

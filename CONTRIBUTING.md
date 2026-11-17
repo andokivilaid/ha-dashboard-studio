@@ -76,12 +76,28 @@ regenerate them.
 A card that is *not* implemented must degrade to `FallbackCard`, never to an
 error. Dashboards from the wild use cards we have never heard of.
 
+## Adding a lint rule
+
+`packages/lovelace/src/lint.ts` holds the configuration rules — the things a
+screenshot cannot catch. A rule is worth adding when a generated dashboard can
+be *silently* wrong: it renders, it photographs fine, and it does not work.
+The Bubble Card pop-up rules are the archetype.
+
+Give the rule a stable `rule` id, a severity (`error` only when the dashboard
+is genuinely broken), and a message written at the model, since it is fed back
+verbatim on a correction turn — say what to do, not just what is wrong. Add a
+case to `tests/unit/lint.test.ts` for both the violation and the shape that
+should *not* trip it.
+
 ## Adding a HACS bundle
 
 Add an entry to `CUSTOM_CARD_BUNDLES` in `packages/lovelace/src/registry.ts`
 with a **pinned** version in the `source` URL, the licence, and every custom
-element the bundle defines. The proxy at `/api/hacs/[slug]` picks it up
-automatically. Check it loads with:
+element the bundle defines. Add a URL fragment for it to `BUNDLE_URL_HINTS` in
+`resources.ts` too, so a live instance that has it installed is recognised —
+HACS paths look like `/hacsfiles/lovelace-mushroom/mushroom.js`, and that path
+is the only record of which cards exist. The proxy at `/api/hacs/[slug]` picks
+it up automatically. Check it loads with:
 
 ```bash
 curl -I http://localhost:3177/api/hacs/<slug>.js
