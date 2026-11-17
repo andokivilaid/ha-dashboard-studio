@@ -31,14 +31,14 @@ export function SiteNav() {
           </span>
         </Link>
 
-        <nav className="flex items-center gap-1" aria-label="Main">
+        <nav className="hs-scroll-x flex min-w-0 items-center gap-1" aria-label="Main">
           {LINKS.map(({ href, label, icon: Icon }) => {
             const active = pathname === href || pathname.startsWith(`${href}/`);
             return (
               <Link
                 key={href}
                 href={href}
-                className={cn("hs-btn hs-btn--ghost hs-btn--sm gap-1.5")}
+                className={cn("hs-btn hs-btn--ghost hs-btn--sm shrink-0 gap-1.5")}
                 style={
                   active
                     ? { background: "var(--brand-soft)", color: "var(--brand)" }
@@ -53,7 +53,7 @@ export function SiteNav() {
           })}
         </nav>
 
-        <div className="ml-auto flex items-center gap-1">
+        <div className="ml-auto flex shrink-0 items-center gap-1">
           <ThemeToggle />
           <a
             className="hs-btn hs-btn--ghost hs-btn--sm"

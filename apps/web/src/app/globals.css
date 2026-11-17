@@ -276,6 +276,11 @@ body {
     overflow: hidden;
     background: var(--surface-2);
     isolation: isolate;
+    /* The scaled render inside is laid out at a fixed logical width; without
+       these the frame would take its width from that content and overflow. */
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
   .hs-preview-frame__inner {
     transform-origin: top left;

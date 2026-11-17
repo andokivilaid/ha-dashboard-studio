@@ -238,7 +238,7 @@ pnpm catalog:bundle
 
 ```bash
 pnpm typecheck     # tsc across all four packages
-pnpm test          # 139 unit tests (vitest)
+pnpm test          # 163 unit tests (vitest)
 pnpm build
 pnpm test:e2e      # Playwright, incl. visual snapshots
 ```
@@ -247,9 +247,10 @@ pnpm test:e2e      # Playwright, incl. visual snapshots
 `!include` variant), dashboard analysis and tag derivation, state formatting
 and icon selection across every domain, the read-only guarantees of the mock
 `hass`, entity-inventory filtering, prompt construction, YAML extraction from
-model replies, the HACS registry, and the catalogue — including a test that
-**fails if any non-permissive entry ever stores YAML**, and one that checks
-every curated dashboard only references entities that exist.
+model replies, the HACS registry, the websocket allow-list that makes live connections read-only, and the
+catalogue — including a test that **fails if any non-permissive entry ever
+stores YAML**, and one that checks every curated dashboard only references
+entities that exist.
 
 **End-to-end tests** load the real built app and assert on the DOM the renderer
 produces: tile features compute the right percentage, the entities card emits a

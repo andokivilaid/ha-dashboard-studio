@@ -112,11 +112,20 @@ const BINARY_SENSOR_LABELS: Record<string, [on: string, off: string]> = {
 
 export function formatNumber(value: number, precision?: number): string {
   if (!Number.isFinite(value)) return String(value);
-  const digits =
-    precision ?? (Number.isInteger(value) ? 0 : Math.abs(value) >= 100 ? 0 : Math.abs(value) >= 10 ? 1 : 2);
+  // An explicit `display_precision` is honoured exactly, as Home Assistant
+  // does. Otherwise decimals are a ceiling, not a target: 8.6 is "8.6", never
+  // "8.60".
+  if (precision !== undefined) {
+    return new Intl.NumberFormat("en-GB", {
+      minimumFractionDigits: precision,
+      maximumFractionDigits: precision,
+    }).format(value);
+  }
+  const abs = Math.abs(value);
+  const maxDigits = Number.isInteger(value) ? 0 : abs >= 100 ? 0 : abs >= 10 ? 1 : 2;
   return new Intl.NumberFormat("en-GB", {
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: maxDigits,
   }).format(value);
 }
 

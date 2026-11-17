@@ -19,6 +19,43 @@ import { normalizeIconName } from "./Icon";
 
 type AnyRecord = Record<string, unknown>;
 
+/**
+ * Maps `mdi:lightbulb` to the glyph itself.
+ *
+ * The webfont's `.mdi-x::before { content: "\F0335" }` rules live in the
+ * document stylesheet, and CSS does not cross shadow boundaries — so an icon
+ * the shims render *inside a HACS card's shadow root* would be blank. Parsing
+ * the codepoints out of that same (already cached) stylesheet once lets the
+ * shims set the character directly, which works in any tree scope.
+ */
+const MDI_FONT = '"Material Design Icons"';
+let codepoints: Map<string, string> | null = null;
+let codepointsPromise: Promise<Map<string, string>> | null = null;
+
+export function mdiStylesheetUrl(): string {
+  return "/mdi/materialdesignicons.min.css";
+}
+
+async function loadCodepoints(): Promise<Map<string, string>> {
+  if (codepoints) return codepoints;
+  if (!codepointsPromise) {
+    codepointsPromise = fetch(mdiStylesheetUrl())
+      .then((r) => (r.ok ? r.text() : ""))
+      .then((css) => {
+        const map = new Map<string, string>();
+        const re = /\.mdi-([a-z0-9-]+)::?before\s*\{\s*content\s*:\s*"\\([0-9a-fA-F]+)"/g;
+        let match: RegExpExecArray | null;
+        while ((match = re.exec(css))) {
+          map.set(match[1], String.fromCodePoint(Number.parseInt(match[2], 16)));
+        }
+        codepoints = map;
+        return map;
+      })
+      .catch(() => new Map<string, string>());
+  }
+  return codepointsPromise;
+}
+
 let installed = false;
 
 /**
@@ -30,8 +67,18 @@ export function installHaElementShims(): void {
   if (installed || typeof window === "undefined" || !("customElements" in window)) return;
   installed = true;
 
+  /**
+   * A constructor may only be registered once, so each tag gets its own
+   * subclass. Registration is also best-effort: a bundle that already defined
+   * the element must not abort the rest of the install.
+   */
   function define(tag: string, ctor: CustomElementConstructor): void {
-    if (!customElements.get(tag)) customElements.define(tag, ctor);
+    if (customElements.get(tag)) return;
+    try {
+      customElements.define(tag, class extends ctor {});
+    } catch {
+      /* another bundle won the race */
+    }
   }
 
   class HaCardShim extends HTMLElement {
@@ -102,11 +149,22 @@ export function installHaElementShims(): void {
       this.style.width = "var(--mdc-icon-size, 24px)";
       this.style.height = "var(--mdc-icon-size, 24px)";
       this.style.lineHeight = "1";
+
       const span = (this.firstElementChild as HTMLElement | null) ?? document.createElement("span");
+      span.style.cssText = `font-family:${MDI_FONT};font-size:var(--mdc-icon-size,24px);line-height:1;font-weight:normal;font-style:normal;-webkit-font-smoothing:antialiased;`;
+      // The class still helps when the element happens to sit in the document.
       span.className = `mdi mdi-${name}`;
-      span.style.fontSize = "var(--mdc-icon-size, 24px)";
-      span.style.lineHeight = "1";
       if (!this.firstElementChild) this.appendChild(span);
+
+      const glyph = codepoints?.get(name);
+      if (glyph !== undefined) {
+        span.textContent = glyph;
+        return;
+      }
+      void loadCodepoints().then((map) => {
+        const resolved = map.get(normalizeIconName(this.icon));
+        if (resolved !== undefined) span.textContent = resolved;
+      });
     }
   }
 
@@ -123,6 +181,14 @@ export function installHaElementShims(): void {
     }
     set hass(_value: unknown) {
       this.update();
+    }
+
+    /**
+     * Both halves of the accessor pair must be redeclared: overriding only the
+     * getter removes the inherited setter, and every Lit card assigns `.icon`.
+     */
+    override set icon(value: string) {
+      super.icon = value;
     }
 
     override get icon(): string {

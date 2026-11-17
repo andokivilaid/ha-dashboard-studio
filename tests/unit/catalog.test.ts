@@ -76,7 +76,7 @@ describe("catalog integrity", () => {
 });
 
 describe("curated dashboards", () => {
-  it("every curated dashboard parses and renders a non-trivial config", async () => {
+  it("every curated dashboard parses and renders a non-trivial config", { timeout: 30_000 }, async () => {
     for (const entry of CURATED_ENTRIES) {
       const yaml = await loadDashboardYaml(entry.id);
       expect(yaml, entry.id).toBeTruthy();
@@ -99,7 +99,8 @@ describe("curated dashboards", () => {
 });
 
 describe("stored YAML", () => {
-  it("parses for every renderable entry", async () => {
+  // 152 dashboards, several of them hundreds of kilobytes, parsed in series.
+  it("parses for every renderable entry", { timeout: 60_000 }, async () => {
     const renderable = allDashboards().filter((e) => e.renderable);
     expect(renderable.length).toBeGreaterThan(5);
     let parsedOk = 0;

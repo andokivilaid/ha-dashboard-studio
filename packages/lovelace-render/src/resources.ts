@@ -24,7 +24,11 @@ export function bundleStatus(slug: string): ResourceStatus {
  * pushes into) and `loadCardHelpers` (used to build nested cards and rows).
  */
 function installFrontendShims(): void {
-  installHaElementShims();
+  try {
+    installHaElementShims();
+  } catch {
+    /* a page may already carry the real frontend elements */
+  }
   const w = window as unknown as Record<string, unknown>;
   if (!w.customCards) w.customCards = [];
   if (!w.loadCardHelpers) {

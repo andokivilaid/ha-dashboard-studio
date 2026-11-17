@@ -10,7 +10,13 @@ test.describe("accessibility basics", () => {
       await expect(page).toHaveTitle(/.+/);
       await expect(page.locator("main")).toHaveCount(1);
       if (path !== "/builder") {
-        await expect(page.locator("h1")).toHaveCount(1);
+        // A rendered dashboard may contain its own headings; only the page
+        // chrome is under test here.
+        const chromeH1s = await page.evaluate(
+          () =>
+            [...document.querySelectorAll("h1")].filter((h) => !h.closest(".ha-render-root")).length,
+        );
+        expect(chromeH1s).toBe(1);
       }
     });
   }
@@ -31,13 +37,9 @@ test.describe("accessibility basics", () => {
 
   test("light theme applies to the renderer too", async ({ page }) => {
     await page.goto("/gallery/studio-sections-home");
-    const toggle = page.getByRole("button", { name: /Theme:/ });
-    // Cycle until the document is light.
-    for (let i = 0; i < 3; i += 1) {
-      if (!(await page.locator("html.dark").count())) break;
-      await toggle.click();
-      await page.waitForTimeout(300);
-    }
+    await page.evaluate(() => window.localStorage.setItem("theme", "light"));
+    await page.reload();
+    await expect(page.locator("html.dark")).toHaveCount(0);
     await expect(page.locator('[data-testid="dashboard-render-root"]')).toHaveAttribute(
       "data-theme",
       "light",

@@ -46,8 +46,8 @@ export function GalleryCard({ entry, priority = false }: { entry: DashboardEntry
   const { analysis } = entry;
 
   return (
-    <div ref={ref}>
-      <Link href={`/gallery/${entry.slug}`} className="hs-card hs-card--hover block h-full">
+    <div ref={ref} className="min-w-0">
+      <Link href={`/gallery/${entry.slug}`} className="hs-card hs-card--hover block h-full min-w-0 overflow-hidden">
         {entry.renderable ? (
           yaml ? (
             <DashboardPreview yaml={yaml} height={230} loadCustomCards />

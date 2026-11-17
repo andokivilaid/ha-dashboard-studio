@@ -23,8 +23,17 @@ export default defineConfig({
     colorScheme: "dark",
   },
   projects: [
-    { name: "chromium", use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } } },
-    { name: "mobile", use: { ...devices["iPhone 14"] }, testMatch: /responsive\.spec\.ts/ },
+    {
+      name: "chromium",
+      use: { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } },
+      testIgnore: /responsive\.spec\.ts/,
+    },
+    {
+      // Pixel 7 is Chromium-based, so CI only has to install one browser.
+      name: "mobile",
+      use: { ...devices["Pixel 7"] },
+      testMatch: /responsive\.spec\.ts/,
+    },
   ],
   webServer: process.env.E2E_BASE_URL
     ? undefined

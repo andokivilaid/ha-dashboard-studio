@@ -41,7 +41,9 @@ test.describe("builder (mock mode)", () => {
     );
 
     await waitForRender(page, 2);
-    await expect(page.getByText("Playwright section")).toBeVisible();
+    await expect(
+      page.locator('[data-testid="preview-pane"]').getByText("Playwright section"),
+    ).toBeVisible();
     await expect(page.locator('[data-testid="preview-pane"]').getByText("Living room ceiling")).toBeVisible();
     await expect(page.locator('[data-testid="yaml-status"]')).toContainText("1 views");
   });
@@ -61,7 +63,9 @@ test.describe("builder (mock mode)", () => {
     await stabilise(page);
     await page.getByLabel("Start from a template").selectOption("classic-masonry");
     await waitForRender(page, 5);
-    await expect(page.locator('[data-testid="preview-pane"]').getByText("Doors & windows")).toBeVisible();
+    await expect(
+      page.locator('[data-testid="preview-pane"]').getByText("Doors & windows"),
+    ).toBeVisible();
   });
 
   test("device switches resize the canvas", async ({ page }) => {
