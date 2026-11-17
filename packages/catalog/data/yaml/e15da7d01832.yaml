@@ -1,0 +1,273 @@
+---
+# The main JaMa Villa dashboard with the most important infos.
+#
+title: Home
+icon: mdi:information-outline
+path: home
+
+badges: []
+cards:
+  - type: custom:state-switch
+    entity: user
+    states:
+      Markus:
+        type: custom:decluttering-card
+        template: welcome_header
+        variables:
+          - image: "/local/assets/markus.jpg"
+      Jasmina:
+        type: custom:decluttering-card
+        template: welcome_header
+        variables:
+          - image: "/local/assets/jasmina.jpg"
+
+  - type: vertical-stack
+    cards:
+      - type: markdown
+        content: |
+          {% if now().month in (1,) %}
+          ## Januar {{ now().day }}
+          {% elif now().month in (2,) %}
+          ## Februar {{ now().day }}
+          {% elif now().month in (3,) %}
+          ## März {{ now().day }}
+          {% elif now().month in (4,) %}
+          ## April {{ now().day }}
+          {% elif now().month in (5,) %}
+          ## Mai {{ now().day }}
+          {% elif now().month in (6,) %}
+          ## Juni {{ now().day }}
+          {% elif now().month in (7,) %}
+          ## Juli {{ now().day }}
+          {% elif now().month in (8,) %}
+          ## August {{ now().day }}
+          {% elif now().month in (9,) %}
+          ## September {{ now().day }}
+          {% elif now().month in (10,) %}
+          ## Oktober {{ now().day }}
+          {% elif now().month in (11,) %}
+          ## November {{ now().day }}
+          {% elif now().month in (12,) %}
+          ## Dezember {{ now().day }}
+          {% endif %}
+
+      - type: custom:simple-weather-card
+        entity: weather.jama_villa
+        name: "zu Hause"
+        secondary_info: precipitation
+        tap_action:
+          action: more-info
+          cards:
+        backdrop:
+          text: var(--app-header-text-color)
+          fade: true
+
+      - type: vertical-stack
+        cards:
+          - type: custom:decluttering-card
+            template: card_header
+            variables:
+              - content: "Die Drei"
+
+          - type: horizontal-stack
+            cards:
+              - type: tile
+                entity: person.jasmina
+                show_entity_picture: true
+              - type: tile
+                entity: person.markus
+                show_entity_picture: true
+              - type: tile
+                entity: person.mia
+                show_entity_picture: true
+
+          - type: entity-filter
+            show_empty: false
+            entities:
+              - entity: light.hall_lights
+                tap_action:
+                  action: toggle
+              - entity: light.nursery_stars
+                tap_action:
+                  action: toggle
+              - entity: light.nursery_bed
+                tap_action:
+                  action: toggle
+              - entity: light.kitchen_ledstrip
+                tap_action:
+                  action: toggle
+              - entity: light.livingroom_tv
+                tap_action:
+                  action: toggle
+              - entity: light.garden_backyard_tree
+                tap_action:
+                  action: toggle
+              - entity: light.garden_rockpear
+                tap_action:
+                  action: toggle
+              - entity: light.garden_frontyard_tree
+                tap_action:
+                  action: toggle
+              - entity: light.garden_terrace_spots
+                tap_action:
+                  action: toggle
+              - entity: light.garden_terrace_lounge
+                tap_action:
+                  action: toggle
+              - entity: light.garden_sundeck_spots
+                tap_action:
+                  action: toggle
+              - entity: light.garden_sundeck_positionlight
+                tap_action:
+                  action: toggle
+              - entity: light.pool_light
+                tap_action:
+                  action: toggle
+              - entity: light.garden_pond_light
+                tap_action:
+                  action: toggle
+              - entity: light.garden_carport_wled
+                tap_action:
+                  action: toggle
+            state_filter:
+              - "on"
+            card:
+              type: glance
+              show_state: false
+
+  - type: vertical-stack
+    cards:
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Sicherheit"
+          - icon: "mdi:security"
+      - type: entity-filter
+        show_empty: false
+        entities:
+          - entity: switch.garden_carport_siren_3
+            tap_action:
+              action: toggle
+        state_filter:
+          - "on"
+        card:
+          type: glance
+          show_state: false
+      - type: entities
+        entities:
+          - type: custom:fold-entity-row
+            head: binary_sensor.system_motion_sensors
+            group_config:
+              secondary_info: last-changed
+          - entity: binary_sensor.hall_frontdoor
+          - entity: binary_sensor.garden_carport_door
+          - type: custom:fold-entity-row
+            head: binary_sensor.system_window_sensors
+            group_config:
+              secondary_info: last-changed
+          - alarm_control_panel.alarm_haus
+          - alarm_control_panel.alarm_carport
+        show_header_toggle: false
+        show_state: false
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Alarm"
+          - icon: "mdi:alarm-light"
+      - type: tile
+        entity: alarm_control_panel.alarm_haus
+        features:
+          - type: "alarm-modes"
+            modes:
+              - armed_home
+              - armed_away
+              - disarmed
+      - type: tile
+        entity: alarm_control_panel.alarm_carport
+        features:
+          - type: "alarm-modes"
+            modes:
+              - armed_home
+              - disarmed
+
+  - type: vertical-stack
+    cards:
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Briefkasten"
+          - icon: "mdi:mailbox-open"
+      - type: tile
+        entity: sensor.garden_mailbox_mail
+
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Garten"
+          - icon: mdi:flower
+      - type: "custom:mini-graph-card"
+        align_header: left
+        align_icon: left
+        decimals: 1
+        hour24: true
+        points_per_hour: 1
+        entities:
+          - entity: sensor.garden_temperature
+          - entity: sensor.garden_humidity
+            show_state: true
+            show_graph: false
+        show:
+          name: false
+          icon: false
+          fill: fade
+          extrema: true
+      - type: horizontal-stack
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: custom:decluttering-card
+                template: card_header
+                variables:
+                  - content: "Wohnzimmer"
+                  - icon: mdi:home-thermometer
+              - type: "custom:mini-graph-card"
+                icon: mdi:television-clean
+                align_header: left
+                align_icon: left
+                decimals: 1
+                hour24: true
+                points_per_hour: 1
+                entities:
+                  - entity: sensor.livingroom_temperature
+                  - entity: sensor.livingroom_humidity
+                    show_state: true
+                    show_graph: false
+                show:
+                  fill: fade
+                  extrema: true
+                  name: false
+                  icon: false
+          - type: vertical-stack
+            cards:
+              - type: custom:decluttering-card
+                template: card_header
+                variables:
+                  - content: "Schlafzimmer"
+                  - icon: mdi:home-thermometer
+              - type: "custom:mini-graph-card"
+                icon: mdi:television-clean
+                align_header: left
+                align_icon: left
+                decimals: 1
+                hour24: true
+                points_per_hour: 1
+                entities:
+                  - entity: sensor.bedroom_temperature
+                  - entity: sensor.bedroom_humidity
+                    show_state: true
+                    show_graph: false
+                show:
+                  fill: fade
+                  extrema: true
+                  name: false
+                  icon: false

@@ -1,0 +1,427 @@
+---
+# JaMa Villa house view, displaying all indoor stuff
+#
+title: Haus
+icon: mdi:home
+path: house
+
+badges: []
+cards:
+  - type: custom:state-switch
+    entity: user
+    states:
+      Markus:
+        type: custom:decluttering-card
+        template: welcome_header
+        variables:
+          - image: "/local/assets/markus.jpg"
+      Jasmina:
+        type: custom:decluttering-card
+        template: welcome_header
+        variables:
+          - image: "/local/assets/jasmina.jpg"
+
+  - type: vertical-stack
+    cards:
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Innenbeleuchtung"
+          - icon: mdi:lightbulb
+      - type: glance
+        entities:
+          - entity: light.indoor_lights
+            tap_action:
+              action: toggle
+          - entity: light.hall_lights
+            tap_action:
+              action: toggle
+          - entity: light.nursery_stars
+            tap_action:
+              action: toggle
+          - entity: light.kitchen_ledstrip
+            tap_action:
+              action: toggle
+          - entity: light.livingroom_tv
+            tap_action:
+              action: toggle
+          - entity: light.livingroom_lamp
+            tap_action:
+              action: toggle
+          - entity: light.livingroom_sofa
+            tap_action:
+              action: toggle
+        show_state: false
+      - type: entity-filter
+        show_empty: false
+        entities:
+          - entity: timer.hall_lights
+            type: custom:timer-bar-card
+        state_filter:
+          - "active"
+
+      - type: horizontal-stack
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: custom:decluttering-card
+                template: card_header
+                variables:
+                  - content: "Wohnzimmer"
+                  - icon: mdi:home-thermometer
+              - type: "custom:mini-graph-card"
+                align_header: left
+                align_icon: left
+                decimals: 1
+                hour24: true
+                points_per_hour: 1
+                entities:
+                  - entity: sensor.livingroom_temperature
+                  - entity: sensor.livingroom_humidity
+                    show_state: true
+                    show_graph: false
+                show:
+                  fill: fade
+                  extrema: true
+                  name: false
+                  icon: false
+          - type: vertical-stack
+            cards:
+              - type: custom:decluttering-card
+                template: card_header
+                variables:
+                  - content: "Küche"
+                  - icon: mdi:home-thermometer
+              - type: "custom:mini-graph-card"
+                align_header: left
+                align_icon: left
+                decimals: 1
+                hour24: true
+                points_per_hour: 1
+                entities:
+                  - entity: sensor.kitchen_temperature
+                  - entity: sensor.kitchen_humidity
+                    show_state: true
+                    show_graph: false
+                show:
+                  fill: fade
+                  extrema: true
+                  name: false
+                  icon: false
+
+      - type: horizontal-stack
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: custom:decluttering-card
+                template: card_header
+                variables:
+                  - content: "Schlafzimmer"
+                  - icon: mdi:home-thermometer
+              - type: "custom:mini-graph-card"
+                align_header: left
+                align_icon: left
+                decimals: 1
+                hour24: true
+                points_per_hour: 1
+                entities:
+                  - entity: sensor.bedroom_temperature
+                  - entity: sensor.bedroom_humidity
+                    show_state: true
+                    show_graph: false
+                show:
+                  fill: fade
+                  extrema: true
+                  name: false
+                  icon: false
+          - type: vertical-stack
+            cards:
+              - type: custom:decluttering-card
+                template: card_header
+                variables:
+                  - content: "Kinderzimmer"
+                  - icon: mdi:home-thermometer
+              - type: "custom:mini-graph-card"
+                align_header: left
+                align_icon: left
+                decimals: 1
+                hour24: true
+                points_per_hour: 1
+                entities:
+                  - entity: sensor.nursery_temperature
+                  - entity: sensor.nursery_humidity
+                    show_state: true
+                    show_graph: false
+                show:
+                  fill: fade
+                  extrema: true
+                  name: false
+                  icon: false
+
+      - type: horizontal-stack
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: custom:decluttering-card
+                template: card_header
+                variables:
+                  - content: "Bad"
+                  - icon: mdi:home-thermometer
+              - type: "custom:mini-graph-card"
+                align_header: left
+                align_icon: left
+                decimals: 1
+                hour24: true
+                points_per_hour: 1
+                entities:
+                  - entity: sensor.bathroom_temperature
+                  - entity: sensor.bathroom_humidity
+                    show_state: true
+                    show_graph: false
+                show:
+                  fill: fade
+                  extrema: true
+                  name: false
+                  icon: false
+          - type: vertical-stack
+            cards:
+              - type: custom:decluttering-card
+                template: card_header
+                variables:
+                  - content: "Büro"
+                  - icon: mdi:home-thermometer
+              - type: "custom:mini-graph-card"
+                align_header: left
+                align_icon: left
+                decimals: 1
+                hour24: true
+                points_per_hour: 1
+                entities:
+                  - entity: sensor.office_temperature
+                  - entity: sensor.office_humidity
+                    show_state: true
+                    show_graph: false
+                show:
+                  fill: fade
+                  extrema: true
+                  name: false
+                  icon: false
+
+      - type: horizontal-stack
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: custom:decluttering-card
+                template: card_header
+                variables:
+                  - content: "Flur"
+                  - icon: mdi:home-thermometer
+              - type: "custom:mini-graph-card"
+                align_header: left
+                align_icon: left
+                decimals: 1
+                hour24: true
+                points_per_hour: 1
+                entities:
+                  - entity: sensor.hall_temperature
+                  - entity: sensor.hall_humidity
+                    show_state: true
+                    show_graph: false
+                show:
+                  fill: fade
+                  extrema: true
+                  name: false
+                  icon: false
+          - type: vertical-stack
+            cards:
+              - type: custom:decluttering-card
+                template: card_header
+                variables:
+                  - content: "Technikraum"
+                  - icon: mdi:home-thermometer
+              - type: "custom:mini-graph-card"
+                align_header: left
+                align_icon: left
+                decimals: 1
+                hour24: true
+                points_per_hour: 1
+                entities:
+                  - entity: sensor.equipmentroom_temperature
+                  - entity: sensor.equipmentroom_humidity
+                    show_state: true
+                    show_graph: false
+                show:
+                  fill: fade
+                  extrema: true
+                  name: false
+                  icon: false
+
+  - type: vertical-stack
+    cards:
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Rollläden Untergeschoss"
+          - icon: mdi:window-shutter-open
+      - type: tile
+        entity: cover.livingroom_slidingdoor
+        features:
+          - type: "cover-open-close"
+      - type: horizontal-stack
+        cards:
+          - type: tile
+            entity: cover.kitchen
+            features:
+              - type: "cover-open-close"
+          - type: tile
+            entity: cover.livingroom_window_3
+            features:
+              - type: "cover-open-close"
+      - type: horizontal-stack
+        cards:
+          - type: tile
+            entity: cover.livingroom_window_2
+            features:
+              - type: "cover-open-close"
+          - type: tile
+            entity: cover.livingroom_window_1
+            features:
+              - type: "cover-open-close"
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Rollläden Obergeschoss"
+          - icon: mdi:window-shutter-open
+      - type: tile
+        entity: cover.bedroom
+        features:
+          - type: "cover-open-close"
+      - type: horizontal-stack
+        cards:
+          - type: tile
+            entity: cover.nursery
+            features:
+              - type: "cover-open-close"
+          - type: tile
+            entity: cover.nursery_bed
+            features:
+              - type: "cover-open-close"
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Kinderzimmer"
+          - icon: mdi:bed-outline
+      - type: horizontal-stack
+        cards:
+          - type: tile
+            entity: light.nursery_stars
+          - type: tile
+            entity: switch.nursery_dollhouse
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Arbeitszimmer"
+          - icon: mdi:desk
+      - type: horizontal-stack
+        cards:
+          - type: tile
+            entity: switch.office_desk_markus_1
+          - type: tile
+            entity: switch.office_desk_markus_2
+      - type: horizontal-stack
+        cards:
+          - type: tile
+            entity: switch.office_desk_monitor
+          - type: tile
+            entity: switch.office_desk_phone_charger
+          - type: tile
+            entity: switch.office_desk_usb_power
+      - type: horizontal-stack
+        cards:
+          - type: tile
+            entity: switch.office_desk_jasmina
+          - type: tile
+            entity: switch.office_iron
+      - type: horizontal-stack
+        cards:
+          - type: tile
+            entity: switch.office_mario_clock
+          - type: tile
+            entity: binary_sensor.office_motion_occupancy
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Bad"
+          - icon: mdi:shower
+      - type: horizontal-stack
+        cards:
+          - type: tile
+            entity: switch.bathroom_towel_heating
+
+  - type: vertical-stack
+    cards:
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Backofen"
+          - icon: mdi:stove
+      - type: entities
+        entities:
+          - entity: sensor.kitchen_oven_status
+            name: Status
+      - type: conditional
+        conditions:
+          - entity: sensor.kitchen_oven_status
+            state_not: Aus
+        card:
+          type: entities
+          entities:
+            - type: attribute
+              entity: sensor.kitchen_oven_status
+              name: Programm
+              attribute: ProgramID
+            - type: attribute
+              entity: sensor.kitchen_oven_status
+              name: Programmfortschritt
+              attribute: programPhase
+              icon: mdi:progress-check
+            - entity: binary_sensor.kitchen_oven_door
+              name: Klappe
+            - entity: sensor.kitchen_oven_target_temperature_0
+              name: Eingestellte Temperatur
+            - entity: sensor.kitchen_oven_temperature_0
+              name: Aktuelle Temperatur
+            - type: attribute
+              entity: sensor.kitchen_oven_status
+              name: Startzeit
+              attribute: kickoffTime
+              icon: mdi:clock-start
+            - entity: sensor.kitchen_oven_remaining_time
+              name: Restlaufzeit
+            - entity: sensor.kitchen_oven_elapsed_time
+              name: Laufzeit
+
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Geräte"
+          - icon: mdi:devices
+      - type: horizontal-stack
+        cards:
+          - type: tile
+            entity: switch.kitchen_dishwasher
+          - type: tile
+            entity: switch.laundryroom_freezer
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Aquarium"
+          - icon: mdi:fishbowl
+      - type: horizontal-stack
+        cards:
+          - type: tile
+            entity: switch.livingroom_aquarium_oberflachenabsauger
+            name: Oberflächenabsauger
+          - type: tile
+            entity: switch.livingroom_aquarium_co2_gas
+            name: CO2 Gas

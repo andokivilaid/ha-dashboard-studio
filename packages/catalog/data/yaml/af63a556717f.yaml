@@ -1,0 +1,132 @@
+title: Automations
+type: masonry
+id: automations
+path: automations
+icon: mdi:home-search
+visible:
+  - user: 2e93f54c62e549c8aeperson2748de6bed9d
+cards:
+- type: entities
+  title: House
+  show_header_toggle: false
+  entities:
+  - entity: automation.house_mode_auto
+    secondary_info: last-triggered
+  - entity: automation.house_mode_away
+    secondary_info: last-triggered
+  - entity: automation.house_mode_bedtime
+    secondary_info: last-triggered
+  - entity: automation.house_mode_holiday
+    secondary_info: last-triggered
+  - type: divider
+  - entity: automation.house_lights_to_bedtime
+    secondary_info: last-triggered
+  - entity: automation.house_lights_from_bedtime
+    secondary_info: last-triggered
+  - entity: automation.house_is_awake
+    secondary_info: last-triggered
+- type: entities
+  title: Hall
+  show_header_toggle: false
+  entities:
+  - entity: automation.hall_lights_to_away
+    secondary_info: last-triggered
+  - entity: automation.hall_lights_to_bedtime
+    secondary_info: last-triggered
+  - entity: automation.hall_lights_to_dim
+    secondary_info: last-triggered
+  - entity: automation.hall_lights_to_night_on
+    secondary_info: last-triggered
+  - entity: automation.hall_lights_to_off
+    secondary_info: last-triggered
+  - type: divider
+  - entity: automation.hall_mode_away
+    secondary_info: last-triggered
+  - entity: automation.hall_mode_bedtime
+    secondary_info: last-triggered
+  - entity: automation.hall_mode_dim
+    secondary_info: last-triggered
+  - entity: automation.hall_mode_night_on
+    secondary_info: last-triggered
+  - entity: automation.hall_mode_off
+    secondary_info: last-triggered
+  - type: divider
+  - entity: automation.hall_lights_unavailable_off
+    secondary_info: last-triggered
+  - entity: automation.hall_lights_turned_off
+    secondary_info: last-triggered
+- type: entities
+  title: Vestibule
+  show_header_toggle: false
+  entities:
+  - entity: automation.vestibule_lights_to_away
+    secondary_info: last-triggered
+  - entity: automation.vestibule_lights_to_bedtime
+    secondary_info: last-triggered
+  - entity: automation.vestibule_lights_to_off
+    secondary_info: last-triggered
+  - entity: automation.vestibule_lights_to_on
+    secondary_info: last-triggered
+  - entity: automation.vestibule_lights_to_night_on
+    secondary_info: last-triggered
+  - type: divider
+  - entity: automation.vestibule_mode_away
+    secondary_info: last-triggered
+  - entity: automation.vestibule_mode_bedtime
+    secondary_info: last-triggered
+  - entity: automation.vestibule_mode_off
+    secondary_info: last-triggered
+  - entity: automation.vestibule_mode_on
+    secondary_info: last-triggered
+  - entity: automation.vestibule_mode_night_on
+    secondary_info: last-triggered
+- type: entities
+  title: Front of the house
+  show_header_toggle: false
+  entities:
+  - entity: automation.number_on_at_sunset
+    secondary_info: last-triggered
+  - entity: automation.number_on_in_the_morning
+    secondary_info: last-triggered
+  - entity: automation.number_sign_off
+    secondary_info: last-triggered
+  - entity: automation.person2_up_early
+    secondary_info: last-triggered
+  - entity: automation.returned_home
+    secondary_info: last-triggered
+  - entity: automation.front_door_open
+    secondary_info: last-triggered
+  - entity: automation.front_door_closed
+    secondary_info: last-triggered
+  - entity: automation.garage_door_open
+    secondary_info: last-triggered
+  - entity: automation.garage_door_closed
+    secondary_info: last-triggered
+  - entity: automation.garage_open_nobody_home
+    secondary_info: last-triggered
+  - entity: automation.person2_away_garage_open
+    secondary_info: last-triggered
+  - entity: automation.probably_leaving
+    secondary_info: last-triggered
+  - entity: automation.front_door_left_open
+    secondary_info: last-triggered
+- type: entities
+  title: Garden
+  show_header_toggle: false
+  entities:
+  - entity: automation.utility_door_open_after_sunset_closed
+    secondary_info: last-triggered
+  - entity: automation.utility_door_open_after_sunset_turn_on
+    secondary_info: last-triggered
+  - entity: automation.utility_door_open_after_sunset_turn_off
+    secondary_info: last-triggered
+  - entity: automation.nighttime_garden_off
+    secondary_info: last-triggered
+  - entity: automation.garden_lights_left_on
+    secondary_info: last-triggered
+  - entity: automation.utility_door_left_open
+    secondary_info: last-triggered
+  - entity: automation.utility_remote
+    secondary_info: last-triggered
+  - entity: binary_sensor.garden_lights_left_on
+    secondary_info: last-changed

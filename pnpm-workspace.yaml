@@ -1,0 +1,16 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+minimumReleaseAgeExclude:
+  - "@google/genai@3.4.0"
+  - lucide-react@1.74.0
+
+onlyBuiltDependencies:
+  - esbuild
+  - protobufjs
+  - "@tailwindcss/oxide"
+  - sharp
+  - unrs-resolver
+
+strictDepBuilds: false

@@ -1,0 +1,68 @@
+title: Map
+path: map
+icon: mdi:map-outline
+type: sidebar
+cards:
+  - type: map
+    dark_mode: true
+    hours_to_show: 4
+    aspect_ratio: "4:3"
+    entities:
+      - person.pedro
+      - person.joana
+      - zone.home
+      - zone.home_pt
+      - zone.office_pt
+      - zone.wood_play
+      - zone.paddington_station
+      - zone.victoria_station
+      - zone.gatwick_airport
+      - zone.heathrow_airport
+      - zone.stansted_airport
+      - zone.porto_airport
+  - type: glance
+    title: Pedro's Phone
+    entities:
+      - entity: person.pedro
+        name: Location
+        hold_action:
+          action: call-service
+          service: notify.mobile_app_pedro_pixel9pro
+          service_data:
+            message: "request_location_update"
+      - entity: device_tracker.pedro_pixel9pro
+        name: GPS
+        icon: mdi:crosshairs-gps
+      - entity: device_tracker.google_pixel_9_pro_pedro
+        name: WiFi
+        icon: mdi:wifi
+      - entity: sensor.pedro_pixel9pro_battery_level
+        name: Battery
+    view_layout:
+      position: sidebar
+
+  - type: glance
+    title: Joana's Phone
+    entities:
+      - entity: person.joana
+        name: Location
+        hold_action:
+          action: call-service
+          service: notify.mobile_app_joana_pixel9pro
+          service_data:
+            message: "request_location_update"
+      - entity: device_tracker.joana_pixel9pro
+        name: GPS
+        icon: mdi:crosshairs-gps
+      - entity: device_tracker.google_pixel_9_pro_joana
+        name: WiFi
+        icon: mdi:wifi
+      - entity: sensor.joana_pixel9pro_battery_level
+        name: Battery
+    view_layout:
+      position: sidebar
+
+  - type: alarm-panel
+    entity: alarm_control_panel.home_alarm
+    view_layout:
+      position: sidebar

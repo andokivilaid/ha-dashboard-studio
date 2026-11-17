@@ -1,0 +1,150 @@
+title: Main
+path: main
+icon: mdi:home-outline
+badges:
+  - type: entity
+    show_name: true
+    entity: person.pedro
+    show_entity_picture: true
+  - type: entity
+    show_name: true
+    entity: person.joana
+    show_entity_picture: true
+  - sensor.eastern_time_zone
+  - sensor.pacific_time_zone
+  - alarm_control_panel.home_alarm
+cards:
+  - type: glance
+    title: Living Room
+    columns: 4
+    entities:
+      - entity: light.living_room_lights
+        name: Lights
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/lights
+      - entity: sensor.living_room_climate_temperature
+        name: Temperature
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/climate
+      - entity: sensor.living_room_climate_humidity
+        name: Humidity
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/climate
+      - entity: camera.living_room_camera_medium
+        name: Camera
+      - entity: group.living_room_smart_plugs
+        name: Smart Plugs
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/plugs
+      - entity: binary_sensor.front_door_contact
+      - entity: binary_sensor.back_door_contact
+      - entity: media_player.lg_smart_tv
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/media
+
+  - type: glance
+    title: Lower Floor
+    columns: 4
+    entities:
+      - entity: binary_sensor.washing_machine_program_running
+        name: Washer
+      - entity: sensor.lower_floor_climate_temperature
+        name: Temperature
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/climate
+      - entity: sensor.lower_floor_climate_humidity
+        name: Humidity
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/climate
+      - entity: camera.lower_floor_camera_medium
+        name: Camera
+      - entity: group.lower_floor_smart_plugs
+        name: Smart Plugs
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/plugs
+
+  - type: glance
+    title: Master Bedroom
+    columns: 4
+    entities:
+      - entity: light.master_bedroom_lights
+        name: Lights
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/lights
+      - entity: sensor.master_bedroom_climate_temperature
+        name: Temperature
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/climate
+      - entity: sensor.master_bedroom_climate_humidity
+        name: Humidity
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/climate
+      - entity: group.master_bedroom_smart_plugs
+        name: Smart Plugs
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/plugs
+
+  - type: glance
+    title: Kids Bedroom
+    columns: 4
+    entities:
+      - entity: light.kids_bedroom_lights
+        name: Lights
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/lights
+      - entity: sensor.kids_bedroom_climate_temperature
+        name: Temperature
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/climate
+      - entity: sensor.kids_bedroom_climate_humidity
+        name: Humidity
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/climate
+      - entity: group.kids_bedroom_smart_plugs
+        name: Smart Plugs
+        tap_action:
+          action: navigate
+          navigation_path: /lovelace/plugs
+
+  - type: glance
+    title: Local
+    columns: 4
+    entities:
+      - entity: sensor.london_underground_victoria
+      - entity: sensor.london_underground_windrush
+
+  - type: weather-forecast
+    title: Weather
+    entity: weather.met_office_islington
+    forecast_type: daily
+    show_current: true
+    show_forecast: true
+
+  - type: glance
+    title: System Status
+    columns: 4
+    entities:
+      - entity: sensor.external_ip
+      - entity: sensor.reported_ip
+      - entity: sensor.zigbee2mqtt_bridge_state
+        name: Zigbee2mqtt
+      - entity: switch.adguard_protection
+        name: AdGuard Home
+        tap_action:
+          action: toggle
+      - entity: binary_sensor.mains_powered

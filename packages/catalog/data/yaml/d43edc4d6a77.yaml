@@ -1,0 +1,180 @@
+title: Camera Live
+icon: mdi:cctv
+cards:
+  - type: vertical-stack
+    cards:
+      - type: button
+        name: RESET CAMERA
+        entity: input_label.current_stream
+        icon: mdi:cctv
+        color_type: card
+        show_state: false
+        size: 5%
+        style:
+          - font-weight: bold
+          - color: rgb(0, 0, 5)
+        state:
+          - value: "frontyard"
+            color: var(--primary-color)
+        tap_action:
+          action: call-service
+          service: script.reset_camera_stream   
+  - type: horizontal-stack
+    cards:
+      - type: button
+        name: Porch
+        entity: input_label.current_stream
+        icon: mdi:cctv
+        color_type: card
+        show_state: false
+        style:
+          - font-weight: bold
+          - color: rgb(0, 0, 5)
+        state:
+          - value: "porch"
+            color: var(--primary-color)
+        tap_action:
+          action: service
+          service: script.stream_porch_camera_to_chromecast
+
+      - type: button
+        name: Driveway
+        entity: input_label.current_stream
+        icon: mdi:cctv
+        color_type: card
+        show_state: false
+        style:
+          - font-weight: bold
+          - color: rgb(0, 0, 5)
+        state:
+          - value: "driveway"
+            color: var(--primary-color)
+        tap_action:
+          action: call-service
+          service: script.stream_driveway_camera_to_chromecast
+
+      - type: button
+        name: Patio
+        entity: input_label.current_stream
+        icon: mdi:cctv
+        color_type: card
+        show_state: false
+        style:
+          - font-weight: bold
+          - color: rgb(0, 0, 5)
+        state:
+          - value: "patio"
+            color: var(--primary-color)
+        tap_action:
+          action: call-service
+          service: script.stream_patio_camera_to_chromecast
+
+      - type: button
+        name: Playarea
+        entity: input_label.current_stream
+        icon: mdi:cctv
+        color_type: card
+        show_state: false
+        style:
+          - font-weight: bold
+          - color: rgb(0, 0, 5)
+        state:
+          - value: "playarea"
+            color: var(--primary-color)
+        tap_action:
+          action: call-service
+          service: script.stream_playarea_camera_to_chromecast
+
+  - type: picture-glance
+    id: camera_frontdoor_camera
+    title: Frontdoor Camera
+    entity: camera.frontdoor_camera
+    camera_image: camera.frontdoor_camera
+    show_info: true
+    tap_action:
+      action: more-info
+    entities:
+      - switch.frontyard_light
+      - binary_sensor.frontdoor_camera_motion
+
+  - type: picture-glance
+    id: camera_patio_camera
+    title: Patio Camera
+    entity: camera.patio_camera
+    camera_image: camera.patio_camera
+    show_info: true
+    tap_action:
+      action: more-info
+    entities:
+      - switch.backyard_light
+      - binary_sensor.patio_camera_motion
+
+  - type: picture-glance
+    id: camera_driveway_camera
+    title: Driveway Camera
+    entity: camera.driveway_camera
+    camera_image: camera.driveway_camera
+    show_info: true
+    tap_action:
+      action: more-info
+    entities:
+      - switch.frontyard_light
+      - binary_sensor.driveway_camera_motion
+
+  - type: picture-glance
+    id: camera_playarea_camera
+    title: Playarea Camera
+    entity: camera.playarea_camera
+    camera_image: camera.playarea_camera
+    show_info: true
+    tap_action:
+      action: more-info
+    entities:
+      - switch.backyard_light
+      - binary_sensor.playarea_camera_motion
+
+  # - type: picture-glance
+  #   id: camera_garage_camera
+  #   title: Garage Camera
+  #   entity: camera.garage_camera
+  #   camera_image: camera.garage_camera
+  #   show_info: true
+  #   tap_action:
+  #     action: more-info
+  #   entities:
+  #     - switch.garage
+
+  - type: picture-glance
+    id: camera_front_camera
+    title: Front Camera
+    entity: camera.amcrest_camera
+    camera_image: camera.amcrest_camera
+    show_info: true
+    tap_action:
+      action: more-info
+    entities:
+      - switch.basement_left
+
+  - type: picture-glance
+    id: porch_camera
+    title: Porch Camera
+    entity: camera.porch_camera
+    camera_image: camera.porch_camera
+    show_info: true
+    tap_action:
+      action: more-info
+    entities:
+      - binary_sensor.porch_motion
+      - switch.frontyard_light
+
+  - type: picture-glance
+    id: garage_camera
+    title: Garage Camera
+    entity: camera.garage
+    camera_image: camera.garage
+    show_info: true
+    tap_action:
+      action: more-info
+    entities:
+      - switch.garage
+      - switch.garage_shop_lights

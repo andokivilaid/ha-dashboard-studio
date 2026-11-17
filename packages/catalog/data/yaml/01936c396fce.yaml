@@ -1,0 +1,9 @@
+title: Home
+
+views:
+  - !include lovelace/main.yaml
+  - !include lovelace/rooms.yaml
+  - !include lovelace/outside.yaml
+  - !include lovelace/media.yaml
+  - !include lovelace/system.yaml
+  - !include lovelace/camera.yaml

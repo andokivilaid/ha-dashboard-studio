@@ -1,0 +1,431 @@
+# =============================================================================
+# SI Gateway — single-phase (Sunsynk / Deye)
+# Core cards only. No HACS, no custom cards, no template sensors.
+# =============================================================================
+# Device slug assumed: si_gateway
+# If your entities are named differently (e.g. si_gateway_6194e0_*), either
+# rename the device in HA and tick "also rename entity IDs", or run:
+#   tools/retarget.sh si_gateway si_gateway_6194e0 dashboards/core/si-gateway-1phase.yaml
+#
+# Paste into: Settings > Dashboards > (your dashboard) > Edit > 3 dots >
+#             Raw configuration editor
+# =============================================================================
+
+views:
+  - title: Solar
+    path: solar
+    icon: mdi:solar-power-variant
+    type: sections
+    max_columns: 2
+    dense_section_placement: true
+    sections:
+
+      # ---------------------------------------------------------------- NOW --
+      - type: grid
+        cards:
+          - type: heading
+            heading: Right now
+            heading_style: title
+            icon: mdi:flash
+
+          - type: gauge
+            entity: sensor.si_gateway_inverter_battery_soc
+            name: Battery
+            min: 0
+            max: 100
+            needle: true
+            severity:
+              green: 60
+              yellow: 30
+              red: 0
+
+          - type: tile
+            entity: sensor.si_gateway_inverter_solar_power
+            name: Solar
+            icon: mdi:solar-power
+            color: amber
+
+          - type: tile
+            entity: sensor.si_gateway_inverter_load_power
+            name: Load
+            icon: mdi:home-lightning-bolt
+            color: blue
+
+          - type: tile
+            entity: sensor.si_gateway_inverter_grid_power
+            name: Grid
+            icon: mdi:transmission-tower
+            color: purple
+
+          - type: tile
+            entity: sensor.si_gateway_inverter_battery_power
+            name: Battery
+            icon: mdi:battery-charging
+            color: green
+
+          - type: tile
+            entity: sensor.si_gateway_inverter_essential_power
+            name: Essential
+            icon: mdi:home-heart
+
+          - type: tile
+            entity: sensor.si_gateway_inverter_nonessential_power
+            name: Non-essential
+            icon: mdi:water-boiler
+
+          - type: tile
+            entity: binary_sensor.si_gateway_inverter_grid_connected_status
+            name: Grid up
+            icon: mdi:transmission-tower-import
+
+          - type: tile
+            entity: sensor.si_gateway_inverter_overall_state
+            name: State
+            icon: mdi:state-machine
+
+      # ------------------------------------------------------------ SURPLUS --
+      - type: grid
+        cards:
+          - type: heading
+            heading: Surplus & ECM
+            heading_style: title
+            icon: mdi:leaf
+
+          - type: markdown
+            content: >
+              **Energy Comfort Model (ECM)** — one live number, 0 to 20, saying
+              how much energy the property has to spare right now. Every SI
+              device polls the gateway for it over local HTTP and decides for
+              itself, so your pool pump, geyser and relays stage themselves in
+              priority order with no Home Assistant automation in the loop —
+              and they keep doing it with Home Assistant switched off.
+
+              Tiers: 0-3 Critical · 4-7 Cautious · 8-11 Moderate ·
+              12-15 Comfortable · 16-20 Excellent.
+
+          - type: tile
+            entity: sensor.si_gateway_si_surplus_scale
+            name: Surplus
+            icon: mdi:gauge
+
+          - type: tile
+            entity: sensor.si_gateway_si_surplus_tier
+            name: Tier
+            icon: mdi:stairs
+
+          - type: tile
+            entity: switch.si_gateway_si_battery_boost
+            name: Battery Boost
+            icon: mdi:battery-charging-high
+            features:
+              - type: toggle
+
+          - type: tile
+            entity: sensor.si_gateway_si_boost_remaining
+            name: Remaining
+            icon: mdi:timer-sand
+
+          - type: entities
+            title: Boost settings
+            entities:
+              - entity: number.si_gateway_si_boost_duration
+                name: Duration
+              - entity: number.si_gateway_si_boost_charge_current
+                name: Charge current
+              - entity: number.si_gateway_si_solar_peak_kw
+                name: Array size (kWp)
+              - entity: number.si_gateway_electricity_tariff
+                name: Tariff
+
+      # -------------------------------------------------------------- TODAY --
+      - type: grid
+        cards:
+          - type: heading
+            heading: Today
+            heading_style: title
+            icon: mdi:calendar-today
+
+          - type: tile
+            entity: sensor.si_gateway_inverter_day_pv_energy
+            name: Generated
+            icon: mdi:solar-power-variant
+
+          - type: tile
+            entity: sensor.si_gateway_inverter_day_load_energy
+            name: Consumed
+            icon: mdi:home-lightning-bolt-outline
+
+          - type: tile
+            entity: sensor.si_gateway_inverter_day_grid_import
+            name: Grid import
+            icon: mdi:transmission-tower-export
+
+          - type: tile
+            entity: sensor.si_gateway_inverter_day_grid_export
+            name: Grid export
+            icon: mdi:transmission-tower-import
+
+          - type: tile
+            entity: sensor.si_gateway_inverter_day_battery_charge
+            name: Charged
+            icon: mdi:battery-arrow-up
+
+          - type: tile
+            entity: sensor.si_gateway_inverter_day_battery_discharge
+            name: Discharged
+            icon: mdi:battery-arrow-down
+
+          - type: tile
+            entity: sensor.si_gateway_solar_independence_today
+            name: Independence
+            icon: mdi:white-balance-sunny
+
+          - type: tile
+            entity: sensor.si_gateway_grid_dependency_today
+            name: Grid reliance
+            icon: mdi:transmission-tower
+
+          - type: tile
+            entity: sensor.si_gateway_solar_savings_today
+            name: Saved today
+            icon: mdi:cash-plus
+
+          - type: tile
+            entity: sensor.si_gateway_grid_cost_today
+            name: Grid cost today
+            icon: mdi:cash-minus
+
+      # ------------------------------------------------------------- CHARTS --
+      - type: grid
+        cards:
+          - type: heading
+            heading: History
+            heading_style: title
+            icon: mdi:chart-line
+
+          - type: history-graph
+            hours_to_show: 24
+            title: Power
+            entities:
+              - entity: sensor.si_gateway_inverter_solar_power
+                name: Solar
+              - entity: sensor.si_gateway_inverter_load_power
+                name: Load
+              - entity: sensor.si_gateway_inverter_grid_power
+                name: Grid
+              - entity: sensor.si_gateway_inverter_battery_power
+                name: Battery
+
+      - type: grid
+        cards:
+          - type: history-graph
+            hours_to_show: 48
+            title: Battery state of charge
+            entities:
+              - entity: sensor.si_gateway_inverter_battery_soc
+                name: SOC
+
+      - type: grid
+        cards:
+          - type: statistics-graph
+            title: Daily energy
+            days_to_show: 30
+            period: day
+            chart_type: bar
+            stat_types:
+              - state
+            entities:
+              - sensor.si_gateway_inverter_day_pv_energy
+              - sensor.si_gateway_inverter_day_load_energy
+              - sensor.si_gateway_inverter_day_grid_import
+
+  # ===========================================================================
+  - title: Inverter
+    path: inverter
+    icon: mdi:cog
+    type: sections
+    max_columns: 2
+    dense_section_placement: true
+    sections:
+
+      - type: grid
+        cards:
+          - type: heading
+            heading: Control
+            heading_style: title
+            icon: mdi:tune
+
+          - type: markdown
+            content: >
+              These write straight to the inverter over Modbus. Changes take
+              effect on the hardware immediately and survive a Home Assistant
+              restart — nothing here depends on HA staying up.
+
+          - type: entities
+            title: Modes
+            entities:
+              - entity: select.si_gateway_inverter_work_mode
+                name: Work mode
+              - entity: select.si_gateway_inverter_energy_pattern
+                name: Energy pattern
+              - entity: switch.si_gateway_inverter_toggle_system_timer
+                name: Use timer
+              - entity: switch.si_gateway_inverter_toggle_grid_charge
+                name: Grid charge
+              - entity: switch.si_gateway_inverter_toggle_solar_sell
+                name: Solar sell
+
+          - type: entities
+            title: Currents & limits
+            entities:
+              - entity: number.si_gateway_inverter_grid_charge_battery_current
+                name: Grid charge current
+              - entity: number.si_gateway_inverter_battery_max_charge_current
+                name: Max charge current
+              - entity: number.si_gateway_inverter_battery_max_discharge_current
+                name: Max discharge current
+              - entity: number.si_gateway_inverter_max_sell_power
+                name: Max sell power
+
+      - type: grid
+        cards:
+          - type: heading
+            heading: Time of use
+            heading_style: title
+            icon: mdi:clock-outline
+
+          - type: entities
+            title: Slots
+            entities:
+              - entity: sensor.si_gateway_inverter_time_slot_1
+                name: Slot 1
+              - entity: number.si_gateway_inverter_prog1_capacity
+                name: "  SOC target"
+              - entity: select.si_gateway_inverter_prog1_charge_option
+                name: "  Charge from"
+              - type: divider
+              - entity: sensor.si_gateway_inverter_time_slot_2
+                name: Slot 2
+              - entity: number.si_gateway_inverter_prog2_capacity
+                name: "  SOC target"
+              - entity: select.si_gateway_inverter_prog2_charge_option
+                name: "  Charge from"
+              - type: divider
+              - entity: sensor.si_gateway_inverter_time_slot_3
+                name: Slot 3
+              - entity: number.si_gateway_inverter_prog3_capacity
+                name: "  SOC target"
+              - entity: select.si_gateway_inverter_prog3_charge_option
+                name: "  Charge from"
+              - type: divider
+              - entity: sensor.si_gateway_inverter_time_slot_4
+                name: Slot 4
+              - entity: number.si_gateway_inverter_prog4_capacity
+                name: "  SOC target"
+              - entity: select.si_gateway_inverter_prog4_charge_option
+                name: "  Charge from"
+              - type: divider
+              - entity: sensor.si_gateway_inverter_time_slot_5
+                name: Slot 5
+              - entity: number.si_gateway_inverter_prog5_capacity
+                name: "  SOC target"
+              - entity: select.si_gateway_inverter_prog5_charge_option
+                name: "  Charge from"
+              - type: divider
+              - entity: sensor.si_gateway_inverter_time_slot_6
+                name: Slot 6
+              - entity: number.si_gateway_inverter_prog6_capacity
+                name: "  SOC target"
+              - entity: select.si_gateway_inverter_prog6_charge_option
+                name: "  Charge from"
+
+      - type: grid
+        cards:
+          - type: heading
+            heading: Health & diagnostics
+            heading_style: title
+            icon: mdi:heart-pulse
+
+          - type: tile
+            entity: sensor.si_gateway_inverter_radiator_temperature
+            name: Radiator temp
+
+          - type: tile
+            entity: sensor.si_gateway_inverter_dc_transformer_temperature
+            name: DC transformer temp
+
+          - type: tile
+            entity: sensor.si_gateway_inverter_battery_temperature
+            name: Battery temp
+
+          - type: entities
+            title: Electrical
+            entities:
+              - entity: sensor.si_gateway_inverter_grid_voltage
+                name: Grid voltage
+              - entity: sensor.si_gateway_inverter_grid_frequency
+                name: Grid frequency
+              - entity: sensor.si_gateway_inverter_inverter_voltage
+                name: Inverter voltage
+              - entity: sensor.si_gateway_inverter_inverter_frequency
+                name: Inverter frequency
+              - entity: sensor.si_gateway_inverter_battery_voltage
+                name: Battery voltage
+              - entity: sensor.si_gateway_inverter_battery_current
+                name: Battery current
+
+          - type: entities
+            title: Strings
+            entities:
+              - entity: sensor.si_gateway_inverter_pv1_power
+                name: PV1 power
+              - entity: sensor.si_gateway_inverter_pv1_voltage
+                name: PV1 voltage
+              - entity: sensor.si_gateway_inverter_pv1_current
+                name: PV1 current
+              - type: divider
+              - entity: sensor.si_gateway_inverter_pv2_power
+                name: PV2 power
+              - entity: sensor.si_gateway_inverter_pv2_voltage
+                name: PV2 voltage
+              - entity: sensor.si_gateway_inverter_pv2_current
+                name: PV2 current
+
+          - type: entities
+            title: Device
+            entities:
+              - entity: sensor.si_gateway_inverter_serial
+                name: Inverter serial
+              - entity: sensor.si_gateway_si_serial
+                name: SI serial
+              - entity: sensor.si_gateway_si_identity
+                name: SI identity
+              - entity: sensor.si_gateway_inverter_rated_power
+                name: Rated power
+
+      - type: grid
+        cards:
+          - type: heading
+            heading: Lifetime totals
+            heading_style: title
+            icon: mdi:counter
+
+          - type: entities
+            entities:
+              - entity: sensor.si_gateway_inverter_total_pv_energy
+                name: Generated
+              - entity: sensor.si_gateway_inverter_total_load_energy
+                name: Consumed
+              - entity: sensor.si_gateway_inverter_total_grid_import
+                name: Grid imported
+              - entity: sensor.si_gateway_inverter_total_grid_export
+                name: Grid exported
+              - entity: sensor.si_gateway_inverter_total_battery_charge
+                name: Charged
+              - entity: sensor.si_gateway_inverter_total_battery_discharge
+                name: Discharged
+              - type: divider
+              - entity: sensor.si_gateway_solar_savings_lifetime
+                name: Saved to date
+              - entity: sensor.si_gateway_grid_cost_lifetime
+                name: Grid cost to date

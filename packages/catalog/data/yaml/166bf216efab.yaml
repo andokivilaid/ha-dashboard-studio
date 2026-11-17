@@ -1,0 +1,197 @@
+title: !secret lovelace_street_name
+views:
+  # Security
+  - path: security
+    title: Security
+    panel: false
+    icon: mdi:shield-home
+    cards:
+      - type: vertical-stack
+        cards:
+          - !include home/security/alarm.yaml
+          - !include home/security/occupancy.yaml
+      - type: vertical-stack
+        cards:
+          - !include home/security/aarlo_front.yaml
+          - !include home/security/aarlo_back.yaml
+      - type: vertical-stack
+        cards:
+          - !include home/security/open_close.yaml
+          - !include home/security/housekeeper.yaml
+          - !include home/security/calamities.yaml
+          - !include home/security/connectivity.yaml
+  # Climate
+  - title: Climate
+    type: custom:masonry-layout
+    path: climate
+    icon: mdi:home-thermometer
+    layout:
+      min_height: 1
+    cards:
+      - type: vertical-stack
+        cards:
+          - !include home/climate/thermostat.yaml
+          - !include home/climate/airco.yaml
+      - type: vertical-stack
+        cards:
+          - !include home/climate/temperature.yaml
+      - type: vertical-stack
+        cards:
+          - type: grid
+            cards:
+              - type: button
+                name: Electric blanket – Bedroom
+                tap_action:
+                  action: toggle
+                entity: switch.on_off_plug_in_unit_3
+              - type: button
+                name: Electric heater – Shed
+                tap_action:
+                  action: toggle
+                entity: switch.smart_plug_5
+              - type: button
+                name: Boiler – Kitchen
+                tap_action:
+                  action: toggle
+                entity: switch.smart_plug_9
+  # Air-quality
+  - title: Air-quality
+    type: custom:masonry-layout
+    path: air-quality
+    icon: mdi:fan
+    layout:
+      min_height: 1
+    cards:
+      - type: vertical-stack
+        cards:
+          - !include home/air_quality/co2.yaml
+          - !include home/air_quality/pm.yaml
+      - !include home/air_quality/fans.yaml
+      - !include home/air_quality/bathroom_fan.yaml
+  # Lights
+  - title: Lights
+    path: lights
+    icon: mdi:home-lightbulb-outline
+    cards:
+      - !include home/lights/rooms.yaml
+      - type: vertical-stack
+        cards:
+          - !include home/lights/wakeup.yaml
+          - type: grid
+            cards:
+              - type: button
+                tap_action:
+                  action: call-service
+                  service: script.turn_on
+                  target:
+                    entity_id: script.lights_out
+                  data:
+                    variables:
+                      activatedFrom: kitchen
+                  confirmation:
+                    text: Turn off all lights?
+                name: Lights out
+                show_state: false
+                show_icon: true
+                icon: mdi:lightbulb-group-off
+              - type: button
+                tap_action:
+                  action: call-service
+                  service: light.turn_on
+                  data:
+                    entity_id: light.attic
+                    flash: long
+                icon: hue:room-attic
+                name: Blink Attic
+          - !include home/lights/hue_scenes.yaml
+      - !include home/lights/lux_downstairs.yaml
+      - !include home/lights/lux_upstairs.yaml
+  # Network
+  - title: Network
+    path: network
+    icon: mdi:lan
+    cards:
+      - type: vertical-stack
+        cards:
+          - !include home/network/lattepanda-mu.yaml
+          - !include home/network/pi5_luchtkasteel.yaml
+      - type: vertical-stack
+        cards:
+          - !include home/network/ha_yellow.yaml
+          - !include home/network/pi5.yaml
+      - type: vertical-stack
+        cards:
+          - !include home/network/wifi.yaml
+          - !include home/network/gammu.yaml
+          - !include home/network/pi4.yaml
+  # Weather
+  - title: Weather
+    path: weather
+    icon: mdi:weather-partly-cloudy
+    cards:
+      - type: vertical-stack
+        cards:
+          - !include home/weather/temperature.yaml
+          - !include home/weather/sun.yaml
+          - type: custom:sun-card
+            card_mod:
+              style: |
+                ha-card div.sun-card-footer{
+                  display: none;
+                }
+      - type: vertical-stack
+        cards:
+          - !include home/weather/wind.yaml
+          - !include home/weather/rain.yaml
+      - type: vertical-stack
+        cards:
+          - type: horizontal-stack
+            cards:
+              - !include home/weather/wind_direction.yaml
+              - !include home/weather/uv_index.yaml
+          - !include home/weather/humidity_pressure.yaml
+          - !include home/weather/forecast.yaml
+  # Chores
+  - icon: mdi:broom
+    type: custom:masonry-layout
+    title: Chores
+    path: chores
+    layout:
+      min_height: 1
+    cards:
+      - !include home/chores/roborock.yaml
+      - !include home/chores/irrigation.yaml
+      - type: vertical-stack
+        cards:
+          - !include home/chores/afvalwijzer.yaml
+          - !include home/chores/devices.yaml
+  # Media
+  - title: Media
+    type: custom:masonry-layout
+    path: media
+    icon: mdi:filmstrip
+    layout:
+      max_cols: 3
+    cards:
+      - type: vertical-stack
+        cards:
+          - type: entity
+            entity: sensor.plex_shield_android_tv
+            attribute: title
+          - !include home/media/dvb.yaml
+      - type: vertical-stack
+        cards:
+          - type: media-control
+            entity: media_player.ha_voice_living_room
+          - type: media-control
+            entity: media_player.ha_voice_bedroom
+          - type: media-control
+            entity: media_player.ha_voice_guestroom
+          - type: media-control
+            entity: media_player.ha_voice_attic
+      - type: vertical-stack
+        cards:
+          - type: markdown
+            content: |
+              ## Guest WiFi
+              <img src="/local/guest-wifi.png"/>

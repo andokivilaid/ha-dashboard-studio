@@ -1,0 +1,2515 @@
+#
+# Lovelace UI
+#
+# @link https://www.home-assistant.io/lovelace/
+#
+
+#
+# External resources
+#
+# Most are installed using HACS (Home Assistant Community Store).
+#
+# @link https://custom-components.github.io/hacs/
+#
+resources:
+  # Auto entities
+  - url: "/local/community/lovelace-auto-entities/auto-entities.js"
+    type: module
+    repo: "https://github.com/thomasloven/lovelace-auto-entities"
+
+  # Bar card: format entities as animated bars
+  - url: "/local/community/bar-card/bar-card.js"
+    type: module
+    repo: "https://github.com/custom-cards/bar-card"
+
+  # Button card
+  - url: "/local/community/button-card/button-card.js"
+    type: module
+    repo: "https://github.com/custom-cards/button-card"
+
+  # Compact custom header
+  - url: "/local/community/custom-header/custom-header.js"
+    type: module
+    repo: "https://github.com/maykar/custom-header"
+
+  # Card mod
+  - url: "/local/community/lovelace-card-mod/card-mod.js"
+    type: module
+    repo: "https://github.com/thomasloven/lovelace-card-mod"
+
+  # Card tools
+  - url: "/local/community/lovelace-card-tools/card-tools.js"
+    type: module
+    repo: "https://github.com/thomasloven/lovelace-card-tools"
+
+  # Dummy entity row
+  - url: "/local/community/lovelace-dummy-entity-row/dummy-entity-row.js"
+    type: module
+    repo: "https://github.com/thomasloven/lovelace-dummy-entity-row"
+
+  # Favicon counter: show a notification count badge.
+  - url: "/local/community/favicon-counter/favicon-counter.js"
+    type: module
+    repo: "https://github.com/custom-cards/favicon-counter"
+
+  # Fold entity row
+  - url: "/local/community/lovelace-fold-entity-row/fold-entity-row.js"
+    type: module
+    repo: "https://github.com/thomasloven/lovelace-fold-entity-row"
+
+  # GitHub entity row
+  - url: "/local/community/lovelace-github-entity-row/github-entity-row.js"
+    type: module
+    repo: "https://github.com/benct/lovelace-github-entity-row"
+
+  # Layout card
+  - url: "/local/community/lovelace-layout-card/layout-card.js"
+    type: module
+    repo: "https://github.com/thomasloven/lovelace-layout-card"
+
+  # Mini graph card
+  - url: "/local/community/mini-graph-card/mini-graph-card-bundle.js"
+    type: module
+    repo: "https://github.com/kalkih/mini-graph-card"
+
+  # Multiple entity row: Show multiple entity states and attributes on entity rows.
+  # - url: "/local/community/lovelace-multiple-entity-row/multiple-entity-row.js"
+  #   type: module
+  #   repo: "https://github.com/benct/lovelace-multiple-entity-row"
+
+  # Restriction Card
+  - url: "/local/community/restriction-card/restriction-card.js"
+    type: module
+    repo: "https://github.com/iantrich/restriction-card"
+
+  # Secondary info entity row
+  - url: "/local/community/secondaryinfo-entity-row/secondaryinfo-entity-row.js"
+    type: module
+    repo: "https://github.com/custom-cards/secondaryinfo-entity-row"
+
+  # Slider entity row
+  - url: "/local/community/lovelace-slider-entity-row/slider-entity-row.js"
+    type: module
+    repo: "https://github.com/thomasloven/lovelace-slider-entity-row"
+
+  # Swipe card
+  - url: "/local/community/swipe-card/swipe-card.js"
+    type: module
+    repo: "https://github.com/bramkragten/custom-ui/tree/master/swipe-card"
+
+  # Vertical stack in card
+  - url: "/local/community/vertical-stack-in-card/vertical-stack-in-card.js"
+    type: module
+    repo: "https://github.com/custom-cards/vertical-stack-in-card"
+
+
+#
+# Custom styles
+#
+styles:
+  button-card-styles: &button-card-styles
+    card:
+      - border: '2px solid var(--secondary-text-color)'
+      - color: 'var(--secondary-text-color)'
+      - font-weight: 'bold'
+
+  button-card-states: &button-card-states
+    - value: 'on'
+      styles:
+        card:
+          - border-color: 'var(--primary-background-color)'
+          - color: 'var(--secondary-text-color)'
+    - value: 'off'
+      styles:
+        card:
+          - border-color: 'var(--secondary-background-color)'
+
+  header-card-style: &header-card-style |
+    ha-card {
+      min-height: 2em;
+      border: 1px solid rgba(255, 255, 255, 20%);
+      --paper-card-background-color: rgba(0, 0, 0, 25%);
+      text-align: center;
+      font-size: 250%;
+      font-weight: 500;
+      line-height: 1em;
+      color: rgb(255, 255, 255);
+      -webkit-text-fill-color: rgb(255, 255, 255);
+      -webkit-text-stroke-width: 1px;
+      -webkit-text-stroke-color: rgba(0, 0, 0, 50%);
+    }
+
+  footer-card-style: &footer-card-style |
+    ha-card {
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      --paper-card-background-color: rgba(0, 0, 0, 50%);
+      color: rgb(255, 255, 255);
+      --paper-item-icon-color: white;
+    }
+
+  graph-card-horizontal: &graph-card-horizontal
+    fill: 'fade'
+    icon: false
+    name: false
+    points: true
+
+  graph-card-solo: &graph-card-solo
+    fill: 'fade'
+    icon: false
+    labels: true
+    name: false
+    points: true
+
+  graph-color-humidity: &graph-color-humidity DEEPSKYBLUE
+
+  graph-color-temperature: &graph-color-temperature ORANGE
+
+  transit_divider: &transit_divider
+    height: '1px'
+    margin-left: '20%'
+    margin-right: 'auto'
+    background: 'var(--secondary-text-color)'
+
+  background-generic-1: &background-generic-1 >-
+    center / cover no-repeat url("/local/images/wallpaper-1.jpg") fixed
+
+  background-generic-2: &background-generic-2 >-
+    center / cover no-repeat url("/local/images/wallpaper-2.jpg") fixed
+
+  background-automations: &background-automations >-
+    center / cover no-repeat url("/local/images/wallpaper-automations.jpg") fixed
+
+  background-climate: &background-climate >-
+    center / cover no-repeat url("/local/cameras/astronomy_picture_of_the_day_proxy.jpg") fixed
+
+  background-configuration: &background-configuration >-
+    center / cover no-repeat url("/local/images/wallpaper-configuration.jpg") fixed
+
+  background-hardware: &background-hardware >-
+    center / cover no-repeat url("/local/images/wallpaper-hardware.jpg") fixed
+
+  background-main: &background-main >-
+    center / cover no-repeat url("/local/cameras/bing_wallpaper_proxy.jpg") fixed
+
+  background-switchboard: &background-switchboard >-
+    center / cover no-repeat url("/local/images/wallpaper-switchboard.jpg") fixed
+
+  background-weather: &background-weather >-
+    center / cover no-repeat url("/local/cameras/noaa_geocolor_proxy.jpg") fixed
+
+
+#
+# Compact Custom Header
+#
+# @link https://github.com/maykar/custom-header
+# @link https://maykar.github.io/custom-header/
+#
+custom_header:
+  compact_mode: true
+  hide_config: true
+  hide_help: true
+  exceptions:
+    - conditions:
+        user_agent: "Mobile"
+        media_query: "(max-width: 600px)"
+      config:
+        options_hide: true
+    - conditions:
+        query_string: "kiosk"
+      config:
+        disable_sidebar: true
+        footer_mode: true
+        indicator_top: true
+
+
+#
+# Lovelace views
+#
+title: "Home"
+views:
+
+  #
+  # Main view
+  #
+  - title: "main"
+    path: "main"
+    icon: "mdi:home-assistant"
+    background: *background-main
+    panel: true
+
+    popup_cards:
+      sensor.bing_wallpaper: &bing_wallpaper_card
+        title: "Bing Wallpaper"
+        card:
+          entity: camera.bing_wallpaper_hd
+          type: "picture-entity"
+          style: |
+            ha-card {
+              border-radius: 0;
+            }
+          show_name: false
+          show_state: false
+
+
+
+    cards:
+      - type: "custom:layout-card"
+        layout: 'vertical'
+        max_width: '100%'
+        cards:
+
+          #
+          # Header
+          #
+          - type: "custom:layout-card"
+            layout: 'vertical'
+            max_width: '100%'
+            cards:
+
+              #
+              # Title
+              #
+              - type: "markdown"
+                style: *header-card-style
+                content: |
+                  💕 {{ states('sensor.good_vibes') }} 🤠
+
+          #
+          # Body
+          #
+          - type: "custom:layout-card"
+            column_num: 1
+            column_width: '280px'
+            max_width: '350px'
+            max_columns: 4
+            cards:
+
+              #
+              # Action center
+              #
+              - type: "vertical-stack"
+                cards:
+                  - type: "horizontal-stack"
+                    cards:
+                      - entity: script.wake_up
+                        type: "custom:button-card"
+                        color_type: 'card'
+                        icon: "mdi:power"
+                        name: "Awaken"
+                        styles: *button-card-styles
+                        state: *button-card-states
+                        tap_action:
+                          action: 'toggle'
+
+                      - entity: input_boolean.nap_mode
+                        type: "custom:button-card"
+                        color_type: 'card'
+                        icon: "mdi:sleep"
+                        name: "Sleep"
+                        styles: *button-card-styles
+                        state: *button-card-states
+
+                      - entity: input_boolean.night_mode
+                        type: "custom:button-card"
+                        color_type: 'card'
+                        icon: "mdi:weather-night"
+                        name: "Dark"
+                        styles: *button-card-styles
+                        state: *button-card-states
+
+                  - type: "horizontal-stack"
+                    cards:
+                      - type: "custom:button-card"
+                        color_type: 'blank-card'
+
+                      - entity: input_boolean.quiet_mode
+                        type: "custom:button-card"
+                        color_type: 'card'
+                        icon: "mdi:volume-mute"
+                        name: "Quiet"
+                        styles: *button-card-styles
+                        state: *button-card-states
+
+                      - entity: input_boolean.low_mode
+                        type: "custom:button-card"
+                        color_type: 'card'
+                        icon: "mdi:weather-sunset-down"
+                        name: "Eco"
+                        styles: *button-card-styles
+                        state: *button-card-states
+
+                  - type: "entities"
+                    show_header_toggle: false
+                    entities:
+                      - input_select.scene
+
+              #
+              # Climate and air quality
+              #
+              - type: "custom:vertical-stack-in-card"
+                cards:
+                  - type: "horizontal-stack"
+                    cards:
+                      - type: "custom:mini-graph-card"
+                        align_state: 'right'
+                        decimals: 0
+                        hour24: true
+                        show: *graph-card-horizontal
+                        entities:
+                          - entity: sensor.average_temperature
+                            name: "Temperature"
+                            color: *graph-color-temperature
+
+                      - type: "custom:mini-graph-card"
+                        align_state: 'right'
+                        decimals: 0
+                        hour24: true
+                        show: *graph-card-horizontal
+                        entities:
+                          - entity: sensor.average_humidity
+                            name: "Humidity"
+                            color: *graph-color-humidity
+
+                  - type: "entities"
+                    title: "Climate & Air Quality 😌"
+                    show_header_toggle: false
+                    entities:
+                      - entity: sensor.average_humidity_friendly
+                        name: "Humidity"
+
+                      - entity: sensor.radon_friendly
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong style="color:var(--primary-text-color);">
+                          <span style="background-color:var(--secondary-background-color);padding:0 0.5em;border-radius:2px;">
+                          [[ sensor.radon_long_term ]]</span>
+                          long term
+                          </strong></small>
+
+                  - type: "horizontal-stack"
+                    cards:
+                      - type: "custom:mini-graph-card"
+                        entities:
+                          - entity: sensor.radon_daily
+                            color: "Orange"
+
+                          - entity: sensor.radon_long_term
+                            name: "Long Term"
+                            color: "LightGray"
+                        align_state: right
+                        decimals: 0
+                        hour24: true
+                        show: *graph-card-solo
+
+              #
+              # Public transit
+              #
+              - type: "entities"
+                title: "Transit to the Metro 🚈"
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.transit_to_metro
+                    name: " "
+                    icon: "mdi:subway"
+                    type: "custom:secondaryinfo-entity-row"
+                    secondary_info: >-
+                      <strong style="color:var(--primary-text-color);">[[ sensor.transit_to_metro_hour ]]</strong>
+
+                  - type: "divider"
+                    style: *transit_divider
+
+                  - entity: sensor.transit_to_metro_2
+                    type: "custom:secondaryinfo-entity-row"
+                    name: " "
+                    icon: " "
+                    secondary_info: >-
+                      <strong style="color:var(--primary-text-color);">[[ sensor.transit_to_metro_2_hour ]]</strong>
+
+                  - type: "divider"
+                    style: *transit_divider
+
+                  - entity: sensor.transit_to_metro_3
+                    type: "custom:secondaryinfo-entity-row"
+                    name: " "
+                    icon: " "
+                    secondary_info: >-
+                      <strong style="color:var(--primary-text-color);">[[ sensor.transit_to_metro_3_hour ]]</strong>
+
+                  - type: "section"
+                    label: "To the market"
+
+                  - entity: sensor.transit_to_market
+                    name: " "
+                    icon: "mdi:cart"
+                    type: "custom:secondaryinfo-entity-row"
+                    secondary_info: >-
+                      <strong style="color:var(--primary-text-color);">[[ sensor.transit_to_market_hour ]]</strong>
+
+                  - type: "divider"
+                    style: *transit_divider
+
+                  - entity: sensor.transit_to_market_2
+                    name: " "
+                    icon: " "
+                    type: "custom:secondaryinfo-entity-row"
+                    secondary_info: >-
+                      <strong style="color:var(--primary-text-color);">[[ sensor.transit_to_market_2_hour ]]</strong>
+
+                  - type: "divider"
+                    style: *transit_divider
+
+                  - entity: sensor.transit_to_market_3
+                    name: " "
+                    icon: " "
+                    type: "custom:secondaryinfo-entity-row"
+                    secondary_info: >-
+                      <strong style="color:var(--primary-text-color);">[[ sensor.transit_to_market_3_hour ]]</strong>
+
+              #
+              # Outdoor cameras
+              #
+              - type: "picture-elements"
+                image: "/local/cameras/front.jpg"
+                elements:
+                  - entity: camera.front_animated
+                    type: "image"
+                    camera_image: camera.front_still
+                    style:
+                      left: '50%'
+                      top: '50%'
+                      width: '100%'
+                      height: '100%'
+
+                  - entity: input_datetime.front_motion_last_detected
+                    type: state-label
+                    style:
+                      top: '0'
+                      left: '0'
+                      padding-left: '24px'
+                      border-radius: '0 0 15px'
+                      transform: 'initial'
+                      background-color: 'rgba(0, 0, 0, 0.3)'
+                      font-size: 'small'
+                      color: '#ffffff'
+                    tap_action:
+                      action: 'more-info'
+
+                  - entity: binary_sensor.motion_front
+                    type: "state-icon"
+                    icon: "mdi:motion-sensor"
+                    style:
+                      top: '-5px'
+                      left: '-3px'
+                      margin: '0'
+                      padding: '0'
+                      transform: 'initial'
+                      '--paper-item-icon-color': 'rgba(255, 255, 255, 0.3)'
+                      '--paper-item-icon-active-color': 'rgba(255, 0, 0, 0.9)'
+                    tap_action:
+                      action: 'more-info'
+
+                  - entity: sensor.camera_front_temperature
+                    type: "state-label"
+                    style:
+                      top: 0
+                      right: 0
+                      height: '100%'
+                      transform: 'initial'
+                      background-color: 'rgba(0, 0, 0, 0.3)'
+                      font-size: 'small'
+                      color: '#ffffff'
+                    tap_action:
+                      action: 'more-info'
+
+                  - entity: sensor.front_camera_signal_strength
+                    type: "state-icon"
+                    style:
+                      top: '16px'
+                      right: '2px'
+                      transform: 'initial'
+                      color: '#ffffff'
+                      '--paper-item-icon-color': 'White'
+                    tap_action:
+                      action: 'more-info'
+
+                  - type: "conditional"
+                    conditions:
+                      - entity: alarm_control_panel.blink_home
+                        state_not: 'disarmed'
+                    elements:
+                      - entity: alarm_control_panel.blink_home
+                        type: "state-icon"
+                        icon: "mdi:shield-home"
+                        style: &alarm_control_panel_blink_home_style
+                          top: '46px'
+                          right: '2px'
+                          margin: 0
+                          padding: 0
+                          transform: 'initial'
+                          '--alarm-color-disarmed': 'rgba(255, 255, 255, 0.5)'
+                          '--alarm-color-armed': 'rgba(255, 255, 255, 1.0)'
+                        tap_action:
+                          action: 'more-info'
+
+                  - type: "conditional"
+                    conditions:
+                      - entity: alarm_control_panel.blink_home
+                        state: 'disarmed'
+                    elements:
+                      - entity: alarm_control_panel.blink_home
+                        type: "state-icon"
+                        icon: "mdi:shield-off-outline"
+                        style: *alarm_control_panel_blink_home_style
+                        tap_action:
+                          action: 'more-info'
+                  - type: "icon"
+                    icon: "mdi:play-circle"
+                    title: "Tap: Play MP4 video in another window"
+                    style:
+                      bottom: '40px'
+                      right: '10px'
+                      transform: 'initial'
+                      color: '#ffffff'
+                    tap_action:
+                      action: 'url'
+                      url_path: "/local/cameras/front.mp4"
+
+                  - entity: script.blink_snapshot
+                    type: "icon"
+                    icon: "mdi:refresh-circle"
+                    title: "Tap: Refresh still image"
+                    tap_action:
+                      action: 'call-service'
+                      service: script.blink_snapshot
+                      service_data:
+                        name: "Front"
+                        entity_id: camera.front
+                    style:
+                      bottom: '8px'
+                      right: '10px'
+                      transform: 'initial'
+                      color: '#ffffff'
+
+              #
+              # Security status
+              #
+              - type: "entities"
+                title: "Security Status 🛡️"
+                show_header_toggle: false
+                entities:
+                  - type: "custom:fold-entity-row"
+                    head: sensor.door_status
+                    items:
+                      - type: "custom:restriction-card"
+                        card:
+                          entity: input_boolean.door_test
+                          name: "Test"
+                          icon: "mdi:check-decagram"
+                        row: true
+
+                  - type: "custom:fold-entity-row"
+                    head: sensor.leak_status
+                    items:
+                      - type: "custom:restriction-card"
+                        card:
+                          entity: input_boolean.leak_test
+                          name: "Test"
+                          icon: "mdi:check-decagram"
+                        row: true
+                        exemptions:
+                          - user: 'renemarc'
+
+                  - type: "custom:fold-entity-row"
+                    head: sensor.motion_status
+                    items:
+                      - type: "custom:restriction-card"
+                        card:
+                          entity: input_boolean.motion_test
+                          name: "Test"
+                          icon: "mdi:check-decagram"
+                        row: true
+
+                  - type: "custom:fold-entity-row"
+                    head: sensor.smoke_status
+                    items:
+                      - type: "custom:restriction-card"
+                        card:
+                          entity: input_boolean.smoke_test
+                          name: "Test"
+                          icon: "mdi:check-decagram"
+                        row: true
+
+                  - sensor.tamper_status
+
+              #
+              # Presence
+              #
+              - type: "entities"
+                title: "Presence 👻"
+                show_header_toggle: false
+                entities:
+                  - entity: person.her
+                    type: "custom:secondaryinfo-entity-row"
+                    secondary_info: >-
+                      <small><strong>
+                      [[ binary_sensor.laptop_her.attributes.friendly_name ]]
+                      is
+                      <span style="color:var(--primary-text-color);">
+                      [[ if(binary_sensor.laptop_her == 'on', 'home', 'away') ]]
+                      </span>
+                      </strong></small>
+
+                  - entity: person.him
+                    type: "custom:secondaryinfo-entity-row"
+                    secondary_info: >-
+                      <small><strong>
+                      [[ binary_sensor.laptop_him.attributes.friendly_name ]]
+                      is
+                      <span style="color:var(--primary-text-color);">
+                      [[ if(binary_sensor.laptop_him == 'on', 'home', 'away') ]]
+                      </span>
+                      </strong></small>
+
+              #
+              # Low batteries
+              #
+              - type: "custom:auto-entities"
+                card:
+                  type: "entities"
+                  title: "Low Batteries 🕯️"
+                  show_header_toggle: false
+                show_empty: false
+                unique: true
+                filter:
+                  include:
+                    - entity_id: "*battery*"
+                      state: 'unknown'
+                    - entity_id: "*battery*"
+                      state: '< 30'
+                    - attributes:
+                        battery: '< 30'
+                    - attributes:
+                        battery_level: '< 30'
+                  exclude:
+                    - entity_id: "display.*"
+                    - entity_id: "group.*"
+
+              #
+              # Broken things
+              #
+              - type: "custom:auto-entities"
+                card:
+                  type: "entities"
+                  title: "Broken Things 🏚️"
+                  show_header_toggle: false
+                show_empty: false
+                unique: true
+                filter:
+                  include:
+                    - state: 'unavailable'
+                    - state: 'unknown'
+                  exclude:
+                    - attributes:
+                        type: 'browser_mod'
+                    - entity_id: "*_filtered"
+                    - entity_id: "group.*"
+                    - entity_id: "media_player.*"
+                    - entity_id: "person.*"
+                    - entity_id: "sensor.dark_sky_*"
+                    - entity_id: "sensor.ebox_*"
+                sort:
+                  method: 'name'
+                  ignore_case: true
+
+          #
+          # Footer
+          #
+          - type: "custom:layout-card"
+            layout: 'vertical'
+            max_width: '100%'
+            cards:
+
+              #
+              # Wallpaper caption
+              #
+              - type: "entities"
+                style: *footer-card-style
+                entities:
+                  - entity: sensor.bing_wallpaper
+                    name: "Wallpaper: Bing"
+                    icon: "mdi:camera-iris"
+
+
+  #
+  # Switchboard
+  #
+  - title: "Switchboard"
+    path: "switchboard"
+    icon: "mdi:nintendo-switch"
+    background: *background-switchboard
+    panel: true
+    cards:
+      - type: "custom:layout-card"
+        layout: 'vertical'
+        max_width: '100%'
+        cards:
+
+          #
+          # Header
+          #
+          - type: "custom:layout-card"
+            layout: 'vertical'
+            max_width: '100%'
+            cards:
+
+              #
+              # Title
+              #
+              - type: "markdown"
+                style: *header-card-style
+                content: |
+                  ⚡ {{ states('sensor.modes_friendly') }} enabled.
+
+          #
+          # Body
+          #
+          - type: "custom:layout-card"
+            column_num: 1
+            column_width: '280px'
+            max_width: '350px'
+            max_columns: 4
+            cards:
+
+              #
+              # Bedroom
+              #
+              - type: "custom:vertical-stack-in-card"
+                cards:
+                  - type: "horizontal-stack"
+                    cards:
+                      - type: "custom:mini-graph-card"
+                        align_state: 'right'
+                        decimals: 0
+                        hour24: true
+                        hours_to_show: 12
+                        show: *graph-card-horizontal
+                        entities:
+                          - entity: sensor.bedroom_temperature
+                            name: "Temperature"
+                            color: *graph-color-temperature
+
+                      - type: "custom:mini-graph-card"
+                        align_state: 'right'
+                        decimals: 0
+                        hour24: true
+                        hours_to_show: 12
+                        show: *graph-card-horizontal
+                        entities:
+                          - entity: sensor.bedroom_humidity
+                            name: "Humidity"
+                            color: *graph-color-humidity
+
+                  - type: "entities"
+                    title: "Bedroom 🛏️"
+                    show_header_toggle: true
+                    entities:
+                      - entity: input_select.bed_effect
+                        icon: "mdi:blank"
+
+                      - light.underbed
+                      - light.headboard
+                      - type: "section"
+                      - light.nightstand
+                      - light.bedside
+
+                      - type: "section"
+
+                      - entity: binary_sensor.bedroom_multisensor
+                        name: "Motion"
+
+              #
+              # Kitchen
+              #
+              - type: "custom:vertical-stack-in-card"
+                cards:
+                  - type: "horizontal-stack"
+                    cards:
+                      - type: "custom:mini-graph-card"
+                        align_state: 'right'
+                        decimals: 0
+                        height: 50
+                        hour24: true
+                        hours_to_show: 12
+                        show: *graph-card-horizontal
+                        entities:
+                          - entity: sensor.kitchen_temperature
+                            name: "Temperature"
+                            color: *graph-color-temperature
+
+                  - type: "entities"
+                    title: "Kitchen 🍽️"
+                    show_header_toggle: true
+                    entities:
+                      - entity: light.countertop
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>
+                          [[ if(sensor.light_countertop_brightness > 0, sensor.light_countertop_color_temp, '') ]] [[ if(sensor.light_countertop_brightness > 0, sensor.light_countertop_color_temp.attributes.unit_of_measurement , '') ]]
+                          [[ if(sensor.light_countertop_brightness > 0, '@', '') ]]
+                          [[ if(sensor.light_countertop_brightness > 0, sensor.light_countertop_brightness, '') ]][[ if(sensor.light_countertop_brightness > 0, sensor.light_countertop_brightness.attributes.unit_of_measurement , '') ]]
+                          </strong></small>
+
+                      - entity: light.sink
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>
+                          [[ if(sensor.light_sink_brightness > 0, sensor.light_sink_color_temp, '') ]] [[ if(sensor.light_sink_brightness > 0, sensor.light_sink_color_temp.attributes.unit_of_measurement , '') ]]
+                          [[ if(sensor.light_sink_brightness > 0, '@', '') ]]
+                          [[ if(sensor.light_sink_brightness > 0, sensor.light_sink_brightness, '') ]][[ if(sensor.light_sink_brightness > 0, sensor.light_sink_brightness.attributes.unit_of_measurement , '') ]]
+                          </strong></small>
+
+                      - entity: light.microwave
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>
+                          [[ if(sensor.light_microwave_brightness > 0, sensor.light_microwave_color_temp, '') ]] [[ if(sensor.light_microwave_brightness > 0, sensor.light_microwave_color_temp.attributes.unit_of_measurement , '') ]]
+                          [[ if(sensor.light_microwave_brightness > 0, '@', '') ]]
+                          [[ if(sensor.light_microwave_brightness > 0, sensor.light_microwave_brightness, '') ]][[ if(sensor.light_microwave_brightness > 0, sensor.light_microwave_brightness.attributes.unit_of_measurement , '') ]]
+                          </strong></small>
+
+                      - entity: light.island
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>
+                          [[ if(sensor.light_island_brightness > 0, sensor.light_island_color_temp, '') ]] [[ if(sensor.light_island_brightness > 0, sensor.light_island_color_temp.attributes.unit_of_measurement , '') ]]
+                          [[ if(sensor.light_island_brightness > 0, '@', '') ]]
+                          [[ if(sensor.light_island_brightness > 0, sensor.light_island_brightness, '') ]][[ if(sensor.light_island_brightness > 0, sensor.light_island_brightness.attributes.unit_of_measurement , '') ]]
+                          </strong></small>
+
+                      - switch.kiosk
+                      - type: "section"
+
+                      - entity: binary_sensor.kitchen_leak_sensor
+                        name: "Floor"
+
+                      - entity: binary_sensor.kiosk_motion_auto
+                        name: "Motion"
+
+              #
+              # Lounge
+              #
+              - type: "custom:vertical-stack-in-card"
+                cards:
+                  - type: "horizontal-stack"
+                    cards:
+                      - type: "custom:mini-graph-card"
+                        align_state: 'right'
+                        decimals: 0
+                        hour24: true
+                        hours_to_show: 12
+                        show: *graph-card-horizontal
+                        entities:
+                          - entity: sensor.lounge_temperature
+                            name: "Temperature"
+                            color: *graph-color-temperature
+
+                      - type: "custom:mini-graph-card"
+                        align_state: 'right'
+                        decimals: 0
+                        hour24: true
+                        hours_to_show: 12
+                        show: *graph-card-horizontal
+                        entities:
+                          - entity: sensor.lounge_humidity
+                            name: "Humidity"
+                            color: *graph-color-humidity
+
+                  - type: "entities"
+                    title: "Lounge 🛋️"
+                    show_header_toggle: true
+                    entities:
+                      - entity: light.aurora
+                        type: "custom:slider-entity-row"
+                        toggle: true
+
+                      - entity: input_select.aurora_effect
+                        icon: "mdi:blank"
+
+                      - type: "section"
+
+                      - entity: switch.lounge_tv
+                        name: "TV"
+
+                      - light.lightpack
+
+                      - entity: input_select.lightpack_effect
+                        icon: "mdi:blank"
+
+                      - type: "section"
+
+                      - entity: light.spotlight
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>
+                          [[ if(sensor.light_spotlight_color != '', sensor.light_spotlight_color, if(sensor.light_spotlight_color_temp > 0, sensor.light_spotlight_color_temp, '')) ]]
+                          [[ if(sensor.light_spotlight_color != '', '', if(sensor.light_spotlight_color_temp > 0, sensor.light_spotlight_color_temp.attributes.unit_of_measurement, '')) ]]
+                          [[ if(sensor.light_spotlight_brightness > 0, '@', '') ]]
+                          [[ if(sensor.light_spotlight_brightness > 0, sensor.light_spotlight_brightness, '') ]][[ if(sensor.light_spotlight_brightness > 0, sensor.light_spotlight_brightness.attributes.unit_of_measurement , '') ]]
+                          </strong></small>
+
+                      - entity: light.torchiere
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>
+                          [[ if(sensor.light_torchiere_color != '', sensor.light_torchiere_color, if(sensor.light_torchiere_color_temp > 0, sensor.light_torchiere_color_temp, '')) ]]
+                          [[ if(sensor.light_torchiere_color != '', '', if(sensor.light_torchiere_color_temp > 0, sensor.light_torchiere_color_temp.attributes.unit_of_measurement, '')) ]]
+                          [[ if(sensor.light_torchiere_brightness > 0, '@', '') ]]
+                          [[ if(sensor.light_torchiere_brightness > 0, sensor.light_torchiere_brightness, '') ]][[ if(sensor.light_torchiere_brightness > 0, sensor.light_torchiere_brightness.attributes.unit_of_measurement , '') ]]
+                          </strong></small>
+
+                      - light.souvenirs
+                      - light.window
+                      - light.rope
+
+                      - type: "section"
+
+                      - entity: binary_sensor.lounge_multisensor
+                        name: "Motion"
+
+              #
+              # Washroom
+              #
+              - type: "custom:vertical-stack-in-card"
+                cards:
+                  - type: "horizontal-stack"
+                    cards:
+                      - type: "custom:mini-graph-card"
+                        align_state: 'right'
+                        decimals: 0
+                        hour24: true
+                        hours_to_show: 12
+                        show: *graph-card-horizontal
+                        entities:
+                          - entity: sensor.washroom_temperature
+                            name: "Temperature"
+                            color: *graph-color-temperature
+
+                      - type: "custom:mini-graph-card"
+                        align_state: 'right'
+                        line_color: 'Blue'
+                        decimals: 0
+                        hour24: true
+                        hours_to_show: 12
+                        show: *graph-card-horizontal
+                        entities:
+                          - entity: sensor.washroom_humidity
+                            name: "Humidity"
+                            color: *graph-color-humidity
+
+                  - type: "entities"
+                    title: "Washroom 🚿"
+                    show_header_toggle: true
+                    entities:
+                      - entity: light.lavatory
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>
+                          [[ if(sensor.light_lavatory_color != '', sensor.light_lavatory_color, if(sensor.light_lavatory_color_temp > 0, sensor.light_lavatory_color_temp, '')) ]]
+                          [[ if(sensor.light_lavatory_color != '', '', if(sensor.light_lavatory_color_temp > 0, sensor.light_lavatory_color_temp.attributes.unit_of_measurement, '')) ]]
+                          [[ if(sensor.light_lavatory_brightness > 0, '@', '') ]]
+                          [[ if(sensor.light_lavatory_brightness > 0, sensor.light_lavatory_brightness, '') ]][[ if(sensor.light_lavatory_brightness > 0, sensor.light_lavatory_brightness.attributes.unit_of_measurement , '') ]]
+                          </strong></small>
+
+                      - entity: light.shower
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>
+                          [[ if(sensor.light_shower_color != '', sensor.light_shower_color, if(sensor.light_shower_color_temp > 0, sensor.light_shower_color_temp, '')) ]]
+                          [[ if(sensor.light_shower_color != '', '', if(sensor.light_shower_color_temp > 0, sensor.light_shower_color_temp.attributes.unit_of_measurement, '')) ]]
+                          [[ if(sensor.light_shower_brightness > 0, '@', '') ]]
+                          [[ if(sensor.light_shower_brightness > 0, sensor.light_shower_brightness, '') ]][[ if(sensor.light_shower_brightness > 0, sensor.light_shower_brightness.attributes.unit_of_measurement , '') ]]
+                          </strong></small>
+
+                      - type: "section"
+
+                      - entity: binary_sensor.washroom_leak_sensor
+                        name: "Floor"
+
+                      - entity: binary_sensor.washroom_multisensor
+                        name: "Motion"
+
+              #
+              # Ceiling
+              #
+              - type: "entities"
+                title: "Ceiling 💡"
+                show_header_toggle: true
+                entities:
+                  - entity: input_select.ceiling_effect
+                    icon: "mdi:blank"
+
+                  - light.bedroom
+                  - light.middle
+                  - light.lounge
+
+          #
+          # Footer
+          #
+          - type: "custom:layout-card"
+            layout: 'vertical'
+            max_width: '100%'
+            cards:
+
+              #
+              # Wallpaper caption
+              #
+              - type: "entities"
+                style: *footer-card-style
+                entities:
+                  - entity: camera.wallpaper_switchboard
+                    type: "custom:dummy-entity-row"
+                    name: "Wallpaper: Unsplash"
+                    icon: "mdi:camera-iris"
+
+  #
+  # Weather
+  #
+  - title: "Weather"
+    path: "weather"
+    icon: "mdi:weather-partly-cloudy"
+    background: *background-weather
+    panel: true
+    cards:
+      - type: "custom:layout-card"
+        layout: 'vertical'
+        max_width: '100%'
+        cards:
+
+          #
+          # Header
+          #
+          - type: "custom:layout-card"
+            layout: 'vertical'
+            max_width: '100%'
+            cards:
+
+              #
+              # Title
+              #
+              - type: "markdown"
+                style: *header-card-style
+                content: >-
+                  {{ states('sensor.weather_emoji') }}
+                  {{ states('sensor.dark_sky_minutely_summary') }}
+                  {% if states('sensor.feels_like') %}
+                    {{- states('sensor.feels_like') }}.
+                  {%- endif %}
+                  {{ states('sensor.feels_like_emoji') }}
+
+          #
+          # Body
+          #
+          - type: "custom:layout-card"
+            column_num: 1
+            column_width: '280px'
+            max_width: '350px'
+            max_columns: 4
+            cards:
+
+              #
+              # Current conditions and forecast
+              #
+              - type: "custom:vertical-stack-in-card"
+                cards:
+                  - type: "horizontal-stack"
+                    cards:
+                      - type: "custom:mini-graph-card"
+                        align_state: 'right'
+                        decimals: 0
+                        hour24: true
+                        hours_to_show: 12
+                        show: *graph-card-horizontal
+                        entities:
+                          - entity: sensor.outside_temperature
+                            name: "Temperature"
+                            color: *graph-color-temperature
+
+                      - type: "custom:mini-graph-card"
+                        align_state: 'right'
+                        decimals: 0
+                        hour24: true
+                        hours_to_show: 12
+                        show: *graph-card-horizontal
+                        entities:
+                          - entity: sensor.outside_humidity
+                            name: "Humidity"
+                            color: *graph-color-humidity
+
+                  - type: "entities"
+                    entities:
+                      - entity: sensor.weather_summary
+                        type: "custom:dummy-entity-row"
+
+                      - entity: sensor.wind_speed
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>
+                          [[ sensor.wind_bearing_cardinal_arrow ]] [[ sensor.wind_bearing_cardinal_16_friendly ]]
+                          </strong></small>
+
+                      - sensor.sun_state
+
+                      - entity: sensor.uv_friendly
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>
+                          [[ if(sun.sun != 'below_horizon', sensor.uv, 'The sun is down...') ]]
+                          </strong></small>
+
+                  - type: "custom:mini-graph-card"
+                    align_state: 'right'
+                    decimals: 0
+                    height: 50
+                    hour24: true
+                    color_thresholds:
+                      - value: 0
+                        color: '#0000cc'
+                      - value: 980
+                        color: '#0066cc'
+                      - value: 985
+                        color: '#0099cc'
+                      - value: 990
+                        color: '#00ccff'
+                      - value: 995
+                        color: '#00ffcc'
+                      - value: 1000
+                        color: '#00ff99'
+                      - value: 1005
+                        color: '#ccff00'
+                      - value: 1010
+                        color: '#ffff66'
+                      - value: 1015
+                        color: '#ffcc00'
+                      - value: 1020
+                        color: '#ff9933'
+                      - value: 1025
+                        color: '#ff6600'
+                      - value: 1030
+                        color: '#ff3300'
+                      - value: 1035
+                        color: '#cc3300'
+                    show:
+                      fill: 'fade'
+                      icon: false
+                      labels: true
+                      name: false
+                      points: true
+                    entities:
+                      - entity: sensor.dark_sky_pressure
+
+              #
+              # Weather forecast
+              #
+              - type: vertical-stack
+                cards:
+                  - type: "markdown"
+                    content: |
+                      <font size="+2">{{ states('sensor.dark_sky_hourly_summary') }} {{ states('sensor.weather_emoji_1') }}</font>
+
+                      {{ states('sensor.dark_sky_daily_summary') }}
+
+                  - type: "entities"
+                    entities:
+                      - type: "custom:fold-entity-row"
+                        head:
+                          entity: sensor.outside_temperature_0
+                          type: "custom:secondaryinfo-entity-row"
+                          name: "Today"
+                          secondary_info: >-
+                            <small><strong>
+                            [[ sensor.outside_condition_0 ]],
+                            low [[ sensor.outside_temperature_low_0 ]] [[ sensor.outside_temperature_low_0.attributes.unit_of_measurement ]]
+                            </strong></small>
+                        items:
+                          - sensor.outside_humidity_0
+                          - sensor.precip_probability_0
+                          - entity: sensor.uv_friendly_0
+                            type: "custom:secondaryinfo-entity-row"
+                            secondary_info: >-
+                              <small><strong>
+                              [[ sensor.uv_0 ]]
+                              </strong></small>
+
+                      - type: "custom:fold-entity-row"
+                        head:
+                          entity: sensor.outside_temperature_1
+                          type: "custom:secondaryinfo-entity-row"
+                          secondary_info: >-
+                            <small><strong>
+                            [[ sensor.outside_condition_1 ]],
+                            low [[ sensor.outside_temperature_low_1 ]][[ sensor.outside_temperature_low_1.attributes.unit_of_measurement ]]
+                            </strong></small>
+                        items:
+                          - sensor.outside_humidity_1
+                          - sensor.precip_probability_1
+                          - entity: sensor.uv_friendly_1
+                            type: "custom:secondaryinfo-entity-row"
+                            secondary_info: >-
+                              <small><strong>
+                              [[ sensor.uv_1 ]]
+                              </strong></small>
+
+                      - type: "custom:fold-entity-row"
+                        head:
+                          entity: sensor.outside_temperature_2
+                          type: "custom:secondaryinfo-entity-row"
+                          secondary_info: >-
+                            <small><strong>
+                            [[ sensor.outside_condition_2 ]],
+                            low [[ sensor.outside_temperature_low_2 ]][[ sensor.outside_temperature_low_2.attributes.unit_of_measurement ]]
+                            </strong></small>
+                        items:
+                          - sensor.outside_humidity_2
+                          - sensor.precip_probability_2
+                          - entity: sensor.uv_friendly_2
+                            type: "custom:secondaryinfo-entity-row"
+                            secondary_info: >-
+                              <small><strong>
+                              [[ sensor.uv_2 ]]
+                              </strong></small>
+
+                      - type: "custom:fold-entity-row"
+                        head:
+                          entity: sensor.outside_temperature_3
+                          type: "custom:secondaryinfo-entity-row"
+                          secondary_info: >-
+                            <small><strong>
+                            [[ sensor.outside_condition_3 ]],
+                            low [[ sensor.outside_temperature_low_3 ]][[ sensor.outside_temperature_low_3.attributes.unit_of_measurement ]]
+                            </strong></small>
+                        items:
+                          - sensor.outside_humidity_3
+                          - sensor.precip_probability_3
+                          - entity: sensor.uv_friendly_3
+                            type: "custom:secondaryinfo-entity-row"
+                            secondary_info: >-
+                              <small><strong>
+                              [[ sensor.uv_3 ]]
+                              </strong></small>
+
+                      - type: "custom:fold-entity-row"
+                        head:
+                          entity: sensor.outside_temperature_4
+                          type: "custom:secondaryinfo-entity-row"
+                          secondary_info: >-
+                            <small><strong>
+                            [[ sensor.outside_condition_4 ]],
+                            low [[ sensor.outside_temperature_low_4 ]][[ sensor.outside_temperature_low_4.attributes.unit_of_measurement ]]
+                            </strong></small>
+                        items:
+                          - sensor.outside_humidity_4
+                          - sensor.precip_probability_4
+                          - entity: sensor.uv_friendly_4
+                            type: "custom:secondaryinfo-entity-row"
+                            secondary_info: >-
+                              <small><strong>
+                              [[ sensor.uv_4 ]]
+                              </strong></small>
+
+
+              #
+              # World safety
+              #
+              - type: "custom:vertical-stack-in-card"
+                cards:
+                  - type: "entities"
+                    title: "World Threats 🤯"
+                    show_header_toggle: false
+                    entities:
+                      - sensor.doomsday_clock
+
+                      - type: "section"
+                        label: "COVID-19 ☣️"
+
+                      - type: "custom:fold-entity-row"
+                        head:
+                          entity: sensor.coronavirus_world_current
+                          type: "custom:secondaryinfo-entity-row"
+                          name: "World"
+                          icon: "mdi:earth"
+                          secondary_info: >-
+                            <small><strong>
+                            [[ sensor.coronavirus_world_estimated ]] est.
+                            </strong></small>
+                        items:
+                          - entity: sensor.coronavirus_world_recovered
+                            name: "Recovered"
+                          - entity: sensor.coronavirus_world_deaths
+                            type: "custom:secondaryinfo-entity-row"
+                            name: "Deceased"
+                            secondary_info: >-
+                              <small><strong>
+                              [[ sensor.coronavirus_world_mortality_rate ]] [[ sensor.coronavirus_world_mortality_rate.attributes.unit_of_measurement ]] mortality rate
+                              </strong></small>
+                          - entity: sensor.coronavirus_world_estimated_deaths
+                            type: "custom:secondaryinfo-entity-row"
+                            name: "At Risk"
+                            secondary_info: >-
+                              <small><strong>Estimated</strong></small>
+
+                      - type: "custom:fold-entity-row"
+                        head:
+                          entity: sensor.coronavirus_neighbor_current
+                          type: "custom:secondaryinfo-entity-row"
+                          name: "USA"
+                          icon: "mdi:star"
+                          secondary_info: >-
+                            <small><strong>
+                            [[ sensor.coronavirus_neighbor_estimated ]] estimated
+                            </strong></small>
+                        items:
+                          - entity: sensor.coronavirus_neighbor_recovered
+                            name: "Recovered"
+                          - entity: sensor.coronavirus_neighbor_deaths
+                            type: "custom:secondaryinfo-entity-row"
+                            name: "Deceased"
+                            secondary_info: >-
+                              <small><strong>
+                              [[ sensor.coronavirus_neighbor_mortality_rate ]] [[ sensor.coronavirus_neighbor_mortality_rate.attributes.unit_of_measurement ]] mortality rate
+                              </strong></small>
+                          - entity: sensor.coronavirus_neighbor_estimated_deaths
+                            type: "custom:secondaryinfo-entity-row"
+                            name: "At Risk"
+                            secondary_info: >-
+                              <small><strong>Estimated</strong></small>
+
+                      - type: "custom:fold-entity-row"
+                        head:
+                          entity: sensor.coronavirus_country_current
+                          type: "custom:secondaryinfo-entity-row"
+                          name: "Canada"
+                          icon: "mdi:leaf-maple"
+                          secondary_info: >-
+                            <small><strong>
+                            [[ sensor.coronavirus_country_estimated ]] estimated
+                            </strong></small>
+                        items:
+                          - entity: sensor.coronavirus_country_recovered
+                            name: "Recovered"
+                          - entity: sensor.coronavirus_country_deaths
+                            type: "custom:secondaryinfo-entity-row"
+                            name: "Deceased"
+                            secondary_info: >-
+                              <small><strong>
+                              [[ sensor.coronavirus_country_mortality_rate ]] [[ sensor.coronavirus_country_mortality_rate.attributes.unit_of_measurement ]] mortality rate
+                              </strong></small>
+                          - entity: sensor.coronavirus_country_estimated_deaths
+                            type: "custom:secondaryinfo-entity-row"
+                            name: "At Risk"
+                            secondary_info: >-
+                              <small><strong>Estimated</strong></small>
+
+                      - type: "custom:fold-entity-row"
+                        head:
+                          entity: sensor.coronavirus_province_current
+                          type: "custom:secondaryinfo-entity-row"
+                          name: "Québec"
+                          icon: "mdi:castle"
+                          secondary_info: >-
+                            <small><strong>
+                            [[ sensor.coronavirus_province_estimated ]] estimated
+                            </strong></small>
+                        items:
+                          - entity: sensor.coronavirus_province_recovered
+                            name: "Recovered"
+                          - entity: sensor.coronavirus_province_deaths
+                            type: "custom:secondaryinfo-entity-row"
+                            name: "Deceased"
+                            secondary_info: >-
+                              <small><strong>
+                              [[ sensor.coronavirus_province_mortality_rate ]] [[ sensor.coronavirus_province_mortality_rate.attributes.unit_of_measurement ]] mortality rate
+                              </strong></small>
+                          - entity: sensor.coronavirus_province_estimated_deaths
+                            type: "custom:secondaryinfo-entity-row"
+                            name: "At Risk"
+                            secondary_info: >-
+                              <small><strong>Estimated</strong></small>
+
+                  - type: "horizontal-stack"
+                    cards:
+                      - type: "custom:mini-graph-card"
+                        align_state: 'right'
+                        decimals: 0
+                        hour24: true
+                        hours_to_show: 168
+                        points_per_hour: 0.04166666666667
+                        show:
+                          fill: 'fade'
+                          icon: false
+                          labels: true
+                          name: false
+                          points: true
+                          state: true
+                        entities:
+                          - entity: sensor.coronavirus_province_current
+                            name: "Québec"
+                            unit: '😷'
+                            color: 'DeepSkyBlue'
+                          - entity: sensor.coronavirus_roc_current
+                            name: "RoC"
+                            unit: '😷'
+                            color: 'Pink'
+
+                      - type: "custom:mini-graph-card"
+                        align_state: 'right'
+                        decimals: 0
+                        hour24: true
+                        hours_to_show: 168
+                        points_per_hour: 0.04166666666667
+                        show:
+                          fill: 'fade'
+                          icon: false
+                          labels: true
+                          name: false
+                          points: true
+                          state: true
+                        entities:
+                          - entity: sensor.coronavirus_province_deaths
+                            name: "Québec"
+                            unit: '😢'
+                            color: 'Blue'
+                          - entity: sensor.coronavirus_roc_deaths
+                            name: "RoC"
+                            unit: '😢'
+                            color: 'Red'
+
+              #
+              # Weather radar and satellite pictures
+              #
+              - type: "vertical-stack"
+                cards:
+                  - entity: camera.environment_canada
+                    type: "picture-entity"
+                    name: "Radar"
+                    camera_image: camera.environment_canada
+                    aspect_ratio: '4x3'
+                    show_name: true
+                    show_state: false
+
+                  - type: "custom:swipe-card"
+                    parameters:
+                      effect: 'fade'
+                      autoplay:
+                        delay: 6000
+                      pagination:
+                        type: 'bullets'
+                    cards:
+                      - entity: camera.noaa_geocolor_hd
+                        type: "picture-entity"
+                        name: "Satellite: Geocolour"
+                        camera_image: camera.noaa_geocolor
+                        aspect_ratio: '4x3'
+                        show_name: true
+                        show_state: false
+
+                      - entity: camera.noaa_water_vapour_hd
+                        type: "picture-entity"
+                        name: "Satellite: Water Vapour"
+                        camera_image: camera.noaa_water_vapour
+                        aspect_ratio: '4x3'
+                        show_name: true
+                        show_state: false
+
+              #
+              # Atmospheric Quality
+              #
+              - type: "custom:vertical-stack-in-card"
+                cards:
+                  - type: "custom:mini-graph-card"
+                    align_state: 'right'
+                    decimals: 0
+                    height: 50
+                    hour24: true
+                    unit: 'AQI'
+                    color_thresholds:
+                      - value: 0
+                        color: '#00e400'
+                      - value: 51
+                        color: '#ffff00'
+                      - value: 101
+                        color: '#ff7e00'
+                      - value: 151
+                        color: '#ff0000'
+                      - value: 201
+                        color: '#990049'
+                      - value: 301
+                        color: '#4c0026'
+                    show:
+                      fill: 'fade'
+                      icon: false
+                      labels: true
+                      name: false
+                      points: true
+                    entities:
+                      - entity: sensor.aqi
+
+                  - type: "entities"
+                    show_header_toggle: false
+                    entities:
+                      - entity: sensor.aqi_friendly
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>
+                          [[ sensor.aqi_stations_count ]] [[ if(sensor.aqi_stations_count == 1, 'station', 'stations') ]] reporting
+                          </strong></small>
+
+                      - type: "section"
+
+                      - entity: sensor.aqi_particles_friendly
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>
+                          [[ sensor.aqi_particles ]] [[ sensor.aqi_particles.attributes.unit_of_measurement ]]
+                          </strong></small>
+
+                      - entity: sensor.aqi_ozone_friendly
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>
+                          [[ sensor.aqi_ozone ]] [[ sensor.aqi_ozone.attributes.unit_of_measurement ]]
+                          </strong></small>
+
+                      - entity: sensor.aqi_carbon_monoxide_friendly
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>
+                          [[ sensor.aqi_carbon_monoxide ]] [[ sensor.aqi_carbon_monoxide.attributes.unit_of_measurement ]]
+                          </strong></small>
+
+                      - entity: sensor.aqi_nitrogen_dioxide_friendly
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>
+                          [[ sensor.aqi_nitrogen_dioxide ]] [[ sensor.aqi_nitrogen_dioxide.attributes.unit_of_measurement ]]
+                          </strong></small>
+
+                      - entity: sensor.aqi_sulphur_dioxide_friendly
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>
+                          [[ sensor.aqi_sulphur_dioxide ]] [[ sensor.aqi_sulphur_dioxide.attributes.unit_of_measurement ]]
+                          </strong></small>
+
+                  - type: "custom:mini-graph-card"
+                    align_state: 'right'
+                    decimals: 0
+                    height: 75
+                    hour24: true
+                    show:
+                      fill: 'fade'
+                      icon: false
+                      labels: true
+                      name: false
+                      points: true
+                      state: false
+                    entities:
+                      - entity: sensor.aqi_particles
+                        color: 'Brown'
+                      - entity: sensor.aqi_ozone
+                        color: 'DeepSkyBlue'
+                      - entity: sensor.aqi_carbon_monoxide
+                        color: 'DarkSlateGray'
+                      - entity: sensor.aqi_nitrogen_dioxide
+                        color: 'DarkOrange'
+                      - entity: sensor.aqi_sulphur_dioxide
+                        color: 'Gold'
+
+          #
+          # Footer
+          #
+          - type: "custom:layout-card"
+            layout: 'vertical'
+            max_width: '100%'
+            cards:
+
+              #
+              # Wallpaper caption
+              #
+              - type: "entities"
+                style: *footer-card-style
+                entities:
+                  - entity: camera.noaa_geocolor
+                    type: "custom:dummy-entity-row"
+                    name: "Wallpaper: NOAA"
+                    icon: "mdi:camera-iris"
+
+
+  #
+  # Climate
+  #
+  - title: "Climate"
+    path: "climate"
+    icon: "mdi:air-conditioner"
+    background: *background-climate
+    panel: true
+
+    popup_cards:
+      sensor.apod: &apod_card
+        title: "Astronomy Picture of the Day"
+        card:
+          entity: camera.astronomy_picture_of_the_day_hd
+          type: "picture-entity"
+          style: |
+            ha-card {
+              border-radius: 0;
+            }
+          show_name: false
+          show_state: false
+
+    cards:
+      - type: "custom:layout-card"
+        layout: 'vertical'
+        max_width: '100%'
+        cards:
+
+          #
+          # Header
+          #
+          - type: "custom:layout-card"
+            layout: 'vertical'
+            max_width: '100%'
+            cards:
+
+              #
+              # Title
+              #
+              - type: "markdown"
+                style: *header-card-style
+                content: |
+                  {{ states('sensor.average_humidity_emoji') }}
+                  Humidity: {{ states('sensor.average_humidity_friendly') }}.
+
+          #
+          # Body
+          #
+          - type: "custom:layout-card"
+            column_num: 1
+            column_width: '280px'
+            max_width: '350px'
+            max_columns: 4
+            cards:
+
+              #
+              # Temperatures
+              #
+              - type: "custom:vertical-stack-in-card"
+                cards:
+                  - type: "horizontal-stack"
+                    cards:
+                      - type: "custom:mini-graph-card"
+                        align_state: 'right'
+                        decimals: 0
+                        height: 50
+                        hour24: true
+                        show: *graph-card-solo
+                        entities:
+                          - entity: sensor.average_temperature
+                            name: "Temperature"
+                            color: *graph-color-temperature
+
+                  - type: "entities"
+                    title: "Temperatures 🌡️"
+                    show_header_toggle: false
+                    entities:
+                      - entity: sensor.bedroom_temperature
+                        name: "Bedroom"
+                        icon: "mdi:hotel"
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>★ Tracked</strong></small>
+
+                      - entity: sensor.humidor_temperature
+                        name: "Humidor"
+                        icon: "mdi:cigar"
+
+                      - entity: sensor.kitchen_temperature
+                        name: "Kitchen"
+                        icon: "mdi:food-fork-drink"
+
+                      - entity: sensor.lounge_temperature
+                        name: "Lounge"
+                        icon: "mdi:sofa"
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>★ Tracked</strong></small>
+
+                      - entity: sensor.radon_detector_temperature
+                        name: "Radon Detector"
+                        icon: "mdi:radioactive"
+
+                      - entity: sensor.washroom_temperature
+                        name: "Washroom"
+                        icon: "mdi:shower"
+
+              #
+              # Humidity
+              #
+              - type: "custom:vertical-stack-in-card"
+                cards:
+                  - type: "horizontal-stack"
+                    cards:
+                      - type: "custom:mini-graph-card"
+                        align_state: 'right'
+                        decimals: 0
+                        height: 50
+                        hour24: true
+                        show: *graph-card-solo
+                        entities:
+                          - entity: sensor.average_humidity
+                            color: *graph-color-humidity
+
+                  - type: "entities"
+                    title: "Humidity Levels 💦"
+                    show_header_toggle: false
+                    entities:
+                      - entity: sensor.bedroom_humidity
+                        name: "Bedroom"
+                        icon: "mdi:hotel"
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>★ Tracked</strong></small>
+
+                      - entity: sensor.humidor_humidity
+                        name: "Humidor"
+                        icon: "mdi:cigar"
+
+                      - entity: sensor.lounge_humidity
+                        name: "Lounge"
+                        icon: "mdi:sofa"
+                        type: "custom:secondaryinfo-entity-row"
+                        secondary_info: >-
+                          <small><strong>★ Tracked</strong></small>
+
+                      - entity: sensor.radon_detector_humidity
+                        name: "Radon Detector"
+                        icon: "mdi:radioactive"
+
+                      - entity: sensor.washroom_humidity
+                        name: "Washroom"
+                        icon: "mdi:shower"
+
+          #
+          # Footer
+          #
+          - type: "custom:layout-card"
+            layout: 'vertical'
+            max_width: '100%'
+            cards:
+
+              #
+              # Wallpaper caption
+              #
+              - type: "entities"
+                style: *footer-card-style
+                entities:
+                  - entity: sensor.apod
+                    name: "Wallpaper: NASA"
+                    icon: "mdi:camera-iris"
+                    # tap_action:
+                    #   action: call-service
+                    #   service: browser_mod.popup
+                    #   service_data:
+                    #     deviceID: this
+                    #     <<: *apod_card
+  #
+  # Hardware
+  #
+  - title: "Hardware"
+    path: "hardware"
+    icon: "mdi:server"
+    background: *background-hardware
+    panel: true
+    cards:
+      - type: "custom:layout-card"
+        layout: 'vertical'
+        max_width: '100%'
+        cards:
+
+          #
+          # Header
+          #
+          - type: "custom:layout-card"
+            layout: 'vertical'
+            max_width: '100%'
+            cards:
+
+              #
+              # Title
+              #
+              - type: "markdown"
+                style: *header-card-style
+                content: |
+                  🏡 {{ states('sensor.version_friendly') }}
+                  {%- if states('binary_sensor.updater') == 'on' -%}
+                    <small><small><small><small> 🆕 <a href="{{ state_attr('binary_sensor.updater', 'release_notes') }}">{{ state_attr('binary_sensor.updater', 'newest_version') }}</a>
+                    </small></small></small></small>
+                  {% endif %}
+
+          #
+          # Body
+          #
+          - type: "custom:layout-card"
+            column_num: 1
+            column_width: '280px'
+            max_width: '350px'
+            max_columns: 4
+            cards:
+
+              #
+              # System
+              #
+              - type: "entities"
+                title: "Home Assistant 🤖"
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.version
+                    type: "custom:secondaryinfo-entity-row"
+                    secondary_info: >-
+                      <small><strong>
+                      [[ sensor.version.attributes.release_notes_html ]]
+                      </strong></small>
+
+                  - sensor.hacs
+                  - type: "section"
+
+                  - entity: sensor.local_ip_address
+                    name: "Local IP"
+
+                  - entity: sensor.uptime_friendly
+                    name: "Uptime"
+
+                  - sensor.uptime_host
+                  - type: "section"
+                  - sensor.cpu_temp
+
+                  - entity: sensor.processor_use
+                    type: "custom:secondaryinfo-entity-row"
+                    secondary_info: >-
+                      <small><strong>
+                      [[ sensor.average_load ]] ([[ sensor.cpu_cores ]] cores)
+                      </strong></small>
+
+                  - entity: sensor.memory_use_percent
+                    type: "custom:secondaryinfo-entity-row"
+                    secondary_info: >-
+                      <small><strong>
+                      [[ sensor.memory_free ]] [[ sensor.memory_free.attributes.unit_of_measurement ]] available
+                      </strong></small>
+
+                  - entity: sensor.disk_use_percent
+                    type: "custom:secondaryinfo-entity-row"
+                    secondary_info: >-
+                      <small><strong>
+                      [[ sensor.disk_free_home ]] [[ sensor.disk_free_home.attributes.unit_of_measurement ]] available
+                      </strong></small>
+
+                  - type: "section"
+                  - sensor.database_size
+                  - sensor.log_size
+
+              #
+              # Devices
+              #
+              - type: "entities"
+                title: "Devices 🔌"
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.printer_status
+                    type: "custom:secondaryinfo-entity-row"
+                    secondary_info: >-
+                      <small><strong>
+                      [[ sensor.printer_page_counter ]] prints, [[ sensor.printer_uptime ]] [[ sensor.printer_uptime.attributes.unit_of_measurement ]] online
+                      </strong></small>
+
+                  - entity: sensor.printer_toner
+                    type: "custom:secondaryinfo-entity-row"
+                    name: "Printer Toner"
+                    secondary_info: >-
+                      <small><strong>
+                      [[ sensor.printer_toner_remaining ]] [[ sensor.printer_toner_remaining.attributes.unit_of_measurement ]] remaining
+                      </strong></small>
+
+                  - entity: sensor.printer_drum
+                    type: "custom:secondaryinfo-entity-row"
+                    name: "Printer Drum"
+                    secondary_info: >-
+                      <small><strong>
+                      [[ sensor.printer_drum_remaining ]] [[ sensor.printer_drum_remaining.attributes.unit_of_measurement ]] remaining
+                      </strong></small>
+
+              #
+              # Batteries
+              #
+              - type: "custom:auto-entities"
+                show_header_toggle: false
+                filter:
+                  exclude:
+                    - entity_id: "*phone*"
+                  include:
+                    - entity_id: "*_battery_level"
+                sort:
+                  method: 'name'
+                  ignore_case: true
+                card:
+                  type: "custom:bar-card"
+                  title: "Sensor Batteries 🔋"
+                  height: '2em'
+                  width: '100%'
+                  align: 'left'
+                  animation:
+                    state: 'off'
+                  # entity_row: true
+                  positions:
+                    icon: 'off'
+                    indicator: 'inside'
+                    minmax: 'off'
+                    title: inside
+                    value: inside
+                  severity:
+                    - color: '#bf4040'
+                      from: 0
+                      to: 20
+                    - color: '#bf9540'
+                      from: 21
+                      to: 50
+                    - color: '#40bf40'
+                      from: 51
+                      to: 100
+                  style: |-
+                    bar-card-contentbar,
+                    bar-card-current,
+                    bar-card-backgroundbar {
+                      border-radius: 0.5em;
+                    }
+                    bar-card-value,
+                    bar-card-title {
+                      color: #ffffff;
+                      font-weight: bold;
+                      text-shadow: 1px 1px #0005;
+                    }
+
+
+              #
+              # WAN
+              #
+              - type: "entities"
+                title: "Internet Access 📡"
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.wan_ip_address
+                    name: "Public IP"
+                    icon: "mdi:wan"
+
+                  - entity: sensor.speedtest_ping_rounded
+                    secondary_info: 'last-changed'
+
+                  - entity: sensor.speedtest_upload_rounded
+                    secondary_info: 'last-changed'
+
+                  - entity: sensor.speedtest_download_rounded
+                    secondary_info: 'last-changed'
+
+                  - entity: sensor.ebox_upload_before_offpeak_rounded
+                    type: "custom:secondaryinfo-entity-row"
+                    secondary_info: >-
+                      <small><strong>
+                      [[ if(sensor.ebox_upload_remaining != 'unknown', sensor.ebox_upload_remaining, '') ]]
+                      [[ if(sensor.ebox_upload_remaining != 'unknown', sensor.ebox_upload_remaining.attributes.unit_of_measurement, '') ]]
+                      [[ if(sensor.ebox_upload_remaining != 'unknown', 'available', '') ]]
+                      </strong></small>
+
+                  - entity: sensor.ebox_download_before_offpeak_rounded
+                    type: "custom:secondaryinfo-entity-row"
+                    secondary_info: >-
+                      <small><strong>
+                      [[ if(sensor.ebox_download_remaining != 'unknown', sensor.ebox_download_remaining, '') ]]
+                      [[ if(sensor.ebox_download_remaining != 'unknown', sensor.ebox_download_remaining.attributes.unit_of_measurement, '') ]]
+                      [[ if(sensor.ebox_download_remaining != 'unknown', 'available', '') ]]
+                      </strong></small>
+
+                  - type: "custom:fold-entity-row"
+                    head:
+                      type: "section"
+                      label: "Limits"
+                    items:
+                      - sensor.ebox_usage_friendly
+                      - sensor.ebox_download_daily_capacity
+
+              #
+              # LAN
+              #
+              - type: "entities"
+                title: "Local Network 📶"
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.unifi_gateway_alerts
+                    name: "Alerts"
+
+                  - entity: sensor.unifi_gateway_lan_clients
+                    type: "custom:secondaryinfo-entity-row"
+                    secondary_info: >-
+                      <small><strong>
+                      [[ if(sensor.unifi_gateway_lan_guests > 0, sensor.unifi_gateway_lan_guests, '') ]]
+                      [[ if(sensor.unifi_gateway_lan_guests > 1, 'guests', if(sensor.unifi_gateway_lan_guests > 0, 'guest', '')) ]]
+                      </strong></small>
+
+                  - entity: sensor.unifi_gateway_wlan_clients
+                    type: "custom:secondaryinfo-entity-row"
+                    secondary_info: >-
+                      <small><strong>
+                      [[ if(sensor.unifi_gateway_wlan_guests > 0, sensor.unifi_gateway_wlan_guests, '') ]]
+                      [[ if(sensor.unifi_gateway_wlan_guests > 1, 'guests', if(sensor.unifi_gateway_wlan_guests > 0, 'guest', '')) ]]
+                      </strong></small>
+
+                  - type: "custom:fold-entity-row"
+                    head:
+                      type: "section"
+                      label: "Router"
+                    items:
+                      - entity: sensor.unifi_uptime
+                        name: "Uptime"
+
+                      - entity: sensor.unifi_gateway_processor_use
+                        name: "CPU Load"
+
+                      - entity: sensor.unifi_gateway_memory_use
+                        name: "Memory Use"
+
+              #
+              # Domain overview
+              #
+              - type: "entities"
+                title: "Domains ✨"
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.count_automations
+                    type: "custom:secondaryinfo-entity-row"
+                    name: "Automations"
+                    secondary_info: >-
+                      <small><strong>
+                      [[ if(sensor.count_automations_disabled > 0, sensor.count_automations_disabled, '') ]]
+                      [[ if(sensor.count_automations_disabled > 0, 'disabled', '') ]]
+                      </strong></small>
+
+                  - entity: sensor.count_interfaces
+                    name: "Interfaces"
+
+                  - entity: sensor.count_lights
+                    type: "custom:secondaryinfo-entity-row"
+                    name: "Lights"
+                    secondary_info: >-
+                      <small><strong>
+                      [[ if(sensor.count_lights_unavailable > 0, sensor.count_lights_unavailable, '') ]]
+                      [[ if(sensor.count_lights_unavailable > 0, 'unavailable', '') ]]
+                      </strong></small>
+
+                  - entity: sensor.count_motion_sensors
+                    type: "custom:secondaryinfo-entity-row"
+                    name: "Motion Sensors"
+                    secondary_info: >-
+                      <small><strong>
+                      [[ if(sensor.count_motion_sensors_unavailable > 0, sensor.count_motion_sensors_unavailable, '') ]]
+                      [[ if(sensor.count_motion_sensors_unavailable > 0, 'unavailable', '') ]]
+                      </strong></small>
+
+                  - entity: sensor.count_security_sensors
+                    type: "custom:secondaryinfo-entity-row"
+                    name: "Security Sensors"
+                    secondary_info: >-
+                      <small><strong>
+                      [[ if(sensor.count_security_sensors_unavailable > 0, sensor.count_security_sensors_unavailable, '') ]]
+                      [[ if(sensor.count_security_sensors_unavailable > 0, 'unavailable', '') ]]
+                      </strong></small>
+
+                  - entity: sensor.count_switches
+                    type: "custom:secondaryinfo-entity-row"
+                    name: "Switches"
+                    secondary_info: >-
+                      <small><strong>
+                      [[ if(sensor.count_switches_unavailable > 0, sensor.count_switches_unavailable, '') ]]
+                      [[ if(sensor.count_switches_unavailable > 0, 'unavailable', '') ]]
+                      </strong></small>
+
+                  - entity: sensor.count_zwave
+                    type: "custom:secondaryinfo-entity-row"
+                    name: "Z-Wave Nodes"
+                    secondary_info: >-
+                      <small><strong>
+                      [[ if(sensor.count_zwave_unavailable > 0, sensor.count_zwave_unavailable, '') ]]
+                      [[ if(sensor.count_zwave_unavailable > 0, 'unavailable', '') ]]
+                      </strong></small>
+
+          #
+          # Footer
+          #
+          - type: "custom:layout-card"
+            layout: 'vertical'
+            max_width: '100%'
+            cards:
+
+              #
+              # Wallpaper caption
+              #
+              - type: "entities"
+                style: *footer-card-style
+                entities:
+                  - entity: camera.wallpaper_hardware
+                    type: "custom:dummy-entity-row"
+                    name: "Wallpaper: Unsplash"
+                    icon: "mdi:camera-iris"
+
+
+  #
+  # Automations
+  #
+  - title: "Automations"
+    path: "automations"
+    icon: "mdi:arrow-decision-auto"
+    background: *background-automations
+    panel: true
+    cards:
+      - type: "custom:layout-card"
+        layout: 'vertical'
+        max_width: '100%'
+        cards:
+
+          #
+          # Header
+          #
+          - type: "custom:layout-card"
+            layout: 'vertical'
+            max_width: '100%'
+            cards:
+
+              #
+              # Title
+              #
+              - type: "markdown"
+                style: *header-card-style
+                content: |
+                  🤖 {{ states('sensor.count_automations_friendly') }}
+
+          #
+          # Body
+          #
+          - type: "custom:layout-card"
+            column_num: 1
+            column_width: '280px'
+            max_width: '350px'
+            max_columns: 4
+            cards:
+
+              #
+              # General automations
+              #
+              - type: "entities"
+                title: "General 🦾"
+                show_header_toggle: false
+                entities:
+                  - automation.cct_lifx
+                  - automation.cct_limitlessled
+                  - automation.homekit_start
+                  - automation.motion_front_start
+                  - automation.motion_front_stop
+                  - automation.scene_daylight
+                  - automation.scene_gaming
+                  - automation.scene_romantic
+                  - automation.scene_select
+                  - automation.theme_auto
+                  - automation.update_verify
+                  - automation.wake_up
+                  - automation.wallpaper_create
+                  - automation.wallpaper_update
+                  - automation.webhook_ifttt
+
+              #
+              # Modes automations
+              #
+              - type: "entities"
+                title: "Modes ⚡"
+                show_header_toggle: false
+                entities:
+                  - automation.low_power_mode_start
+                  - automation.low_power_mode_stop
+                  - automation.nap_mode_start
+                  - automation.nap_mode_stop
+                  - automation.night_mode_start
+                  - automation.night_mode_stop
+                  - automation.quiet_mode_start
+                  - automation.quiet_mode_stop
+                  - automation.tamper_detection_start
+                  - automation.tamper_detection_stop
+
+              #
+              # Device automations
+              #
+              - type: "entities"
+                title: "Devices 🔌"
+                show_header_toggle: false
+                entities:
+                  - automation.aurora_brightness
+                  - automation.aurora_effect
+                  - automation.aurora_schedule
+                  - automation.aurora_select
+                  - automation.bed_effect
+                  - automation.bed_schedule
+                  - automation.bed_select
+                  - automation.kitchen_lights_full
+                  - automation.kitchen_lights_init
+                  - automation.kitchen_lights_off
+                  - automation.kitchen_lights_on
+                  - automation.kitchen_lights_toggle
+                  - automation.kiosk_auto
+                  - automation.kiosk_low_power
+                  - automation.lightpack_auto
+                  - automation.lightpack_effect
+                  - automation.lightpack_select
+                  - automation.nightlight_off
+                  - automation.nightlight_on
+                  - automation.tv_off
+                  - automation.video_player_resume
+                  - automation.video_player_stop
+
+              #
+              # Areas automations
+              #
+              - type: "entities"
+                title: "Areas 🏠"
+                show_header_toggle: false
+                entities:
+                  - automation.bedroom_low_power
+                  - automation.bedroom_off
+                  - automation.bedroom_on
+                  - automation.ceiling_effect
+                  - automation.ceiling_low_power
+                  - automation.ceiling_off
+                  - automation.ceiling_on
+                  - automation.ceiling_schedule
+                  - automation.ceiling_select
+                  - automation.kitchen_low_power
+                  - automation.kitchen_off
+                  - automation.kitchen_on
+                  - automation.lounge_low_power
+                  - automation.lounge_off
+                  - automation.lounge_on
+                  - automation.washroom_low_power
+                  - automation.washroom_off
+                  - automation.washroom_on
+
+              #
+              # Notifications automations
+              #
+              - type: "entities"
+                title: "Notifications 🔔"
+                show_header_toggle: false
+                entities:
+                  - automation.daily_greeting
+                  - automation.door_notify
+                  - automation.door_notify_reset
+                  - automation.front_door_notify
+                  - automation.humidity_notify
+                  - automation.humidor_notify
+                  - automation.humidor_notify_reset
+                  - automation.power_supply_notify
+                  - automation.radon_notify
+                  - automation.radon_notify_reset
+                  - automation.smoke_notify
+                  - automation.tamper_detection_notify
+                  - automation.update_notify
+
+          #
+          # Footer
+          #
+          - type: "custom:layout-card"
+            layout: 'vertical'
+            max_width: '100%'
+            cards:
+
+              #
+              # Wallpaper caption
+              #
+              - type: "entities"
+                style: *footer-card-style
+                entities:
+                  - entity: camera.wallpaper_automations
+                    type: "custom:dummy-entity-row"
+                    name: "Wallpaper: Unsplash"
+                    icon: "mdi:camera-iris"
+
+  #
+  # Configuration
+  #
+  - title: "Configuration"
+    path: "configuration"
+    icon: "mdi:settings"
+    background: *background-configuration
+    panel: true
+    cards:
+      - type: "custom:layout-card"
+        layout: 'vertical'
+        max_width: '100%'
+        cards:
+
+          #
+          # Header
+          #
+          - type: "custom:layout-card"
+            layout: 'vertical'
+            max_width: '100%'
+            cards:
+
+              #
+              # Title
+              #
+              - type: "markdown"
+                style: *header-card-style
+                content: |
+                  👨‍💻 On &OpenCurlyDoubleQuote;<em>{{ states('sensor.git_branch') }}</em>&CloseCurlyDoubleQuote; branch.
+
+          #
+          # Body
+          #
+          - type: "custom:layout-card"
+            column_num: 1
+            min_width: 280
+            max_width: "30%"
+            max_columns: 4
+            cards:
+
+
+              #
+              # Configuration Repository
+              #
+              - type: "custom:vertical-stack-in-card"
+                cards:
+                  - type: "entities"
+                    title: "GitHub Config Repo 🌟"
+                    show_header_toggle: false
+                    entities:
+                      - entity: sensor.git_branch
+                        name: "Branch"
+
+                      - entity: sensor.repo_config_stargazers
+                        name: "Stargazers"
+
+                      - entity: sensor.repo_config_forks
+                        name: "Forks"
+
+                      - entity: sensor.repo_config_issues
+                        name: "Issues"
+
+                      - type: "weblink"
+                        icon: "mdi:github-circle"
+                        name: "renemarc/home-assistant-config"
+                        url: "https://github.com/renemarc/home-assistant-config"
+
+                  - type: "horizontal-stack"
+                    cards:
+                      - type: "custom:mini-graph-card"
+                        decimals: 0
+                        hour24: true
+                        hours_to_show: 336
+                        points_per_hour: 0.03
+                        show:
+                          fill: 'fade'
+                          icon: false
+                          labels: true
+                          name: false
+                          points: 'hover'
+                          state: false
+                        entities:
+                          - entity: sensor.repo_config_views
+                            name: "Views"
+                          - entity: sensor.repo_config_views_unique
+                            name: "Uniques"
+
+                      - type: "custom:mini-graph-card"
+                        decimals: 0
+                        hour24: true
+                        hours_to_show: 336
+                        points_per_hour: 0.03
+                        show:
+                          fill: 'fade'
+                          icon: false
+                          labels: true
+                          name: false
+                          points: 'hover'
+                          state: false
+                        entities:
+                          - entity: sensor.repo_config_clones
+                            name: "Clones"
+                          - entity: sensor.repo_config_clones_unique
+                            name: "Uniques"
+
+              #
+              # Other automation-related GitHub repos
+              #
+              - type: "entities"
+                title: "Related GitHub Repos 💫"
+                show_header_toggle: false
+                entities:
+                  - entity: sensor.repo_airthings
+                    type: "custom:github-entity-row"
+                    name: "airthings"
+
+                  - entity: sensor.repo_countdoom
+                    type: "custom:github-entity-row"
+                    name: "countdoom"
+
+                  - entity: sensor.repo_doomsday_clock
+                    type: "custom:github-entity-row"
+                    name: "doomsday-clock"
+
+                  - entity: sensor.repo_flic
+                    type: "custom:github-entity-row"
+                    name: "flic"
+
+
+              #
+              # Configuration switches
+              #
+              - type: "entities"
+                title: "Extra Settings ⚙️"
+                show_header_toggle: false
+                entities:
+                  - input_boolean.scene_mode
+
+                  - type: "custom:fold-entity-row"
+                    head:
+                      entity: variable.tamper_detected
+                      name: "Tampering"
+                    items:
+                      - input_boolean.tamper_detected
+                      - entity: script.tamper_reset
+                        name: "Reset"
+
+                  - switch.aeotec_zstick_disco_light
+
+          #
+          # Footer
+          #
+          - type: "custom:layout-card"
+            layout: 'vertical'
+            max_width: '100%'
+            cards:
+
+              #
+              # Wallpaper caption
+              #
+              - type: "entities"
+                style: *footer-card-style
+                entities:
+                  - entity: camera.wallpaper_configuration
+                    type: "custom:dummy-entity-row"
+                    name: "Wallpaper: Unsplash"
+                    icon: "mdi:camera-iris"

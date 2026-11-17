@@ -1,0 +1,21 @@
+node_modules
+.next
+out
+dist
+.turbo
+coverage
+*.tsbuildinfo
+.env
+.env.local
+.env*.local
+.vercel
+test-results
+playwright-report
+blob-report
+playwright/.cache
+.DS_Store
+packages/catalog/data/raw
+
+# Playwright visual baselines are committed; its scratch output is not.
+/test-results
+/playwright-report

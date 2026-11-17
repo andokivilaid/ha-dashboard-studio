@@ -1,0 +1,183 @@
+---
+# The main JaMa Villa outdoor view
+#
+title: Garten
+icon: mdi:flower
+path: garden
+
+badges: []
+cards:
+  - type: custom:state-switch
+    entity: user
+    states:
+      Markus:
+        type: custom:decluttering-card
+        template: welcome_header
+        variables:
+          - image: "/local/assets/markus.jpg"
+      Jasmina:
+        type: custom:decluttering-card
+        template: welcome_header
+        variables:
+          - image: "/local/assets/jasmina.jpg"
+
+  - type: vertical-stack
+    cards:
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Außenbeleuchtung"
+          - icon: mdi:lightbulb
+      - type: glance
+        entities:
+          - entity: light.garden_lights
+            tap_action:
+              action: toggle
+          - entity: light.garden_backyard_tree
+            tap_action:
+              action: toggle
+          - entity: light.garden_frontyard_tree
+            tap_action:
+              action: toggle
+          - entity: light.garden_rockpear
+            tap_action:
+              action: toggle
+          - entity: light.garden_terrace_spots
+            tap_action:
+              action: toggle
+          - entity: light.garden_terrace_lounge
+            tap_action:
+              action: toggle
+          - entity: light.garden_grass
+            tap_action:
+              action: toggle
+          - entity: light.garden_sundeck_spots
+            tap_action:
+              action: toggle
+          - entity: light.garden_sundeck_positionlight
+            tap_action:
+              action: toggle
+          - entity: light.pool_light
+            icon: mdi:pool
+            tap_action:
+              action: toggle
+          - entity: light.garden_pond_light
+            tap_action:
+              action: toggle
+          - entity: light.garden_carport_wled
+            tap_action:
+              action: toggle
+        show_state: false
+
+  - type: vertical-stack
+    cards:
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Garten (24h)"
+          - icon: mdi:thermometer
+      - type: "custom:mini-graph-card"
+        decimals: 1
+        hour24: true
+        points_per_hour: 1
+        entities:
+          - entity: sensor.garden_temperature
+          - entity: sensor.garden_humidity
+            show_state: true
+            show_graph: false
+        show:
+          fill: fade
+          extrema: true
+          name: false
+          icon: false
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Garten (7d)"
+          - icon: mdi:thermometer
+      - type: "custom:mini-graph-card"
+        decimals: 1
+        hour24: true
+        hours_to_show: 168
+        points_per_hour: 0.25
+        entities:
+          - entity: sensor.garden_temperature
+          - entity: sensor.garden_humidity
+            show_state: true
+            show_graph: false
+        show:
+          fill: fade
+          extrema: true
+          name: false
+          icon: false
+
+  - type: vertical-stack
+    cards:
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Sonnendeck"
+          - icon: mdi:white-balance-sunny
+
+      - type: horizontal-stack
+        cards:
+          - type: tile
+            entity: light.garden_sundeck_spots
+            name: LED
+          - type: tile
+            entity: light.garden_sundeck_positionlight
+            name: Schiffslicht
+          - type: tile
+            entity: switch.garden_sundeck_sockets
+            name: Steckdosen
+
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Gartenbank"
+      - type: conditional
+        conditions:
+          - entity: switch.garden_carport_siren_3
+            state_not: "on"
+        card:
+          type: entities
+          entities:
+            - entity: binary_sensor.garden_bench
+              name: Bewegungserkennung
+            - entity: input_boolean.garden_bench_notification
+              name: Benachrichtigen
+      - type: conditional
+        conditions:
+          - entity: switch.garden_carport_siren_3
+            state: "on"
+        card:
+          type: entities
+          entities:
+            - entity: binary_sensor.garden_bench
+              name: Bewegungserkennung
+            - entity: input_boolean.garden_bench_notification
+              name: Benachrichtigen
+            - witch.garden_carport_siren_3
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Teich"
+          - icon: mdi:waves
+      - type: horizontal-stack
+        cards:
+          - type: tile
+            entity: switch.garden_pond_blubber
+          - type: tile
+            entity: switch.garden_pond_waterfall
+      - type: entities
+        entities:
+          - input_select.garden_pond_mode
+      - type: custom:decluttering-card
+        template: card_header
+        variables:
+          - content: "Shaun"
+          - icon: mdi:robot-mower
+      - type: horizontal-stack
+        cards:
+          - type: tile
+            entity: switch.garden_shaun

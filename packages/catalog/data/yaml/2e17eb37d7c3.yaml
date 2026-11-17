@@ -1,0 +1,769 @@
+resources:
+  - url: /local/resources/cards/card-tools.js?track=true
+    type: js
+  - url: /local/resources/cards/gauge-card.js?v=2
+    type: js
+  - url: /local/resources/cards/bignumber-card.js?v=1
+    type: js
+  - url: /local/resources/cards/slider-entity-row.js?v=1
+    type: js
+  - url: /local/resources/cards/monster-card.js?v=1
+    type: js    
+  - url: /local/resources/cards/useful-markdown-card.js?v=1
+    type: js        
+  - url: /local/resources/cards/mini-media-player-bundle.js?v=1.3.1
+    type: module
+  - url: /local/resources/cards/mini-graph-card-bundle.js?v=0.9.3
+    type: module    
+
+
+title: Hidden Ridge
+views:
+
+#############
+# MAIN VIEW #
+#############
+
+  - icon: mdi:home
+    title: Home
+    id: home
+    cards:
+####   FAMILY STACK
+      - type: vertical-stack
+        cards:
+          - type: picture-glance
+            entities:
+              - entity: group.tristans_phone
+                icon: mdi:human-male
+                name: Tristan
+              - entity: group.crystals_phone
+                icon: mdi:human-female
+                name: Crystal
+            image: /local/resources/images/lovelace/family_edited.jpg
+            title: Family
+            state_image:
+              not_home: /local/resources/images/lovelace/family_away_edited.jpg
+              home: /local/resources/images/lovelace/family_edited.jpg
+            entity: group.tristal 
+          - type: entities
+            entities:
+              - lock.front_door
+              - lock.back_door
+              - entity: cover.garage_door_opener
+                
+                
+#### LIVINGROOM STACK
+      - type: vertical-stack
+        cards:
+          - type: picture-entity
+            image: /local/resources/images/lovelace/livingroom_edited.jpg
+            entity: light.living_room_lights
+            name: Livingroom
+            tap_action: 
+              action: toggle   
+          - type: entity-filter
+            show_header_toggle: false
+            entities:
+              - type: custom:mini-media-player
+                entity: media_player.plex_shield_android_tv
+                icon: mdi:plex
+                group: true
+                artwork: full-cover
+                hide:
+                  volume: true
+                  power: true
+                  progress: true
+                  controls: true
+                  info: false
+                  icon: true
+                  name: Plex
+              - type: custom:mini-media-player
+                entity: media_player.shield_tv
+                icon: mdi:youtube-tv
+                name: Shield TV
+                group: true
+                artwork: none
+                hide:
+                  progress: true
+                  power: true
+                  volume: true
+                  controls: false  
+                  source: true
+              - type: custom:mini-media-player
+                entity: media_player.livingroom_tv
+                group: true
+                artwork: none
+                hide:
+                  icon: true
+                  volume: true
+                  power: true
+                  controls: true
+                  progress: true
+              - type: custom:mini-media-player
+                entity: media_player.vizio_smartcast
+                group: true
+                name: Volume
+                hide:
+                  name: false
+                  source: true
+                  controls: true
+                  info: true
+                  power: true
+                  icon: true
+                  volume: false
+                  progress: true                  
+            state_filter:
+              - "playing"
+              - "paused"
+              - "on"
+            show_empty: false
+          - type: entity-filter
+            show_header_toggle: false
+            entities:
+              - type: custom:mini-media-player
+                entity: media_player.livingroom_speaker
+                icon: mdi:cast-connected
+                group: true
+                artwork: none
+            state_filter:
+              - "playing"
+            show_empty: false
+          - type: entity-filter
+            show_header_toggle: false
+            entities:
+              - type: custom:mini-media-player
+                entity: media_player.livingroom_assistant
+                icon: mdi:google-home
+                group: true
+                artwork: none
+            state_filter:
+              - "playing"
+            show_empty: false
+          - type: entity-filter
+            show_header_toggle: false
+            entities:
+              - type: custom:mini-media-player
+                entity: media_player.party_mode
+                icon: mdi:cast-connected
+                group: true
+                artwork: none
+            state_filter:
+              - "playing"
+            show_empty: false
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: light.living_room_lights
+                name: Lights
+                type: custom:slider-entity-row
+                hide_toggle: true
+              - entity: light.fan
+                name: Fan
+                type: custom:slider-entity-row
+                hide_toggle: true
+              - climate.downstairs_hallway
+              - sensor.protect_down
+
+#### BEDROOM STACK
+      - type: vertical-stack
+        cards:
+          - type: picture-entity
+            image: /local/resources/images/lovelace/master_bedroom_edited.jpg
+            entity: light.master_bedroom
+            name: Master Bedroom
+            tap_action: 
+              action: toggle
+          - type: entity-filter
+            show_header_toggle: false
+            entities:          
+              - type: custom:mini-media-player
+                entity: media_player.plex_plex_for_vizio_bedroom_tv
+                icon: mdi:plex
+                group: true
+                artwork: full-cover
+                hide:
+                  volume: true
+                  power: true
+                  progress: true
+                  controls: true
+                  info: false
+                  icon: true
+                  name: Plex
+              - type: custom:mini-media-player
+                entity: media_player.bedroom_tv
+                group: true
+                artwork: none
+                icon: mdi:youtube-tv
+                hide:
+                  volume: true
+                  power: true
+                  controls: false
+                  progress: true
+                  source: true
+              - type: custom:mini-media-player
+                entity: media_player.vizio_smartcast_2
+                group: true
+                name: Volume
+                hide:
+                  controls: true
+                  info: true
+                  icon: true
+                  power: true
+                  name: false
+                  source: true
+                  progress: true
+              - type: custom:mini-media-player
+                entity: media_player.master_suite
+                icon: mdi:cast-connected
+                group: true
+                artwork: none
+                hide:
+                  power: true
+                  volume: true
+                  progress: true
+              - type: custom:mini-media-player
+                entity: media_player.master_suite
+                group: true
+                hide:
+                  name: true
+                  source: true
+                  controls: true
+                  info: true
+                  power: true
+                  icon: true
+                  progress: true
+                  volume: false
+            state_filter:
+              - "playing"
+              - "on"
+            show_empty: false           
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: input_select.bedroom_tv
+                icon: mdi:television
+              - entity: sensor.current_activity_bedroom_tv
+              - entity: light.master_bedroom
+                name: Lights
+                type: custom:slider-entity-row
+                hide_toggle: true
+              - light.bedroom_floor_lamp
+              - light.crystals_nightstand
+              - light.tristans_nightstand
+#### KITCHEN STACK
+      - type: vertical-stack
+        cards:
+          - type: picture-entity
+            image: /local/resources/images/lovelace/kitchen_edited.jpg
+            entity: group.kitchen_lighting
+            name: Kitchen
+            tap_action: 
+              action: toggle
+          - type: entity-filter
+            show_header_toggle: false
+            entities:
+              - type: custom:mini-media-player
+                entity: media_player.dining_room_speaker
+                icon: mdi:cast-connected
+                group: true
+                artwork: none
+              - type: custom:mini-media-player
+                entity: media_player.kitchen_display
+                icon: mdi:youtube-tv
+                group: true
+                artwork: none
+              - type: custom:mini-media-player
+                entity: media_player.kitchen
+                icon: mdi:cast-connected
+                group: true
+                artwork: none
+            state_filter:
+              - "playing"
+            show_empty: false 
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - switch.overhead_light
+              - light.recessed_lights
+              - switch.chandelier
+              - entity: light.pantry
+                image: /local/resources/images/devices/smartthings.png
+              - light.cabinet_lights
+              - sensor.protect_kitchen
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: light.foyer
+                name: Foyer Light 
+              - entity: light.dining_room
+                name: Dining Room Lights
+          - id: 83b5c93f379e416faecf8f4910cbfb5d  # Automatically created id
+            type: weather-forecast
+            entity: weather.forecast                
+#### EXTERIOR STACK
+      - type: vertical-stack
+        cards:
+          - type: picture-entity
+            image: /local/resources/images/lovelace/house_exterior_edited.jpg
+            entity: group.exterior
+            name: Exterior
+            tap_action: 
+              action: toggle
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: light.frontdoor
+                name: Entryway Light
+              - light.front_floods
+              - light.rear_floods
+              - switch.patio_lights
+          - id: a85d6987bce14c1abf0a2e4830f47f59  # Automatically created id
+            type: glance
+            title: Alarm
+            tap_action: toggle
+            entities:
+              - entity: sensor.front_door
+                name: Front
+              - entity: sensor.front_windows
+                name: Front
+              - entity: sensor.bedroom_windows
+                name: Bedroom
+              - entity: sensor.back_windows
+                name: Back
+              - entity: sensor.back_door
+                name: Back
+              - entity: binary_sensor.hvac_leak_sensor_water
+                name: HVAC
+              - entity: sensor.hvac_leak_sensor_temperature_measurement
+                name: N Attic
+                icon: mdi:thermometer
+              - entity: sensor.garage_door
+                name: Garage
+              - entity: sensor.water_heater_leak_sensor_temperature_measurement
+                name: S Attic
+                icon: mdi:thermometer
+              - entity: binary_sensor.water_heater_leak_sensor_water
+                name: WH                    
+#### MANCAVE / OFFICE STACK
+      - type: vertical-stack
+        cards:
+          - type: picture-entity
+            name: Man Cave
+            image: /local/resources/images/lovelace/office_edited.jpg
+            entity: light.mancave_lights
+            tap_action: 
+              action: toggle
+          - type: entity-filter
+            show_header_toggle: false
+            entities:
+              - type: custom:mini-media-player
+                entity: media_player.mancave_assistant
+                icon: mdi:google-home
+                group: true
+                artwork: none        
+                hide:
+                  controls: false
+              - type: custom:mini-media-player
+                entity: media_player.mancave_tv
+                icon: mdi:cast-connected
+                group: true
+                artwork: none   
+                hide:
+                  volume: false
+              - type: custom:mini-media-player
+                entity: media_player.plex_mancave_tv
+                icon: mdi:plex
+                group: true
+                artwork: full-cover    
+                hide:
+                  volume: true                
+            state_filter:
+              - "playing"
+            show_empty: false
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: light.mancave_lights
+                name: Lights
+                type: custom:slider-entity-row
+                hide_toggle: true
+                image: /local/resources/images/devices/hue.png
+              - climate.upstairs_hallway
+              - sensor.protect_up            
+      - type: conditional
+        conditions:
+          - entity: input_boolean.christmas_lights
+            state: "on"
+        card:
+          type: entities
+          entities:
+            - entity: switch.christmas_lights             
+              image: /local/resources/images/devices/smartthings.png
+              name: Christmas Lights
+#### Nursery STACK
+      - type: vertical-stack
+        cards:
+          - type: picture-entity
+            name: Jensen's Room
+            image: /local/resources/images/lovelace/nursery_edited.jpg
+            tap_action: none
+            hold_action: call_service
+            service: script.jensens_bedtime
+            show_state: true
+            entity: light.ceiling_light
+          - type: entity-filter
+            show_header_toggle: false
+            entities:
+            - type: custom:mini-media-player
+              entity: media_player.nursery_assistant
+              icon: mdi:google-home
+              group: true
+              artwork: none
+            - type: custom:mini-media-player
+              entity: media_player.media_player.nursery_tv
+              icon: mdi:cast-connected
+              group: true
+              artwork: none              
+            state_filter:
+              - playing
+            show_empty: false             
+          - type: entities
+            show_header_toggle: false
+            entities:
+              - entity: light.ceiling_light
+                image: /local/resources/images/devices/smartthings.png
+              - entity: switch.nightlight
+                image: /local/resources/images/devices/smartthings.png          
+                name: Nightlight
+              - entity: script.jensens_bedtime
+                name: Jensen's Bedtime Routine
+                image: /local/resources/images/devices/google_home.png
+            
+
+##################################
+# Filter cards for Misc Media Players #
+##################################
+
+      - type: entity-filter
+        show_header_toggle: false
+        entities:
+          - type: custom:mini-media-player
+            entity: media_player.all_assistants
+            icon: mdi:cast-connected
+            group: true
+            artwork: none
+          - type: custom:mini-media-player
+            entity: media_player.all_speakers
+            icon: mdi:cast-connected
+            group: true
+            artwork: none
+          - type: custom:mini-media-player
+            entity: media_player.garage_speaker
+            icon: mdi:cast-connected
+            group: true
+            artwork: none
+          - type: custom:mini-media-player
+            entity: media_player.house_party_protocol
+            icon: mdi:cast-connected
+            group: true
+            artwork: none
+        state_filter:
+          - playing
+        show_empty: false 
+
+##########
+# LIGHTS #
+##########
+
+  - icon: mdi:lightbulb
+    title: Lights
+    id: lights
+    cards:
+      - type: entities
+        show_header_toggle: false
+        title: Living Room
+        entities:
+          - light.floor_lamp_left
+          - light.floor_lamp_right
+          - light.table_lamp
+      - type: entities
+        show_header_toggle: false
+        title: Master Bedroom
+        entities:
+          - light.tristans_nightstand
+          - light.crystals_nightstand
+          - light.bedroom_floor_lamp
+      - type: entities
+        show_header_toggle: false
+        title: Kitchen
+        entities:
+          - switch.overhead_light
+          - switch.chandelier
+          - light.recessed_lights
+          - light.pantry
+      - type: entities
+        show_header_toggle: false
+        title: Man Cave
+        entities:
+          - entity: light.man_cave_ceiling_light
+            name: Ceiling Light
+            image: /local/resources/images/devices/smartthings.png
+          - entity: light.office_bias_light
+            name: Monitor Bias Light
+            image: /local/resources/images/devices/hue.png
+          - entity: light.man_cave_floor_lamp
+            name: Floor Lamp
+            image: /local/resources/images/devices/hue.png
+          - entity: light.office_corner_lamp
+            name: Corner Lamp
+            image: /local/resources/images/devices/hue.png            
+          - entity: light.desk_light
+            name: Desk Lamp
+            image: /local/resources/images/devices/smartthings.png
+          - entity: switch.printer_light
+            name: Printer Light
+            image: /local/resources/images/devices/smartthings.png
+      - type: entities
+        show_header_toggle: false
+        title: Exterior
+        entities:
+          - light.frontdoor
+          - light.front_floods
+          - light.rear_floods
+          - switch.patio_lights
+      - type: entities
+        show_header_toggle: false
+        title: Foyer
+        entities:
+          - light.foyer
+      - type: entities
+        show_header_toggle: false
+        title: Dining Room
+        entities:
+          - light.dining_room
+      - type: entities
+        show_header_toggle: false
+        title: Accent Lights
+        entities:
+          - light.cabinet_lights
+          - light.bias_light
+
+#################
+# MEDIA PLAYERS #
+#################
+
+  - icon: mdi:play-network-outline
+    title: Media
+    id: media
+    cards:
+      - type: media-control
+        entity: media_player.all_assistants
+      - type: media-control
+        entity: media_player.all_speakers
+      - type: media-control
+        entity: media_player.bathroom_assistant
+      - type: media-control
+        entity: media_player.tristans_clock
+      - type: media-control
+        entity: media_player.crystals_clock
+      - type: media-control
+        entity: media_player.bedroom_speaker
+      - type: media-control
+        entity: media_player.dining_room_speaker
+      - type: media-control
+        entity: media_player.garage_speaker
+      - type: media-control
+        entity: media_player.kitchen_display
+      - type: media-control
+        entity: media_player.livingroom_assistant
+      - type: media-control
+        entity: media_player.livingroom_tv
+      - type: media-control
+        entity: media_player.mancave_assistant
+      - type: media-control
+        entity: media_player.mancave_tv
+      - type: media-control
+        entity: media_player.master_suite
+      - type: media-control
+        entity: media_player.nursery_assistant
+      - type: media-control
+        entity: media_player.party_mode
+      - type: media-control
+        entity: media_player.vizio_smartcast
+      - type: media-control
+        entity: media_player.shield_tv
+      - type: media-control
+        entity: media_player.nursery_tv
+      - type: media-control
+        entity: media_player.vizio_smartcast_2
+
+###########
+# CAMERAS #
+###########
+
+  - icon: mdi:video
+    title: Cameras
+    id: camera
+    cards:
+      - type: picture-entity
+        name: Front Door
+        entity: camera.downstairs_front_door
+        camera_image: camera.downstairs_front_door
+      - type: picture-entity
+        name: Backyard
+        entity: camera.downstairs_yard
+        camera_image: camera.downstairs_yard
+      - type: picture-entity
+        name: Nursery
+        entity: camera.upstairs_nursery
+        camera_image: camera.upstairs_nursery
+      - type: map
+        entities:
+          - entity: person.tristan
+          - entity: person.crystal
+          - zone.home
+          - zone.sedgwick
+          - zone.ttc
+
+#########
+# ADMIN #
+#########
+  - icon: mdi:lan
+    title: Devices
+    id: devices
+    cards:
+      - type: vertical-stack
+        cards:                
+          - type: custom:mini-graph-card
+            name: Plex Media Server
+            points_per_hour: 60
+            hours_to_show: 24
+            decimals: 0
+            aggregate_func: max
+            entities:
+              - entity: sensor.tautulli_streams
+                name: 'Streams'
+              - entity: sensor.tautulli_transcodes
+                name: 'Transcodes'                
+          - type: horizontal-stack
+            cards:
+              - type: gauge
+                name: Streams
+                entity: sensor.tautulli_streams
+                min: 0
+                max: 10
+              - type: gauge
+                name: Transcodes
+                entity: sensor.tautulli_transcodes
+                min: 0
+                max: 10           
+      - type: vertical-stack
+        cards:
+          - type: custom:mini-graph-card
+            name: Ender 3 Pro
+            hours_to_show: 24
+            points_per_hour: 120
+            unit: "°F"
+            entities:
+              - entity: sensor.ender_3_pro_actual_bed_temp
+                name: 'Actual Bed Temp'
+              - entity: sensor.ender_3_pro_actual_tool0_temp
+                name: 'Actual Hotend Temp'
+              - entity: sensor.ender_3_pro_target_bed_temp
+                name: 'Target Bed Temp'
+              - entity: sensor.ender_3_pro_target_tool0_temp
+                name: 'Target Hotend Temp'
+          - type: picture-entity
+            name: Ender 3 Pro
+            entity: camera.octoprint
+            camera_image: camera.octoprint
+            show_name: false
+            show_state: false
+          - type: conditional
+            conditions:
+              - entity: binary_sensor.ender_3_pro_printing
+                state: "on"
+            card:
+              type: markdown
+              title: 'Time Remaining:'
+              content: >              
+                {{ states.sensor.ender_3_pro_print_time_remaining.state }}                
+          - type: conditional
+            conditions:
+              - entity: binary_sensor.ender_3_pro_printing
+                state: "on"
+            card:
+              type: gauge
+              name: 'Job Progress'
+              entity: sensor.ender_3_pro_print_job_percentage
+              min: 0
+              max: 100
+      - type: vertical-stack
+        cards:
+          - type: custom:mini-graph-card
+            name: Virtual Machine
+            hours_to_show: 24
+            points_per_hour: 60
+            entities: 
+              - entity: sensor.load_5m
+  - icon: mdi:cog
+    title: Settings
+    id: settings
+    cards:
+      - type: entity-filter
+        show_header_toggle: false
+        entities:
+          - entity: sensor.front_door_battery
+            name: Front Door
+            icon: mdi:key-variant
+          - entity: sensor.back_door_battery
+            name: Back Door
+            icon: mdi:key-variant
+          - entity: sensor.hvac_leak_sensor_battery
+            name: HVAC
+            icon: mdi:water
+          - entity: sensor.water_heater_leak_sensor_battery
+            name: Water Heater
+            icon: mdi:water
+        state_filter:
+          - '20'
+          - '19'
+          - '18'
+          - '17'
+          - '16'
+          - '15'
+          - '14'
+          - '13'
+          - '12'
+          - '11'
+          - '10'
+          - '9'
+          - '8'
+          - '7'
+          - '6'
+          - '5'
+          - '4'
+          - '3'
+          - '2'
+          - '1'
+          - '0'
+        show_empty: false
+        card:
+          type: glance
+          title: Low batteries
+      - type: vertical-stack
+        cards:
+          - type: entities
+            show_header_toggle: false
+            title: Administration
+            entities:    
+              - entity: input_boolean.ghh_disabler
+                name: "Disable Google Home Hub"
+                icon: mdi:youtube
+              - input_boolean.disable_away_mode
+              - input_boolean.disable_alarm
+              - switch.vacation_mode
+              - input_boolean.simulate_presence
+              - input_boolean.disable_all_automations
+
+

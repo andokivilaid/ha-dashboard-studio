@@ -1,0 +1,336 @@
+#**********************************************************
+#* CATEGORY    UI
+#* GROUP       HOME AUTOMATION
+#* AUTHOR      LANCE HAYNIE <LANCE@HAYNIEMAIL.COM>
+#**********************************************************
+#Jarvis Home Automation
+#Copyright 2020 Haynie IPHC, LLC
+#Developed by Haynie Research & Development, LLC
+#Licensed under the Apache License, Version 2.0 (the "License");
+#you may not use this file except in compliance with the License.#
+#You may obtain a copy of the License at
+#http://www.apache.org/licenses/LICENSE-2.0
+#Unless required by applicable law or agreed to in writing, software
+#distributed under the License is distributed on an "AS IS" BASIS,
+#WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#See the License for the specific language governing permissions and
+#limitations under the License.
+title: Jarvis Home Automation
+views:
+  - title: ''
+    path: home
+    panel: true
+    icon: 'mdi:home'
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: alarm-panel
+                states:
+                  - arm_home
+                  - arm_away
+                entity: alarm_control_panel.home_alarm
+          - type: vertical-stack
+            cards:
+              - type: weather-forecast
+                entity: weather.home
+                name: Weather
+              - type: entities
+                entities:
+                  - entity: input_number.systemvolume
+                  - entity: input_boolean.whitenoise
+                  - entity: input_boolean.naturesounds
+                show_header_toggle: false
+                state_color: true
+
+  #Lights
+  - icon: 'mdi:lightbulb'
+    panel: true
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: vertical-stack
+            cards:
+
+              #Left Column
+              - type: vertical-stack
+                cards:
+                - type: entities
+                  entities:
+                    - entity: light.exterior_lights
+                    - entity: light.front_porch
+                    - entity: light.dining_room
+                    - entity: light.tv_backlight
+                    - entity: light.family_room_desk
+                    - entity: light.master_shower
+
+          #Right Column
+          - type: vertical-stack
+            cards:
+              - type: vertical-stack
+                cards:
+                - type: entities
+                  entities:
+                    - entity: light.back_porch
+                    - entity: light.front_porch_color_1
+                    - entity: light.front_porch_color_2
+                    - entity: light.front_porch_color_3
+                    - entity: light.front_porch_left
+                    - entity: light.front_porch_right
+
+  #Media
+  - icon: 'mdi:television-play'
+    panel: true
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: vertical-stack
+            cards:
+
+              #Left Column
+              - type: vertical-stack
+                cards:
+                - type: entities
+                  entities:
+                    - entity: media_player.wes_tv
+
+
+          #Right Column
+          - type: vertical-stack
+            cards:
+              - type: vertical-stack
+                cards:
+                - type: entities
+                  entities:
+                    - entity: script.game_timer
+                      name: Game Timer
+                      icon: 'mdi:google-controller'
+
+
+  #HVAC
+  - icon: 'mdi:thermometer'
+    panel: true
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          #Left Column
+          - type: vertical-stack
+            cards:
+              - type: vertical-stack
+                cards:
+                - type: thermostat
+                  entity: climate.downstairs
+                  name: Downstairs
+
+          #Right Column
+          - type: vertical-stack
+            cards:
+              - type: vertical-stack
+                cards:
+                - type: thermostat
+                  entity: climate.upstairs
+                  name: Upstairs
+
+  #WX
+  - icon: 'mdi:white-balance-sunny'
+    panel: true
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: vertical-stack
+            cards:
+
+              #Left Column
+              - type: vertical-stack
+                cards:
+                  - type: picture-entity
+                    entity: camera.wxradar
+                    name: STGWX
+
+          #Right Column
+          - type: vertical-stack
+            cards:
+              - type: vertical-stack
+                cards:
+                  - type: weather-forecast
+                    entity: weather.home
+                    name: Weather
+
+  #Cameras
+  - icon: 'mdi:cctv'
+    panel: true
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: vertical-stack
+            cards:
+
+
+              - type: vertical-stack
+                cards:
+                  - type: picture-entity
+                    entity: camera.front_porch_cam
+                    name: Front Porch
+                  - type: picture-entity
+                    entity: camera.family_room_cam
+                    name: Family Room
+                  - type: picture-entity
+                    entity: camera.garage_cam
+                    name: Garage
+
+          - type: vertical-stack
+            cards:
+              - type: vertical-stack
+                cards:
+                  - type: picture-entity
+                    entity: camera.front_yard_cam
+                    name: Front Yard
+                  - type: picture-entity
+                    entity: camera.living_room_cam
+                    name: Living Room
+                  - type: picture-entity
+                    entity: camera.upstairs_cam
+                    name: Upstairs
+
+          - type: vertical-stack
+            cards:
+              - type: vertical-stack
+                cards:
+                  - type: picture-entity
+                    entity: camera.stairs_cam
+                    name: Stairs
+                  - type: picture-entity
+                    entity: camera.kitchen_cam
+                    name: Kitchen
+                  - type: picture-entity
+                    entity: camera.dining_room_cam
+                    name: Dining Room
+
+  #Tool
+  - panel: true
+    icon: 'mdi:tools'
+    path: tools
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: entities
+                entities:
+                  - entity: script.game_timer
+                  - entity: script.leaving_in_15_min
+
+          - type: vertical-stack
+            cards:
+              - type: entities
+                entities:
+                  - entity: scene.color_loop
+                  - entity: scene.family_room_desk_color_loop
+                  - entity: scene.living_room_tv_color_loop
+                  - entity: sensor.myphone_battery_state
+                  - entity: sensor.katies_iphone_battery_state
+                  - entity: sensor.wesleys_iphone_battery_state
+
+          - type: vertical-stack
+            cards:
+              - type: entities
+                entities:
+                  - entity: input_boolean.hvacautomation
+                  - entity: script.restart_system
+                  - entity: script.restart_jarvis_base
+                  - entity: script.restart_jarvis_tts
+                  - entity: script.restart_jarvis_stt
+
+  #System Information
+  - panel: true
+    icon: 'mdi:pulse'
+    path: system
+    badges: []
+    cards:
+      - type: horizontal-stack
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: gauge
+                entity: sensor.processor_use_percent
+                min: 0
+                max: 100
+                severity:
+                  green: 0
+                  yellow: 50
+                  red: 75
+              - type: gauge
+                entity: sensor.memory_use_percent
+                min: 0
+                max: 100
+                severity:
+                  green: 0
+                  yellow: 50
+                  red: 75
+              - type: gauge
+                entity: sensor.disk_use_percent
+                min: 0
+                max: 100
+                severity:
+                  green: 0
+                  yellow: 50
+                  red: 75
+          - type: vertical-stack
+            cards:
+              - type: gauge
+                entity: sensor.load_1m
+                max: 4
+                severity:
+                  green: 0
+                  yellow: 2
+                  red: 3
+                min: 0
+              - type: gauge
+                entity: sensor.load_5m
+                max: 4
+                severity:
+                  green: 0
+                  yellow: 2
+                  red: 3
+              - type: gauge
+                entity: sensor.load_15m
+                min: 0
+                max: 4
+                severity:
+                  green: 0
+                  yellow: 2
+                  red: 3
+          - type: vertical-stack
+            cards:
+            - type: gauge
+              entity: sensor.speedtest_download
+              min: 1
+              max: 200
+              severity:
+                green: 50
+                yellow: 25
+                red: 0
+            - type: gauge
+              entity: sensor.speedtest_upload
+              min: 1
+              max: 25
+              severity:
+                green: 15
+                yellow: 10
+                red: 0
+            - type: gauge
+              entity: sensor.speedtest_ping
+              min: 1
+              max: 100
+              severity:
+                green: 0
+                yellow: 50
+                red: 75

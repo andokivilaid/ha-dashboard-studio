@@ -1,0 +1,290 @@
+path: rooms
+title: Rom
+icon: mdi:sofa
+cards:
+  - type: entities
+    title: Stue
+    show_header_toggle: false
+    entities:
+      - type: custom:mini-graph-card
+        entities:
+          - sensor.netatmo_home_living_room_temperature
+        align_icon: state
+        show:
+          name: false
+      - type: section
+      - entity: sensor.netatmo_home_living_room_temperature
+        name: Temperatur
+        secondary_info: last-changed
+      - entity: sensor.smoke_detector_temperature_measurement
+        name: Temperatur (tak)
+        secondary_info: last-changed
+      - entity: sensor.netatmo_home_living_room_humidity
+        name: Luftfuktighet
+        secondary_info: last-changed
+      - entity: sensor.netatmo_home_living_room_co2
+        name: CO2
+        secondary_info: last-changed
+      - type: section
+      - entity: sensor.smoke_detector_smoke_detector
+        type: custom:multiple-entity-row
+        name: Røykvarsler
+        icon: mdi:fire
+        secondary_info: last-changed
+        state_color: true
+        entities:
+          - entity: sensor.smoke_detector_battery
+            name: Batteri
+      - entity: vacuum.xiaomi_vacuum_cleaner
+        type: custom:multiple-entity-row
+        secondary_info: last-changed
+        state_color: true
+        entities:
+          - attribute: battery_level
+            name: Batteri
+            unit: '%'
+          - attribute: status
+            name: Status
+      - type: section
+      - entity: climate.heater_l
+        type: custom:multiple-entity-row
+        name: Varme (V)
+        icon: mdi:radiator
+        show_state: false
+        secondary_info: last-changed
+        state_color: true
+        entities:
+          - entity: sensor.heater_l_year_consumption
+            name: År
+          - entity: sensor.heater_l_day_consumption
+            name: Dag
+          - attribute: current_temperature
+            name: false
+            unit: '°C'
+      - entity: climate.heater_r
+        type: custom:multiple-entity-row
+        name: Varme (H)
+        icon: mdi:radiator
+        show_state: false
+        secondary_info: last-changed
+        state_color: true
+        entities:
+          - entity: sensor.heater_r_year_consumption
+            name: År
+          - entity: sensor.heater_r_day_consumption
+            name: Dag
+          - attribute: current_temperature
+            name: false
+            unit: '°C'
+      - type: section
+      - entity: light.living_room
+        type: custom:slider-entity-row
+        toggle: true
+        name: Alle
+      - entity: light.lounge
+        type: custom:slider-entity-row
+        toggle: true
+        name: Stue
+        icon: mdi:floor-lamp
+      - entity: light.living_room_sofa
+        type: custom:slider-entity-row
+        toggle: true
+        name: Sofa
+        icon: mdi:desk-lamp
+      - entity: light.entertainment_tv
+        type: custom:slider-entity-row
+        toggle: true
+        name: TV
+        icon: mdi:television-ambient-light
+      - type: section
+      - entity: switch.power_sofa
+        name: Sofa
+        icon: mdi:power-plug
+        state_color: true
+        assumed_state: false
+      - type: section
+      - entity: switch.power_tv
+        type: custom:multiple-entity-row
+        name: TV
+        state_color: true
+        assumed_state: false
+        entities:
+          - entity: sensor.power_tv_power_meter
+            name: Total
+          - entity: sensor.power_tv_energy_meter
+            name: Forbruk
+
+  - type: entities
+    title: Gang
+    show_header_toggle: false
+    entities:
+      - type: custom:mini-graph-card
+        entities:
+          - sensor.hall_motion_temperature_measurement
+        align_icon: state
+        show:
+          name: false
+      - type: section
+      - entity: sensor.hall_motion_temperature_measurement
+        name: Temperatur
+        secondary_info: last-changed
+      - entity: sensor.main_door_temperature_measurement
+        name: Temperatur (dør)
+        secondary_info: last-changed
+      - entity: sensor.hall_motion_illuminance
+        name: Lysnivå
+        secondary_info: last-changed
+      - type: section
+      - entity: binary_sensor.hall_motion_motion
+        type: custom:multiple-entity-row
+        name: Bevegelse
+        icon: mdi:run
+        secondary_info: last-changed
+        state_color: true
+        entities:
+          - entity: sensor.hall_motion_battery
+            name: Batteri
+      - entity: binary_sensor.main_door_contact
+        type: custom:multiple-entity-row
+        name: Ytterdør
+        icon: mdi:login
+        secondary_info: last-changed
+        state_color: true
+        entities:
+          - entity: sensor.main_door_battery
+            name: Batteri
+      - type: section
+      - entity: light.hall_roof
+        type: custom:slider-entity-row
+        toggle: true
+        name: Tak
+        icon: mdi:ceiling-light
+      - entity: light.hall_cabinet
+        name: Vitrineskap
+        icon: mdi:track-light
+
+  - type: entities
+    title: Soverom
+    show_header_toggle: false
+    entities:
+      - type: custom:mini-graph-card
+        entities:
+          - sensor.netatmo_home_temperature
+        align_icon: state
+        show:
+          name: false
+      - type: section
+      - entity: sensor.netatmo_home_temperature
+        name: Temperatur
+        secondary_info: last-changed
+      - entity: sensor.bedroom_button_temperature_measurement
+        name: Temperatur (knapp)
+        secondary_info: last-changed
+      - type: section
+      - entity: sensor.netatmo_home_humidity
+        name: Luftfuktighet
+        secondary_info: last-changed
+      - entity: sensor.netatmo_home_pressure
+        name: Trykk
+        secondary_info: last-changed
+      - entity: sensor.netatmo_home_noise
+        name: Lyd
+        secondary_info: last-changed
+      - entity: sensor.netatmo_home_co2
+        name: CO2
+        secondary_info: last-changed
+      - type: section
+      - entity: light.bedroom_main
+        type: custom:slider-entity-row
+        toggle: true
+        name: Tak
+        icon: mdi:led-strip-variant
+      - entity: light.nightstand
+        type: custom:slider-entity-row
+        toggle: true
+        name: Nattbord
+        icon: mdi:lamp
+      - type: section
+      - entity: switch.charger_ben
+        name: Lader (B)
+        icon: mdi:power-plug
+        state_color: true
+        assumed_state: false
+      - entity: switch.charger_kristin
+        name: Lader (K)
+        icon: mdi:power-plug
+        state_color: true
+        assumed_state: false
+      - entity: timer.bedroom_charger
+      - type: section
+      - entity: switch.power_pc
+        type: custom:multiple-entity-row
+        name: PC
+        state_color: true
+        assumed_state: false
+        entities:
+          - entity: sensor.power_pc_power_meter
+            name: Forbruk
+          - entity: sensor.power_pc_energy_meter
+            name: Total
+
+  - type: entities
+    title: Bad
+    show_header_toggle: false
+    entities:
+      - type: custom:mini-graph-card
+        entities:
+          - sensor.water_leak_temperature_measurement
+        align_icon: state
+        show:
+          name: false
+      - type: section
+      - entity: sensor.water_leak_temperature_measurement
+        name: Temperatur
+        secondary_info: last-changed
+      - entity: climate.bathroom_thermostat
+        type: custom:multiple-entity-row
+        name: Termostat
+        show_state: false
+        secondary_info: last-changed
+        state_color: true
+        entities:
+          - attribute: temperature
+            name: Target
+            unit: '°C'
+          - attribute: current_temperature
+            name: Current
+            unit: '°C'
+      - type: section
+      - entity: binary_sensor.water_leak_water
+        type: custom:multiple-entity-row
+        name: Vannsensor
+        icon: mdi:pipe-leak
+        secondary_info: last-changed
+        state_color: true
+        entities:
+          - entity: sensor.water_leak_battery
+            name: Batteri
+      - type: section
+      - entity: switch.washing_machine
+        type: custom:multiple-entity-row
+        name: Vaskemaskin
+        icon: mdi:washing-machine
+        secondary_info: last-changed
+        state_color: true
+        entities:
+          - entity: sensor.washing_machine_energy
+            name: Total
+          - attribute: sensor.washing_machine_power
+            name: Forbruk
+      - entity: switch.tumble_dryer
+        type: custom:multiple-entity-row
+        name: Tørketrommel
+        icon: mdi:tumble-dryer
+        secondary_info: last-changed
+        state_color: true
+        entities:
+          - entity: sensor.tumble_dryer_energy
+            name: Total
+          - attribute: sensor.tumble_dryer_power
+            name: Forbruk

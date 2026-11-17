@@ -1,0 +1,19 @@
+{
+  "name": "@ha-studio/catalog",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": { ".": "./src/index.ts" },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "ingest": "tsx scripts/ingest.ts",
+    "validate": "tsx scripts/validate.ts"
+  },
+  "dependencies": {
+    "@ha-studio/lovelace": "workspace:*",
+    "zod": "4.6.7"
+  }
+}

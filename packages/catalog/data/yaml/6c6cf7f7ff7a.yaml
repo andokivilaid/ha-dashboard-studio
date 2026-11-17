@@ -1,0 +1,59 @@
+---
+title: Home
+icon: mdi:home
+path: home
+cards:
+  - type: horizontal-stack
+    cards:
+      - type: custom:mushroom-template-card
+        entity: binary_sensor.stookalert_friesland
+        primary: "Stookalert"
+        secondary: "{{ 'Onveilig' if is_state(entity, 'on') else 'Veilig' }}"
+        layout: vertical
+        icon: mdi:shield-check
+        icon_color: "{{ 'red' if is_state(entity, 'on') else 'green' }}"
+        badge_icon: "{{ 'mdi:exclamation' if is_state(entity, 'on') }}"
+        badge_color: red
+        tap_action:
+          action: navigate
+          navigation_path: stookwijzer
+      - type: custom:mushroom-template-card
+        entity: sensor.stookwijzer
+        primary: "Stookwijzer"
+        secondary: "{{ state_attr('sensor.stookwijzer', 'message_short') }}"
+        layout: vertical
+        icon: mdi:fire
+        icon_color: |
+          {% if is_state('sensor.stookwijzer', 'blue') %}blue
+          {% elif is_state('sensor.stookwijzer', 'orange') %}orange
+          {% else %}red
+          {% endif %}
+        badge_icon: "{{ 'mdi:exclamation' if is_state(entity, 'red') }}"
+        badge_color: red
+        tap_action:
+          action: navigate
+          navigation_path: stookwijzer
+  - type: entities
+    show_header_toggle: false
+    entities:
+      - entity: input_boolean.vacation_mode
+      - entity: input_boolean.sleep_mode
+      - entity: input_boolean.guest_mode
+
+  - title: Mechanische Ventilatie
+    type: entities
+    entities:
+      - input_select.itho_fan_mode
+      - sensor.itho_fan_state
+      - sensor.itho_fan_temperature
+      - sensor.itho_fan_humidity
+
+  - type: entities
+    entities:
+      - switch.adguard_protection
+
+  - type: entities
+    show_header_toggle: false
+    entities:
+      - entity: media_player.huiskamer
+      - entity: media_player.zolder

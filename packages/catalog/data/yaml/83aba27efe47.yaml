@@ -1,0 +1,12 @@
+views:
+  - !include views/klimaat.yaml
+  - !include views/lampen.yaml
+  - !include views/deuren.yaml
+  - !include views/ramen.yaml
+  - !include views/alarm.yaml
+  - !include views/batterijen.yaml
+  - !include views/systeem.yaml
+  - !include views/hass.yaml
+  - !include views/internet.yaml
+  - !include views/3dprinter.yaml
+  - !include views/aquarium.yaml

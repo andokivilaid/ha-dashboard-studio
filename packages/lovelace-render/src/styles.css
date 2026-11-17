@@ -1,0 +1,1192 @@
+/* =========================================================================
+   Home Assistant design tokens.
+   Values mirror the frontend's default light and dark themes so that both our
+   own card implementations and third-party HACS bundles (which read the same
+   custom properties) look like the real thing.
+   ========================================================================= */
+
+.ha-render-root {
+  --red-color: #f44336;
+  --pink-color: #e91e63;
+  --purple-color: #926bc7;
+  --deep-purple-color: #6e41ab;
+  --indigo-color: #3f51b5;
+  --blue-color: #2196f3;
+  --light-blue-color: #03a9f4;
+  --cyan-color: #00bcd4;
+  --teal-color: #009688;
+  --green-color: #4caf50;
+  --light-green-color: #8bc34a;
+  --lime-color: #cddc39;
+  --yellow-color: #ffeb3b;
+  --amber-color: #ffc107;
+  --orange-color: #ff9800;
+  --deep-orange-color: #ff6f22;
+  --brown-color: #795548;
+  --grey-color: #9e9e9e;
+  --blue-grey-color: #607d8b;
+  --black-color: #000000;
+  --white-color: #ffffff;
+
+  --primary-color: #03a9f4;
+  --dark-primary-color: #0288d1;
+  --light-primary-color: #b3e5fc;
+  --accent-color: #ff9800;
+
+  --primary-text-color: #212121;
+  --secondary-text-color: #727272;
+  --disabled-text-color: #bdbdbd;
+  --text-primary-color: #ffffff;
+
+  --primary-background-color: #fafafa;
+  --secondary-background-color: #e5e5e5;
+  --card-background-color: #ffffff;
+  --divider-color: rgba(0, 0, 0, 0.12);
+  --sidebar-background-color: #ffffff;
+
+  --state-icon-color: #44739e;
+  --state-active-color: var(--amber-color);
+  --state-inactive-color: var(--state-icon-color);
+  --state-unavailable-color: var(--disabled-text-color);
+
+  --state-alarm_control_panel-armed_away-color: var(--red-color);
+  --state-alarm_control_panel-armed_home-color: var(--red-color);
+  --state-alarm_control_panel-armed_night-color: var(--red-color);
+  --state-alarm_control_panel-armed_vacation-color: var(--red-color);
+  --state-alarm_control_panel-arming-color: var(--orange-color);
+  --state-alarm_control_panel-pending-color: var(--orange-color);
+  --state-alarm_control_panel-triggered-color: var(--red-color);
+  --state-alert-active-color: var(--red-color);
+  --state-automation-active-color: var(--amber-color);
+  --state-binary_sensor-active-color: var(--amber-color);
+  --state-binary_sensor-alerting-color: var(--red-color);
+  --state-climate-auto-color: var(--green-color);
+  --state-climate-cool-color: var(--blue-color);
+  --state-climate-dry-color: var(--orange-color);
+  --state-climate-fan_only-color: var(--cyan-color);
+  --state-climate-heat-color: var(--deep-orange-color);
+  --state-climate-heat_cool-color: var(--amber-color);
+  --state-cover-active-color: var(--purple-color);
+  --state-device_tracker-active-color: var(--light-green-color);
+  --state-fan-active-color: var(--cyan-color);
+  --state-group-active-color: var(--amber-color);
+  --state-humidifier-active-color: var(--purple-color);
+  --state-light-active-color: var(--amber-color);
+  --state-lock-active-color: var(--red-color);
+  --state-media_player-active-color: var(--light-blue-color);
+  --state-person-active-color: var(--light-green-color);
+  --state-script-active-color: var(--amber-color);
+  --state-sensor-battery-high-color: var(--green-color);
+  --state-sensor-battery-low-color: var(--red-color);
+  --state-sensor-battery-medium-color: var(--orange-color);
+  --state-siren-active-color: var(--red-color);
+  --state-sun-above_horizon-color: var(--amber-color);
+  --state-switch-active-color: var(--amber-color);
+  --state-update-active-color: var(--orange-color);
+  --state-vacuum-active-color: var(--teal-color);
+  --state-valve-active-color: var(--purple-color);
+
+  --ha-card-background: var(--card-background-color);
+  --ha-card-border-radius: 12px;
+  --ha-card-border-width: 1px;
+  --ha-card-border-color: var(--divider-color);
+  --ha-card-box-shadow: none;
+  --ha-card-header-font-size: 24px;
+  --ha-card-header-color: var(--primary-text-color);
+
+  --masonry-view-card-margin: 4px;
+  --row-gap: 8px;
+  --column-gap: 8px;
+
+  --mdc-theme-primary: var(--primary-color);
+  --mdc-theme-on-primary: var(--text-primary-color);
+  --paper-item-icon-color: var(--state-icon-color);
+  --paper-item-icon-active-color: var(--state-active-color);
+
+  --ha-font-family-body: "Roboto", "Noto Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Helvetica, Arial, sans-serif;
+  --ha-font-size-m: 14px;
+  --ha-font-weight-normal: 400;
+  --ha-font-weight-medium: 500;
+
+  --slider-track-color: rgba(0, 0, 0, 0.1);
+  --slider-bar-color: var(--primary-color);
+
+  color: var(--primary-text-color);
+  background: var(--primary-background-color);
+  font-family: var(--ha-font-family-body);
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  container-type: inline-size;
+}
+
+.ha-render-root[data-theme="dark"] {
+  --primary-text-color: #e1e1e1;
+  --secondary-text-color: #9b9b9b;
+  --disabled-text-color: #6f6f6f;
+  --primary-background-color: #111111;
+  --secondary-background-color: #202020;
+  --card-background-color: #1c1c1c;
+  --divider-color: rgba(225, 225, 225, 0.12);
+  --sidebar-background-color: #1c1c1c;
+  --state-icon-color: #e1e1e1;
+  --slider-track-color: rgba(255, 255, 255, 0.1);
+  color-scheme: dark;
+}
+
+/* ---------------------------- Layout ------------------------------------ */
+
+.hui-view {
+  padding: 8px 8px 32px;
+  box-sizing: border-box;
+  min-height: 100%;
+}
+
+.hui-view--masonry {
+  display: grid;
+  grid-template-columns: repeat(var(--hui-columns, 3), minmax(0, 1fr));
+  gap: 8px;
+  align-items: start;
+}
+.hui-view--masonry > .hui-masonry-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.hui-view--sections {
+  display: grid;
+  /* HA sizes sections at ~500px and centres the grid; anything narrower makes
+     tile names truncate far more aggressively than they do in a real instance. */
+  grid-template-columns: repeat(var(--hui-columns, 3), minmax(0, 500px));
+  justify-content: center;
+  gap: 24px 16px;
+  align-items: start;
+  margin: 0 auto;
+}
+
+.hui-section {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 8px;
+  min-width: 0;
+  grid-column: span var(--hui-section-span, 1);
+}
+.hui-section__title {
+  grid-column: 1 / -1;
+  margin: 0 0 -2px;
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--primary-text-color);
+  padding: 0 4px;
+}
+.hui-section__item {
+  grid-column: span var(--hui-card-cols, 6);
+  min-width: 0;
+}
+
+.hui-view--panel {
+  padding: 8px;
+}
+.hui-view--panel > * {
+  height: 100%;
+}
+
+.hui-view--sidebar {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+}
+.hui-view--sidebar .hui-masonry-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+@container (max-width: 900px) {
+  .hui-view--masonry,
+  .hui-view--sections {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .hui-view--sidebar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@container (max-width: 600px) {
+  .hui-view--masonry,
+  .hui-view--sections {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .hui-section__item {
+    grid-column: span min(var(--hui-card-cols, 6), 12);
+  }
+}
+
+/* ---------------------------- Badges ------------------------------------ */
+
+.hui-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  padding: 4px 8px 12px;
+}
+.hui-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 14px 0 10px;
+  border-radius: 18px;
+  background: var(--ha-card-background);
+  border: var(--ha-card-border-width) solid var(--ha-card-border-color);
+  box-sizing: border-box;
+  max-width: 100%;
+}
+.hui-badge__icon {
+  color: var(--badge-color, var(--state-icon-color));
+  flex: 0 0 auto;
+  display: inline-flex;
+}
+.hui-badge__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.1;
+}
+.hui-badge__name {
+  font-size: 10px;
+  color: var(--secondary-text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hui-badge__state {
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---------------------------- Card shell -------------------------------- */
+
+.ha-card {
+  background: var(--ha-card-background);
+  border-radius: var(--ha-card-border-radius);
+  border: var(--ha-card-border-width) solid var(--ha-card-border-color);
+  box-shadow: var(--ha-card-box-shadow);
+  color: var(--primary-text-color);
+  display: block;
+  position: relative;
+  box-sizing: border-box;
+  overflow: hidden;
+  height: 100%;
+}
+.ha-card__header {
+  padding: 12px 16px 8px;
+  font-size: 20px;
+  font-weight: 400;
+  letter-spacing: -0.012em;
+  line-height: 1.3;
+  color: var(--ha-card-header-color);
+}
+.ha-card__content {
+  padding: 16px;
+}
+.ha-card--clickable {
+  cursor: pointer;
+}
+
+.hui-fallback-card {
+  padding: 14px 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.hui-fallback-card__icon {
+  color: var(--secondary-text-color);
+  flex: 0 0 auto;
+}
+.hui-fallback-card__title {
+  font-weight: 500;
+  font-size: 14px;
+  word-break: break-word;
+}
+.hui-fallback-card__sub {
+  font-size: 12px;
+  color: var(--secondary-text-color);
+  margin-top: 2px;
+}
+.hui-fallback-card__pill {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--secondary-background-color);
+  color: var(--secondary-text-color);
+}
+
+.hui-error-card {
+  padding: 14px 16px;
+  background: var(--red-color);
+  color: #fff;
+  border-radius: var(--ha-card-border-radius);
+  font-size: 13px;
+}
+
+/* ---------------------------- Tile card --------------------------------- */
+
+.hui-tile {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+  box-sizing: border-box;
+}
+.hui-tile__row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.hui-tile--vertical .hui-tile__row {
+  flex-direction: column;
+  text-align: center;
+  gap: 6px;
+}
+.hui-tile__icon {
+  position: relative;
+  flex: 0 0 auto;
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--tile-color, var(--state-icon-color));
+  overflow: hidden;
+}
+.hui-tile__icon::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  opacity: 0.2;
+  border-radius: inherit;
+}
+.hui-tile__icon > * {
+  position: relative;
+}
+.hui-tile__img {
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  object-fit: cover;
+  flex: 0 0 auto;
+}
+.hui-tile__text {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.hui-tile__name {
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.1px;
+}
+.hui-tile__state {
+  font-size: 12px;
+  color: var(--secondary-text-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hui-tile__features {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ---------------------------- Features ---------------------------------- */
+
+.hui-feature-bar {
+  position: relative;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--feature-track, var(--slider-track-color));
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 12px;
+  color: var(--primary-text-color);
+  user-select: none;
+}
+.hui-feature-bar__fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  background: var(--feature-fill, var(--state-active-color));
+  opacity: 0.85;
+}
+.hui-feature-bar__label {
+  position: relative;
+  font-weight: 500;
+  mix-blend-mode: normal;
+}
+.hui-feature-buttons {
+  display: flex;
+  gap: 8px;
+}
+.hui-feature-button {
+  flex: 1;
+  height: 42px;
+  border-radius: 10px;
+  border: none;
+  background: var(--slider-track-color);
+  color: var(--primary-text-color);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+}
+.hui-feature-button[data-active="true"] {
+  background: color-mix(in srgb, var(--state-active-color) 28%, transparent);
+  color: var(--state-active-color);
+}
+
+/* ---------------------------- Entities card ----------------------------- */
+
+.hui-entities__rows {
+  padding: 4px 0 8px;
+}
+.hui-entities-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 16px;
+  min-height: 40px;
+}
+.hui-entities-row__icon {
+  color: var(--row-color, var(--state-icon-color));
+  flex: 0 0 auto;
+  display: inline-flex;
+}
+.hui-entities-row__name {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.hui-entities-row__state {
+  color: var(--primary-text-color);
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.hui-entities-row__secondary {
+  font-size: 12px;
+  color: var(--secondary-text-color);
+}
+.hui-entities__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 16px 4px;
+}
+.hui-section-divider {
+  height: 1px;
+  background: var(--divider-color);
+  margin: 8px 16px;
+}
+.hui-toggle {
+  width: 40px;
+  height: 22px;
+  border-radius: 11px;
+  background: var(--slider-track-color);
+  position: relative;
+  flex: 0 0 auto;
+}
+.hui-toggle[data-on="true"] {
+  background: color-mix(in srgb, var(--state-active-color) 45%, transparent);
+}
+.hui-toggle::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 16px;
+  height: 16px;
+  border-radius: 8px;
+  background: var(--secondary-text-color);
+  transition: transform 0.18s ease;
+}
+.hui-toggle[data-on="true"]::after {
+  transform: translateX(18px);
+  background: var(--state-active-color);
+}
+
+/* ---------------------------- Glance ------------------------------------ */
+
+.hui-glance {
+  display: grid;
+  grid-template-columns: repeat(var(--glance-columns, 4), minmax(0, 1fr));
+  gap: 8px;
+  padding: 8px 16px 16px;
+}
+.hui-glance__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  text-align: center;
+  min-width: 0;
+}
+.hui-glance__name,
+.hui-glance__state {
+  font-size: 12px;
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.hui-glance__name {
+  color: var(--secondary-text-color);
+}
+
+/* ---------------------------- Button ------------------------------------ */
+
+.hui-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 20px 12px;
+  height: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
+.hui-button__icon {
+  color: var(--button-color, var(--state-icon-color));
+}
+.hui-button__name {
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: capitalize;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+.hui-button__state {
+  font-size: 12px;
+  color: var(--secondary-text-color);
+}
+
+/* ---------------------------- Light card -------------------------------- */
+
+.hui-light {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 16px 24px;
+}
+.hui-light__dial {
+  position: relative;
+  width: 180px;
+  height: 180px;
+}
+.hui-light__value {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 400;
+}
+.hui-light__value small {
+  font-size: 14px;
+  color: var(--secondary-text-color);
+}
+.hui-light__name {
+  font-size: 15px;
+  font-weight: 500;
+}
+
+/* ---------------------------- Thermostat -------------------------------- */
+
+.hui-thermostat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 16px 20px;
+}
+.hui-thermostat__dial {
+  position: relative;
+  width: 210px;
+  height: 210px;
+}
+.hui-thermostat__readout {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.hui-thermostat__target {
+  font-size: 42px;
+  font-weight: 400;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.hui-thermostat__current {
+  font-size: 13px;
+  color: var(--secondary-text-color);
+  margin-top: 6px;
+}
+.hui-thermostat__action {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--thermo-color, var(--secondary-text-color));
+  margin-top: 4px;
+}
+.hui-mode-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.hui-mode-chip {
+  width: 36px;
+  height: 36px;
+  border-radius: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--slider-track-color);
+  color: var(--secondary-text-color);
+}
+.hui-mode-chip[data-active="true"] {
+  background: var(--chip-active, var(--state-active-color));
+  color: #fff;
+}
+
+/* ---------------------------- Weather ----------------------------------- */
+
+.hui-weather {
+  padding: 16px;
+}
+.hui-weather__now {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.hui-weather__temp {
+  font-size: 40px;
+  font-weight: 300;
+  line-height: 1;
+}
+.hui-weather__meta {
+  flex: 1;
+  min-width: 0;
+}
+.hui-weather__name {
+  font-size: 16px;
+  font-weight: 500;
+}
+.hui-weather__cond {
+  color: var(--secondary-text-color);
+  font-size: 13px;
+}
+.hui-weather__attrs {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--secondary-text-color);
+  margin-top: 8px;
+}
+.hui-weather__forecast {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 4px;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--divider-color);
+  text-align: center;
+}
+.hui-weather__day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+}
+.hui-weather__day b {
+  font-weight: 500;
+}
+.hui-weather__low {
+  color: var(--secondary-text-color);
+}
+
+/* ---------------------------- Gauge ------------------------------------- */
+
+.hui-gauge {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+.hui-gauge__value {
+  font-size: 26px;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+.hui-gauge__name {
+  font-size: 13px;
+  color: var(--secondary-text-color);
+  text-align: center;
+}
+
+/* ---------------------------- Graph ------------------------------------- */
+
+.hui-graph {
+  padding: 8px 12px 12px;
+}
+.hui-graph__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--secondary-text-color);
+  margin-bottom: 4px;
+}
+.hui-graph__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-right: 6px;
+}
+.hui-graph__svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+/* ---------------------------- Media ------------------------------------- */
+
+.hui-media {
+  position: relative;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 16px;
+  gap: 10px;
+  background: linear-gradient(140deg, var(--media-a, #37474f), var(--media-b, #263238));
+  color: #fff;
+}
+.hui-media__title {
+  font-size: 16px;
+  font-weight: 500;
+}
+.hui-media__sub {
+  font-size: 13px;
+  opacity: 0.8;
+}
+.hui-media__progress {
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.25);
+  overflow: hidden;
+}
+.hui-media__progress > span {
+  display: block;
+  height: 100%;
+  background: #fff;
+}
+.hui-media__controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  opacity: 0.95;
+}
+
+/* ---------------------------- Markdown ---------------------------------- */
+
+.hui-markdown {
+  padding: 16px;
+  font-size: 14px;
+}
+.hui-markdown h1,
+.hui-markdown h2,
+.hui-markdown h3 {
+  margin: 0 0 8px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+.hui-markdown h1 { font-size: 22px; }
+.hui-markdown h2 { font-size: 18px; }
+.hui-markdown h3 { font-size: 16px; }
+.hui-markdown p { margin: 0 0 8px; }
+.hui-markdown ul { margin: 0 0 8px; padding-left: 20px; }
+.hui-markdown code {
+  background: var(--secondary-background-color);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+.hui-markdown a { color: var(--primary-color); }
+
+/* ---------------------------- Picture ----------------------------------- */
+
+.hui-picture {
+  position: relative;
+  display: block;
+}
+.hui-picture__img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: var(--secondary-background-color);
+}
+.hui-picture__footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 10px 14px;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  backdrop-filter: blur(2px);
+}
+.hui-picture__glance {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+/* ---------------------------- Heading ----------------------------------- */
+
+.hui-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 4px 0;
+  grid-column: 1 / -1;
+}
+.hui-heading--title { font-size: 22px; font-weight: 400; }
+.hui-heading--subtitle { font-size: 14px; font-weight: 500; color: var(--secondary-text-color); }
+.hui-heading__badges {
+  margin-left: auto;
+  display: flex;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--secondary-text-color);
+  align-items: center;
+}
+
+/* ---------------------------- Area card --------------------------------- */
+
+.hui-area {
+  position: relative;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--primary-color) 14%, transparent), transparent);
+}
+.hui-area__name {
+  padding: 14px 16px 0;
+  font-size: 18px;
+  font-weight: 500;
+}
+.hui-area__sensors {
+  padding: 2px 16px 0;
+  font-size: 13px;
+  color: var(--secondary-text-color);
+}
+.hui-area__controls {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px 14px;
+  flex-wrap: wrap;
+}
+.hui-area__chip {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--slider-track-color);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--secondary-text-color);
+}
+.hui-area__chip[data-active="true"] {
+  color: var(--state-active-color);
+  background: color-mix(in srgb, var(--state-active-color) 20%, transparent);
+}
+
+/* ---------------------------- Alarm ------------------------------------- */
+
+.hui-alarm {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+.hui-alarm__state {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--alarm-color, var(--primary-text-color));
+}
+.hui-alarm__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+.hui-alarm__key {
+  height: 44px;
+  border-radius: 10px;
+  background: var(--slider-track-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
+/* ---------------------------- Misc -------------------------------------- */
+
+.hui-stack--horizontal {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 8px;
+  height: 100%;
+}
+.hui-stack--vertical {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  height: 100%;
+}
+.hui-grid {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(var(--grid-columns, 2), minmax(0, 1fr));
+}
+.hui-grid--square > * {
+  aspect-ratio: 1 / 1;
+}
+
+.hui-todo {
+  padding: 4px 0 12px;
+}
+.hui-todo__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 16px;
+}
+.hui-todo__box {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 2px solid var(--secondary-text-color);
+  flex: 0 0 auto;
+}
+.hui-todo__item[data-done="true"] .hui-todo__box {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+}
+.hui-todo__item[data-done="true"] span {
+  text-decoration: line-through;
+  color: var(--secondary-text-color);
+}
+
+.hui-calendar__event {
+  display: flex;
+  gap: 12px;
+  padding: 8px 16px;
+  align-items: baseline;
+}
+.hui-calendar__time {
+  font-size: 12px;
+  color: var(--secondary-text-color);
+  min-width: 68px;
+  font-variant-numeric: tabular-nums;
+}
+
+.hui-iframe {
+  width: 100%;
+  border: 0;
+  display: block;
+  aspect-ratio: 16 / 9;
+  background: var(--secondary-background-color);
+}
+
+.hui-map {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background:
+    radial-gradient(circle at 30% 40%, color-mix(in srgb, var(--primary-color) 16%, transparent), transparent 60%),
+    repeating-linear-gradient(0deg, var(--divider-color) 0 1px, transparent 1px 40px),
+    repeating-linear-gradient(90deg, var(--divider-color) 0 1px, transparent 1px 40px),
+    var(--secondary-background-color);
+}
+.hui-map__pin {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 11px;
+  color: var(--primary-text-color);
+}
+.hui-map__dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 13px;
+  background: var(--primary-color);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  border: 2px solid var(--card-background-color);
+}
+
+.hui-statistic {
+  padding: 16px;
+}
+.hui-statistic__value {
+  font-size: 32px;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+.hui-statistic__name {
+  color: var(--secondary-text-color);
+  font-size: 13px;
+}
+
+.hui-energy__bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 6px;
+  height: 120px;
+  padding: 8px 16px 0;
+}
+.hui-energy__bar {
+  flex: 1;
+  border-radius: 4px 4px 0 0;
+  background: var(--primary-color);
+  min-height: 3px;
+}
+
+.hui-custom-host {
+  display: block;
+  height: 100%;
+}
+.hui-custom-host > * {
+  display: block;
+}
+
+.hui-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--secondary-background-color) 25%,
+    color-mix(in srgb, var(--secondary-background-color) 60%, var(--card-background-color)) 37%,
+    var(--secondary-background-color) 63%
+  );
+  background-size: 400% 100%;
+  animation: hui-shimmer 1.4s ease infinite;
+  border-radius: var(--ha-card-border-radius);
+  min-height: 92px;
+}
+@keyframes hui-shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hui-skeleton { animation: none; }
+}
+
+/* ---------------------------- View tabs --------------------------------- */
+
+.hui-tabs {
+  display: flex;
+  gap: 2px;
+  align-items: stretch;
+  background: var(--primary-color);
+  padding: 0 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.hui-tabs::-webkit-scrollbar {
+  display: none;
+}
+.hui-tab {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.72);
+  min-width: 56px;
+  height: 48px;
+  padding: 0 14px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+.hui-tab[data-active="true"] {
+  color: #fff;
+}
+.hui-tab[data-active="true"]::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 0;
+  height: 2px;
+  background: #fff;
+  border-radius: 2px 2px 0 0;
+}

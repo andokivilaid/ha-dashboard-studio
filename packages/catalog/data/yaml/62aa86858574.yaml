@@ -1,0 +1,42 @@
+title: 3D Printer
+path: 3dprinter
+icon: mdi:printer-3d
+type: sections
+sections:
+  - type: custom:mushroom-chips-card
+    chips:
+      - type: template
+        tap_action:
+          action: navigate
+          navigation_path: /dashboard-welkom/welkom
+        icon: mdi:arrow-left-bold
+        content: Overzicht
+    layout_options:
+      grid_columns: full
+
+  - type: grid
+    column_span: 4
+    cards:
+      - type: heading
+        heading: 3D printer
+        heading_style: title
+        icon: mdi:printer-3d
+
+  - type: grid
+    cards:
+      - type: heading
+        heading: P1S
+        heading_style: subtitle
+        badges:
+          - type: entity
+            show_state: true
+            show_icon: false
+            entity: sensor.p1s_01p00c480300533_print_status
+      - type: custom:ha-bambulab-ams-card
+        ams: 7b5fe0c32a98004bd4b4c13962b8ec3a
+        show_info_bar: true
+      - type: custom:ha-bambulab-print_status-card
+        printer: fe906d66cefa564d81b807f00cf7935a
+        custom_power: switch.3d_printer_plug
+      - type: custom:ha-bambulab-print_control-card
+        printer: fe906d66cefa564d81b807f00cf7935a

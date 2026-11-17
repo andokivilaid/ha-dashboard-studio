@@ -1,0 +1,359 @@
+title: My Home
+icon: mdi:home
+cards:
+  - type: alarm-panel
+    entity: alarm_control_panel.home
+    icon: mdi:security
+    color_type: card
+    show_state: true
+    name: Security
+    size: 20%
+    style:
+      - height: 75px
+      - font-weight: bold
+      - color: rgb(255, 255, 255)
+    state:
+      - value: "disarmed"
+        color: rgb(255,0,0)
+      - value: "armed_home"
+        color: rgb(0, 128, 0)
+      - value: "armed_away"
+        color: rgb(0, 0, 255)
+    action: more_info
+
+  - type: horizontal-stack
+    cards:
+      - type: button
+        entity: climate.dining_room
+        icon: mdi:thermometer-lines
+        name: Nest
+        color_type: card
+        show_state: "on"
+        size: 20%
+        style:
+          - height: 75px
+          - font-weight: bold
+          - color: rgb(255, 255, 255)
+        state:
+          - value: "heat"
+            color: rgb(255,0,0)
+          - value: "eco"
+            color: rgb(0, 128, 0)
+          - value: "cool"
+            color: rgb(0, 0, 255)
+        action: service
+        service:
+          domain: script
+          action: toggle_climate
+
+      - type: button
+        entity: binary_sensor.door_window_sensor_158d000424a6d6
+        icon: mdi:door
+        name: Front Door
+        color_type: card
+        show_state: "on"
+        size: 20%
+        style:
+          - height: 75px
+          - font-weight: bold
+          - color: rgb(255, 255, 255)
+        state:
+          - value: "on"
+            color: rgb(255,0,0)
+          - value: "off"
+            color: rgb(0, 128, 0)
+
+      - type: button
+        entity: binary_sensor.door_window_sensor_158d00040ad8fc
+        icon: mdi:door
+        name: Back Door
+        color_type: card
+        show_state: "on"
+        size: 20%
+        style:
+          - height: 75px
+          - font-weight: bold
+          - color: rgb(255, 255, 255)
+        state:
+          - value: "on"
+            color: rgb(255,0,0)
+          - value: "off"
+            color: rgb(0, 128, 0)
+
+  - type: entities
+    title: Kalavala Family
+    show_header_toggle: false
+    entities:
+      - type: attribute
+        entity: device_tracker.life360_suresh
+        name: Suresh
+        attribute: address
+      - type: attribute
+        entity: device_tracker.life360_mallika
+        name: Mallika
+        attribute: address
+      - type: attribute
+        entity: device_tracker.life360_srinika
+        name: Srinika
+        attribute: address
+      - type: attribute
+        entity: device_tracker.life360_hasika
+        name: Hasika
+        attribute: address
+      - entity: input_boolean.home_mode_away
+        name: Home Away Status
+    card:
+      type: glance
+      title: Kalavala Family
+
+  - type: entity-filter
+    title: For Your Information
+    show_empty: false
+    show_header_toggle: false
+    entities:
+      - entity: input_label.suresh_charging
+        name: Suresh
+      - entity: input_label.mallika_charging
+        name: Mallika
+      - entity: input_label.srinika_charging
+        name: Srinika
+      - entity: input_label.hasika_charging
+        name: Hasika
+
+      - entity: input_label.hasika_wifi
+        name: Hasika
+      - entity: input_label.mallika_wifi
+        name: Mallika
+      - entity: input_label.srinika_wifi
+        name: Srinika
+      - entity: input_label.suresh_wifi
+        name: Suresh
+
+      - sensor.recycle_day
+      - sensor.trash_day
+    state_filter:
+      - "Charging"
+      - "yes"
+      - "LTE"
+      - "Not Connected"
+    card:
+      type: glance
+      title: FYI
+
+  - type: entities
+    title: Pill Reminder
+    show_header_toggle: false
+    entities:
+      - input_datetime.pill_reminder_time
+      - input_boolean.pill_taken
+      - input_boolean.pill_voice_notification
+      - binary_sensor.door_window_sensor_158d00040ad8ec
+      - input_label.pill_taken_at
+
+  - type: glance
+    show_icon: true
+    show_name: true
+    show_state: true
+    title: Fitness
+    entities:
+      - entity: sensor.suresh_steps
+        icon: "mdi:run"
+        name: Suresh Steps
+      - entity: sensor.suresh_floors_ascended
+        icon: "mdi:run"
+        name: Suresh Floors Ascended
+      - entity: sensor.mallika_steps
+        icon: "mdi:run"
+        name: Mallika Steps
+      - entity: sensor.mallika_floors_ascended
+        icon: "mdi:run"
+        name: Mallika Floors Ascended
+
+  - type: conditional
+    conditions:
+      - entity: input_boolean.emergency_mode
+        state: "on"
+    card:
+      type: entities
+      title: Emergency Scripts
+      show_header_toggle: false
+      entities:
+        - script.all_indoor_lights_off
+        - script.emergency_all_lights_switches_on
+        - script.emergency_script
+        - script.emergency_script_loop
+
+  - type: horizontal-stack
+    cards:
+      - type: glance
+        entities:
+          - input_label.mallika_birthday_days2go
+      - type: glance
+        entities:
+          - input_label.srinika_birthday_days2go
+      - type: glance
+        entities:
+          - input_label.hasika_birthday_days2go
+
+  - type: entity-filter
+    title: Doors
+    show_empty: false
+    entities:
+      - alarm_control_panel.home
+      - entity: binary_sensor.door_window_sensor_158d000424a6d6
+        name: Front Door
+      - entity: binary_sensor.door_window_sensor_158d00040ad8fc
+        name: Back Door
+      - entity: binary_sensor.basement_door_sensor_sensor
+        name: Basement Door
+      - entity: binary_sensor.garage_door_sensor_sensor
+        name: Garage Door
+      - entity: binary_sensor.door_window_sensor_158d0004880f30
+        name: Garage Entry Door
+      - entity: sensor.single_car_garage_door_sensor_status
+        name: Single Car Garage Door
+      - entity: binary_sensor.two_car_garage_door_tilt_sensor_sensor
+        name: Double Car Garage Door
+      - entity: binary_sensor.door_window_sensor_158d00044e5cb3
+        name: Master Bathroom Toilet Door Sensor
+      - entity: binary_sensor.door_window_sensor_158d00045ab168
+        name: Guest Bathroom Door Sensor
+    state_filter:
+      - "on"
+      - "opened"
+      - "Open"
+    card:
+      type: glance
+      title: Doors
+
+  - type: tile
+    entity: weather.dark_sky
+
+  - type: entities
+    title: Xiaomi Motion Sensors
+    show_header_toggle: false
+    entities:
+      - binary_sensor.motion_sensor_158d00016c2d0e # Dining Room
+      - binary_sensor.motion_sensor_158d00016db6d2 # Front Room
+      - binary_sensor.motion_sensor_158d0001a25041 # Family Room
+      - binary_sensor.motion_sensor_158d0001a662fe # Kitchen
+      - binary_sensor.motion_sensor_158d00024e57d3 # Master Bedroom
+      - binary_sensor.motion_sensor_158d00024e842c # Backyard
+      - binary_sensor.motion_sensor_158d00024ee084 # Front Door
+      - binary_sensor.motion_sensor_158d000272bed1 # Srinika's Bedroom
+      - binary_sensor.motion_sensor_158d000272bf48 # Inside Garage
+      - binary_sensor.motion_sensor_158d000272bfd7 # Office Room
+      - binary_sensor.motion_sensor_158d00047b6f69 # Hasika's Bedroom
+      - binary_sensor.motion_sensor_158d00024e57fb # Driveway
+
+  - type: entities
+    title: Xiaomi Door Sensors
+    show_header_toggle: false
+    entities:
+      - entity: binary_sensor.door_window_sensor_158d000424a6d6
+        name: Front Door
+      - entity: binary_sensor.door_window_sensor_158d00040ad8fc
+        name: Back Door
+      - entity: binary_sensor.door_window_sensor_158d0004880f30
+        name: Garage Entry Door
+      - entity: binary_sensor.door_window_sensor_158d000424718f
+        name: Master Bathroom Door
+      - entity: binary_sensor.door_window_sensor_158d00040ad8ec
+        name: Pill Box
+      - entity: binary_sensor.door_window_sensor_158d0004231f7b
+        name: Two Car Garage Door
+      - entity: binary_sensor.door_window_sensor_158d0004248d5b
+        name: Single Car Garage Door
+      - entity: binary_sensor.door_window_sensor_158d00044e5cb3
+        name: Master Bathroom Toilet Door Sensor
+      - entity: binary_sensor.door_window_sensor_158d00045ab168
+        name: Guest Bathroom Door Sensor
+
+  - type: entities
+    title: Plex
+    show_header_toggle: false
+    entities:
+      - sensor.plex_mahasri_nas
+
+  - type: entities
+    title: Luminance
+    show_header_toggle: false
+    entities:
+      - sensor.illumination_158d00016c2d0e
+      - sensor.illumination_158d00016db6d2
+      - sensor.illumination_158d0001a25041
+      - sensor.illumination_158d0001a662fe
+      - sensor.illumination_158d00024e57d3
+      - sensor.illumination_158d00024e57fb
+      - sensor.illumination_158d00024e842c
+      - sensor.illumination_158d00024ee084
+      - sensor.illumination_158d000272bed1
+      - sensor.illumination_158d000272bf48
+      - sensor.illumination_158d000272bfd7
+      - sensor.illumination_158d000464c25a
+      - sensor.illumination_158d00047b6f69
+
+  - type: entities
+    title: Batteries
+    show_header_toggle: false
+    entities:
+      - sensor.battery_158d00016c2d0e
+      - sensor.battery_158d00016db6d2
+      - sensor.battery_158d0001a25041
+      - sensor.battery_158d0001a662fe
+      - sensor.battery_158d00024e57d3
+      - sensor.battery_158d00024e57fb
+      - sensor.battery_158d00024e842c
+      - sensor.battery_158d00024ee084
+      - sensor.battery_158d000272bed1
+      - sensor.battery_158d000272bf48
+      - sensor.battery_158d000272bfd7
+      - sensor.battery_158d000276e3e8
+      - sensor.battery_158d000278eb6a
+      - sensor.battery_158d0002794cd6
+      - sensor.battery_158d00027c0276
+      - sensor.battery_158d00027ce15c
+      - sensor.battery_158d00027cf60d
+      - sensor.battery_158d00040ad8ec
+      - sensor.battery_158d00040ad8fc
+      - sensor.battery_158d0004231f7b
+      - sensor.battery_158d000424718f
+      - sensor.battery_158d0004248d5b
+      - sensor.battery_158d000424a6d6
+      - sensor.battery_158d00045622d9
+      - sensor.battery_158d000464c25a
+      - sensor.battery_158d00047b6f69
+      - sensor.battery_158d0004880f30
+
+  - type: entity-filter
+    title: Motion Sensors
+    show_empty: false
+    entities:
+      - binary_sensor.motion_sensor_158d0001a662fe
+      - binary_sensor.motion_sensor_158d0001a25041
+      - binary_sensor.motion_sensor_158d00016db6d2
+      - binary_sensor.motion_sensor_158d00016c2d0e
+      - binary_sensor.garage_motion
+      - binary_sensor.patio_camera_motion
+      - binary_sensor.playarea_camera_motion
+      - binary_sensor.frontdoor_camera_motion
+      - binary_sensor.driveway_camera_motion
+      - binary_sensor.audio_detector_sensor
+      - binary_sensor.basement_door_sensor_sensor
+      - binary_sensor.door_window_sensor_158d000424a6d6
+      - binary_sensor.garage_door_sensor_sensor
+      - binary_sensor.kitchen_motion_sensor_sensor
+      - binary_sensor.door_window_sensor_158d00040ad8fc # back door
+      - binary_sensor.door_window_sensor_158d0004880f30 # Garage Entry Door
+      - binary_sensor.stairs_motion_sensor_sensor
+      - binary_sensor.door_window_sensor_158d0004248d5b
+      - binary_sensor.two_car_garage_door_tilt_sensor_sensor
+    state_filter:
+      - "on"
+      - "detected"
+      - "opened"
+      - "Open"
+    card:
+      type: entities
+      title: Motion Sensors
+      show_header_toggle: false

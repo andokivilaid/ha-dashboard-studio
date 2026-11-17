@@ -1,0 +1,97 @@
+# Example three-column Lovelace dashboard for VoIP Stack.
+#
+# Replace every <...> placeholder with the device or entity ID exposed by your
+# installation. The mini-media-player rows are optional and require the
+# mini-media-player custom card.
+
+title: VoIP
+icon: mdi:phone-voip
+type: sections
+max_columns: 3
+sections:
+  # ESP phone with its most useful audio controls grouped below the call card.
+  - type: grid
+    cards:
+      - type: custom:voip-stack-card
+        device_id: <first_esp_device_id>
+        name: First ESP Phone
+        mode: esp_mirror
+        show_protocol: true
+        show_extended_info: true
+        grid_options:
+          columns: 12
+          rows: 5
+      - type: entities
+        show_header_toggle: false
+        grid_options:
+          columns: 12
+          rows: 3
+        entities:
+          - number.<first_esp>_master_volume
+          - type: custom:mini-media-player
+            entity: media_player.<first_esp>
+            group: true
+            artwork: none
+            volume_stateless: false
+            hide:
+              icon: true
+              info: true
+              power: true
+              source: true
+              sound_mode: true
+              controls: true
+              progress: true
+              runtime: true
+              volume_level: true
+              mute: true
+          - number.<first_esp>_mic_gain
+
+  - type: grid
+    cards:
+      - type: custom:voip-stack-card
+        device_id: <second_esp_device_id>
+        name: Second ESP Phone
+        mode: esp_mirror
+        show_protocol: true
+        show_extended_info: true
+        grid_options:
+          columns: 12
+          rows: 5
+      - type: entities
+        show_header_toggle: false
+        grid_options:
+          columns: 12
+          rows: 3
+        entities:
+          - number.<second_esp>_master_volume
+          - type: custom:mini-media-player
+            entity: media_player.<second_esp>
+            group: true
+            artwork: none
+            volume_stateless: false
+            hide:
+              icon: true
+              info: true
+              power: true
+              source: true
+              sound_mode: true
+              controls: true
+              progress: true
+              runtime: true
+              volume_level: true
+              mute: true
+          - number.<second_esp>_mic_gain
+
+  # Native, resizable and internally scrollable view of the canonical roster.
+  - type: grid
+    cards:
+      - type: custom:voip-stack-card
+        mode: phonebook
+        title: VoIP Phonebook
+        entity: sensor.voip_phonebook
+        grid_options:
+          columns: 12
+          rows: 8
+
+cards: []
+# theme: <your_dashboard_theme>

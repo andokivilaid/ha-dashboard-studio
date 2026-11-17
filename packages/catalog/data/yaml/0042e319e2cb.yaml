@@ -1,0 +1,9 @@
+---
+# https://www.home-assistant.io/dashboards/dashboards/
+
+title: Home
+views:
+  - !include lovelace/views/home.yaml
+  - !include lovelace/views/automations.yaml
+  - !include lovelace/views/battery_levels.yaml
+

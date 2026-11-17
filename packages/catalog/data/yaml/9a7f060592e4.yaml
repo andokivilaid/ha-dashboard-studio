@@ -1,0 +1,23 @@
+- url: /bambu_lab/ha-bambulab-cards.js
+  type: module
+
+- url: /local/apexcharts-card.js
+  type: module
+
+- url: /local/auto-entities.js
+  type: module
+
+- url: /local/entity-progress-card.js
+  type: module
+
+- url: /local/mini-graph-card-bundle.js
+  type: module
+
+- url: /local/mini-media-player-bundle.js
+  type: module
+
+- url: /local/mushroom.js
+  type: module
+
+- url: /local/vertical-stack-in-card.js
+  type: module

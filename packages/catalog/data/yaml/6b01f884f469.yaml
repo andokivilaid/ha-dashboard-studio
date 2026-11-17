@@ -1,0 +1,135 @@
+  - badges: []
+    cards:
+      - entities:
+          - entity: person.luka
+        show_name: false
+        show_state: true
+        title: Luka location
+        type: glance
+      - type: plant-status
+        entity: plant.ficus_benjamin_natasya
+        name: Ficus Benjamina Natasja
+      - type: grid
+        columns: 2
+        cards:
+          - type: light
+            entity: light.luka_table_light
+            name: Table light
+          - type: light
+            entity: light.luka_ceiling_light
+            name: Ceiling light
+      - entity: climate.luka_room
+        type: thermostat
+      - type: grid
+        cards:
+          - type: entity
+            entity: input_boolean.luka_school_online
+            name: Online
+          - type: entity
+            entity: sensor.current_week
+            name: Week
+          - type: entity
+            entity: sensor.luka_school_tomorrow
+            name: Tomorrow
+          - type: entity
+            entity: sensor.luka_school_today
+            name: Today
+          - type: entity
+            entity: sensor.school_end_days_luka
+            name: Days left
+          - type: entity
+            entity: sensor.school_start_days_luka
+      - shorten_cards: false
+        consolidate_entities: false
+        child_card: false
+        hide_header: false
+        header: Luka Floor light
+        color_wheel: true
+        persist_features: true
+        brightness: true
+        color_temp: true
+        white_value: true
+        color_picker: true
+        smooth_color_wheel: true
+        show_slider_percent: true
+        full_width_sliders: false
+        brightness_icon: weather-sunny
+        white_icon: file-word-box
+        temperature_icon: thermometer
+        effects_list: ture
+        entity: light.luka_floor_light
+        group: true
+        type: custom:light-entity-card
+      - entities:
+          - entity: person.luka
+        hours_to_show: 0
+        type: map
+        title: Luka location
+      - type: entities
+        entities:
+          - entity: sensor.weight_luka
+          - entity: sensor.impedance_luka
+        title: Mi Body Composition Scale
+      - type: entities
+        entities:
+          - entity: binary_sensor.mosquito
+          - entity: sensor.luka_battery_level
+          - entity: sensor.luka_mosquito_tablet
+        title: Xiaomi Mosquito
+        show_header_toggle: false
+      - cards:
+          - entities:
+              - entity: input_select.radio_station
+              - entity: input_text.custom_radio
+              - entity: input_select.radio_speaker
+              - entity: switch.radio_volume_down
+              - entity: switch.radio_mute
+              - entity: switch.radio_volume_up
+              - entity: switch.radio_stop
+              - entity: switch.radio_play
+            entity: input_select.radio_station
+            state_image:
+              Antena Zagreb: /local/radio/antena-zagreb.jpg
+              Antena Christmas: /local/radio/antena-zagreb.jpg
+              Antena Live: /local/radio/antena-zagreb.jpg
+              Antena Rock: /local/radio/antena-zagreb.jpg
+              Narodni: /local/radio/narodni-radio.jpg
+              HKR: /local/radio/otvoreni.jpg
+              HRT1: /local/radio/otvoreni.jpg
+              HRT2: /local/radio/otvoreni.jpg
+              Otvoreni: /local/radio/otvoreni.jpg
+              Radio Marija: /local/radio/otvoreni.jpg
+              Radio Postaja Mir Međugorje: /local/radio/otvoreni.jpg
+              yammat FM: /local/radio/yammat-fm.jpg
+              Stopped: /local/radio/otvoreni.jpg
+            type: picture-glance
+          - entities:
+              - entity: sensor.radio_station_selected
+              - entity: sensor.speaker_selected
+              - entity: input_number.radio_volume
+            show_header_toggle: false
+            type: entities
+          - group: true
+            hide:
+              controls: true
+            icon: mdi:google-home
+            icon_state: true
+            tts:
+              language: en
+              platform: google_translate
+            type: custom:mini-media-player
+            entity: media_player.whatever_me
+        type: vertical-stack
+      - type: entities
+        entities:
+          - entity: sensor.withings_body_temperature_c_luka
+            name: Body Temperature
+          - entity: sensor.withings_skin_temperature_c_luka
+            name: Skin termperature
+          - entity: sensor.withings_temperature_c_luka
+            name: Room temperature
+        title: Luka temperature
+        state_color: true
+    icon: mdi:alpha-l-box
+    path: luka
+    title: Luka room

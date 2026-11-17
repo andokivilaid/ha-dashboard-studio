@@ -1,0 +1,35 @@
+{
+  "name": "ha-dashboard-studio",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A gallery of real Home Assistant dashboards and an AI-assisted Lovelace builder that renders them live.",
+  "license": "MIT",
+  "packageManager": "pnpm@12.18.0",
+  "engines": {
+    "node": ">=20.11"
+  },
+  "scripts": {
+    "build": "pnpm --filter @ha-studio/web build",
+    "catalog:bundle": "tsx packages/catalog/scripts/bundle.ts",
+    "catalog:ingest": "tsx packages/catalog/scripts/ingest.ts",
+    "catalog:validate": "tsx packages/catalog/scripts/validate.ts",
+    "dev": "pnpm --filter @ha-studio/web dev",
+    "format": "prettier --write .",
+    "lint": "pnpm -r --no-bail lint",
+    "postinstall": "node scripts/sync-assets.mjs",
+    "start": "pnpm --filter @ha-studio/web start",
+    "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "test:watch": "vitest",
+    "typecheck": "pnpm -r --no-bail typecheck"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.65.1",
+    "@types/node": "26.6.6",
+    "prettier": "3.10.1",
+    "tsx": "4.23.15",
+    "typescript": "7.0.2",
+    "vitest": "5.1.0"
+  }
+}
