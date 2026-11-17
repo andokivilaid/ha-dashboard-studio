@@ -79,7 +79,8 @@ types, entity ids that exist in exactly one house — rendered in the browser:
 ## The gallery
 
 ```
-328 dashboards · 152 with mirrored YAML · 156 source repositories
+328 dashboards · 152 with mirrored YAML · 156 repositories · 144 authors
+4 983 cards · 140 built-in card types · 244 distinct HACS cards seen
 ```
 
 The catalogue is built by `packages/catalog/scripts/ingest.ts`, which:
