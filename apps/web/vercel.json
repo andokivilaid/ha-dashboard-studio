@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "buildCommand": "cd ../.. && pnpm catalog:bundle && pnpm --filter @ha-studio/web build",
+  "installCommand": "cd ../.. && pnpm install --no-frozen-lockfile",
+  "functions": {
+    "src/app/api/ai/generate/route.ts": { "maxDuration": 300 },
+    "src/app/api/ai/critique/route.ts": { "maxDuration": 300 }
+  }
+}
