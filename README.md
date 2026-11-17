@@ -60,6 +60,14 @@ cards.
 - **Anything unknown degrades gracefully** to a labelled placeholder that still
   names the card and its entity. A dashboard from 2019 using a card nobody has
   heard of still produces a readable preview.
+- **Entities nobody else has are invented.** A harvested dashboard names
+  `light.tv_lysa` and `sensor.varmepump_effekt`, which exist in exactly one
+  house in the world. Rather than show a wall of "Unavailable", the renderer
+  synthesises plausible state from the entity id — inferring that
+  `sensor.kjokken_temperatur` is a temperature in °C and
+  `binary_sensor.hallway_motion` is a motion detector, in several languages.
+  Values are hashed from the id, so a dashboard looks the same on every render.
+  The detail page says how many states were invented.
 
 ![A rendered dashboard detail page](docs/screenshots/detail-sections.png)
 
@@ -238,7 +246,7 @@ pnpm catalog:bundle
 
 ```bash
 pnpm typecheck     # tsc across all four packages
-pnpm test          # 163 unit tests (vitest)
+pnpm test          # 194 unit tests (vitest)
 pnpm build
 pnpm test:e2e      # Playwright, incl. visual snapshots
 ```
@@ -247,8 +255,9 @@ pnpm test:e2e      # Playwright, incl. visual snapshots
 `!include` variant), dashboard analysis and tag derivation, state formatting
 and icon selection across every domain, the read-only guarantees of the mock
 `hass`, entity-inventory filtering, prompt construction, YAML extraction from
-model replies, the HACS registry, the websocket allow-list that makes live connections read-only, and the
-catalogue — including a test that **fails if any non-permissive entry ever
+model replies, the HACS registry, entity synthesis (including that it never overwrites a real entity and is
+deterministic), the websocket allow-list that makes live connections
+read-only, and the catalogue — including a test that **fails if any non-permissive entry ever
 stores YAML**, and one that checks every curated dashboard only references
 entities that exist.
 

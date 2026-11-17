@@ -61,6 +61,26 @@ The studio registers minimal `ha-card`, `ha-icon`, `ha-state-icon`,
 `ha-svg-icon` and `ha-ripple` elements because those bundles compose them and
 the real frontend normally provides them.
 
+## Entity synthesis
+
+A dashboard harvested from someone else's instance names entity ids that exist
+nowhere else. `packages/lovelace/src/synthesize.ts` invents state for every id
+the config names that the demo home lacks:
+
+- The domain decides the shape — a `climate.*` gets `current_temperature`,
+  `hvac_modes` and an `hvac_action`; a `cover.*` gets a device class and a
+  position; a `weather.*` gets a five-day forecast.
+- The object id decides the detail. `sensor.kjokken_temperatur` becomes a
+  temperature in °C, `sensor.varmepump_effekt` a power reading in W,
+  `binary_sensor.hallway_motion` a motion detector — matched against name
+  fragments in English and several Nordic/Baltic languages, since that is what
+  the harvested configs actually contain.
+- Every value is derived from a hash of the entity id, so it is identical on
+  every render. That is what makes the visual snapshots viable.
+- A real connection never gets this. Synthesis is gated on the mock `hass`;
+  your instance's entity list is authoritative, and a missing entity there is
+  information, not a gap to paper over.
+
 ## Known limits
 
 - **Jinja templates are not evaluated.** No backend exists to evaluate them.

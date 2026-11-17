@@ -104,6 +104,7 @@ export function createMockHass(options: MockHassOptions = {}): HomeAssistant {
     callWS: () => refuse("a websocket command"),
     callApi: () => refuse("a REST call"),
     connected: true,
+    isMock: true,
     translationMetadata: {
       fragments: [],
       translations: { en: { nativeName: "English", isRTL: false } },

@@ -6,3 +6,4 @@ export * from "./icons";
 export * from "./format";
 export * from "./mock/index";
 export * from "./sample-dashboards";
+export * from "./synthesize";

@@ -23,6 +23,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --no-frozen-lockfile
       - run: node scripts/sync-assets.mjs
+      - run: pnpm check:imports
       - run: pnpm catalog:validate
       - run: pnpm typecheck
       - run: pnpm test

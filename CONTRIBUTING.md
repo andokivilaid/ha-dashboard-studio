@@ -36,14 +36,29 @@ pnpm test:e2e             # Playwright; starts the built app itself
 pnpm test:e2e --ui        # interactive
 ```
 
-End-to-end tests include visual snapshots. If a change is *meant* to alter the
-rendering, update them deliberately:
+End-to-end tests include visual snapshots. Playwright names a baseline after
+the platform that produced it, and font rasterisation differs between macOS and
+Linux, so the repository carries **both**: `*-darwin.png` for local runs and
+`*-linux.png` for CI.
+
+If a change is *meant* to alter the rendering, regenerate both and include them
+in the pull request:
 
 ```bash
-pnpm exec playwright test --update-snapshots
+pnpm build && pnpm --filter @ha-studio/web start &   # the suite needs the built app
+pnpm exec playwright test --update-snapshots          # your own platform
+
+# Linux baselines, matching what CI sees:
+docker run --rm --platform linux/amd64 \
+  -v "$PWD":/work -w /work \
+  --add-host=host.docker.internal:host-gateway \
+  -e E2E_BASE_URL=http://host.docker.internal:3177 \
+  mcr.microsoft.com/playwright:v1.65.1-noble \
+  npx --yes playwright@1.65.1 test --update-snapshots
 ```
 
-and include the new PNGs in the pull request so a reviewer can see the diff.
+If you cannot produce Linux baselines, say so in the PR — a maintainer will
+regenerate them.
 
 ## Adding a card to the renderer
 

@@ -13,6 +13,7 @@
     "catalog:bundle": "tsx packages/catalog/scripts/bundle.ts",
     "catalog:ingest": "tsx packages/catalog/scripts/ingest.ts",
     "catalog:validate": "tsx packages/catalog/scripts/validate.ts",
+    "check:imports": "node scripts/check-imports.mjs",
     "dev": "pnpm --filter @ha-studio/web dev",
     "format": "prettier --write .",
     "lint": "pnpm -r --no-bail lint",

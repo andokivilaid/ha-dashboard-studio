@@ -34,6 +34,7 @@ export function DashboardDetail({
   const [viewIndex, setViewIndex] = useState(0);
   const [tab, setTab] = useState<"render" | "yaml" | "elements">("render");
   const [copied, setCopied] = useState(false);
+  const [synthesized, setSynthesized] = useState<string[]>([]);
 
   const parsed = useMemo(() => (yaml ? parseLovelaceYaml(yaml) : null), [yaml]);
   const hass = useMemo(() => createMockHass({ darkMode: theme === "dark" }), [theme]);
@@ -124,6 +125,7 @@ export function DashboardDetail({
                     showTabs
                     width={width}
                     options={{ interactive: false, loadCustomCards: true }}
+                    onSynthesized={setSynthesized}
                   />
                 </div>
               </div>
@@ -149,6 +151,15 @@ export function DashboardDetail({
         ) : null}
 
         {tab === "elements" ? <ElementsTable analysis={entry.analysis} bundles={bundles} /> : null}
+
+        {tab === "render" && synthesized.length ? (
+          <p className="mt-3 text-[12px] text-faint">
+            {synthesized.length} of the entities this dashboard names do not exist in the demo
+            home, so plausible values were invented from their ids
+            (e.g. <code className="font-mono">{synthesized[0]}</code>). States, not layout, are
+            the guesswork.
+          </p>
+        ) : null}
 
         {parsed?.unresolvedIncludes.length ? (
           <p className="mt-3 text-[12px] text-faint">

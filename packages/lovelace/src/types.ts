@@ -160,6 +160,10 @@ export interface HomeAssistant {
   localize_async?: (key: string) => Promise<string>;
   /** Studio-specific: true when the renderer refuses writes. */
   readOnly?: boolean;
+  /** Studio-specific: true for the demo home, which may be extended with
+   *  synthetic entities so other people's dashboards render. Never set for a
+   *  real instance — its entity list is authoritative. */
+  isMock?: boolean;
   auth?: { data?: { access_token?: string }; expired?: boolean };
   connection?: unknown;
   hassUrl?: (path?: string) => string;
