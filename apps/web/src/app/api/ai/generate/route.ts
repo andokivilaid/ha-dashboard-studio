@@ -20,6 +20,9 @@ const bodySchema = z.object({
   inventory: z.string().max(200_000),
   areas: z.string().max(20_000).default(""),
   currentYaml: z.string().max(400_000).nullable().optional(),
+  availableCards: z.string().max(20_000).optional(),
+  /** Rule violations found in the previous attempt, for a correction turn. */
+  lint: z.string().max(20_000).optional(),
 });
 
 /**
@@ -43,6 +46,8 @@ export async function POST(req: Request) {
     inventory: parsed.inventory,
     areas: parsed.areas,
     currentYaml: parsed.currentYaml ?? null,
+    availableCards: parsed.availableCards,
+    lint: parsed.lint,
   });
 
   try {

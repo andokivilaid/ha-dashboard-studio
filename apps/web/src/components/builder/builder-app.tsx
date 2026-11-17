@@ -18,17 +18,22 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import {
+  availableCustomCards,
   buildEntityInventory,
   createMockHass,
+  formatLintForModel,
+  lintDashboard,
   parseLovelaceYaml,
   starterById,
   STARTER_TEMPLATES,
   toLovelaceYaml,
   type HomeAssistant,
+  type LintIssue,
   type LovelaceConfig,
 } from "@ha-studio/lovelace";
 import { DashboardRenderer, type CardPath } from "@ha-studio/lovelace-render";
 import { YamlEditor } from "./yaml-editor";
+import { LintBar } from "./lint-bar";
 import { ChatPanel, type ChatMessage } from "./chat-panel";
 import { ConnectDialog } from "./connect-dialog";
 import { SettingsDialog } from "./settings-dialog";
@@ -40,7 +45,7 @@ import {
   type BuilderSettings,
 } from "@/lib/builder-settings";
 import { PROVIDER_LABELS } from "@/lib/ai/types";
-import { buildAreaBlock, buildInventoryBlock } from "@/lib/ai/prompts";
+import { buildAreaBlock, buildAvailableCardsBlock, buildInventoryBlock } from "@/lib/ai/prompts";
 import { captureElement, dataUrlBytes } from "@/lib/screenshot";
 import {
   connectToHomeAssistant,
@@ -85,6 +90,9 @@ export function BuilderApp({
   const [session, setSession] = useState<LiveHaSession | null>(null);
   const [liveStates, setLiveStates] = useState(0);
   const [haDashboards, setHaDashboards] = useState<HaDashboardSummary[]>([]);
+  const [importedFrom, setImportedFrom] = useState<{ title: string; hash: string | null } | null>(
+    null,
+  );
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -92,6 +100,8 @@ export function BuilderApp({
   const busy = phase !== null;
 
   const renderRef = useRef<HTMLDivElement | null>(null);
+  /** Lint failures from the previous turn, handed back on the next request. */
+  const lintFeedbackRef = useRef<string | null>(null);
 
   useEffect(() => setSettings(loadSettings()), []);
   useEffect(() => {
@@ -111,6 +121,21 @@ export function BuilderApp({
   const width = DEVICES.find((d) => d.id === device)!.width;
 
   const inventory = useMemo(() => buildEntityInventory(hass), [hass]);
+
+  // In live mode the vocabulary is whatever HACS actually registered on the
+  // instance; in mock mode it is everything the renderer can execute.
+  const customCardVocabulary = useMemo(
+    () => availableCustomCards(session ? session.resources : null),
+    [session],
+  );
+
+  const lint = useMemo<LintIssue[]>(() => {
+    if (!config) return [];
+    return lintDashboard(config, {
+      knownEntities: new Set(Object.keys(hass.states)),
+      availableCustomCards: customCardVocabulary,
+    });
+  }, [config, hass, customCardVocabulary]);
   const areaBlock = useMemo(() => {
     const counts = new Map<string, number>();
     for (const reg of Object.values(hass.entities)) {
@@ -150,10 +175,14 @@ export function BuilderApp({
       if (!session) return;
       try {
         setPhase("Fetching your dashboard…");
-        const cfg = await fetchLovelaceConfig(session.connection, urlPath);
+        const { config: cfg, hash } = await fetchLovelaceConfig(session.connection, urlPath);
         setYaml(toLovelaceYaml(cfg));
         setViewIndex(0);
-        toast.success("Imported your dashboard (read-only copy)");
+        setImportedFrom({
+          title: haDashboards.find((d) => (d.url_path ?? "") === (urlPath ?? ""))?.title ?? "Default",
+          hash,
+        });
+        toast.success("Imported a copy — your instance is untouched");
       } catch (err) {
         toast.error(err instanceof Error ? err.message : "Import failed");
       } finally {
@@ -180,6 +209,8 @@ export function BuilderApp({
       }
       setInput("");
       pushMessage({ role: "user", content: request });
+      const pendingLint = lintFeedbackRef.current;
+      lintFeedbackRef.current = null;
 
       const history = messages
         .filter((m) => m.role === "user" || m.role === "assistant")
@@ -199,7 +230,11 @@ export function BuilderApp({
             history,
             inventory: buildInventoryBlock(inventory),
             areas: areaBlock,
+            availableCards: buildAvailableCardsBlock(customCardVocabulary, {
+              live: Boolean(session),
+            }),
             currentYaml: yaml.trim() ? yaml : null,
+            lint: pendingLint ?? undefined,
           }),
         });
         const data = (await res.json()) as {
@@ -213,6 +248,21 @@ export function BuilderApp({
         const nextYaml = data.yaml;
         if (nextYaml) {
           const check = parseLovelaceYaml(nextYaml);
+          if (check.config) {
+            const problems = lintDashboard(check.config, {
+              knownEntities: new Set(Object.keys(hass.states)),
+              availableCustomCards: customCardVocabulary,
+            }).filter((i) => i.severity === "error");
+            if (problems.length) {
+              pushMessage({
+                role: "system",
+                content: `${problems.length} configuration problem(s) found; asking the model to fix them.`,
+              });
+              lintFeedbackRef.current = formatLintForModel(problems);
+            } else {
+              lintFeedbackRef.current = null;
+            }
+          }
           if (!check.config) {
             pushMessage({
               role: "system",
@@ -406,6 +456,20 @@ export function BuilderApp({
           )}
         </button>
 
+        {importedFrom ? (
+          <span
+            className="hs-tag"
+            title={
+              importedFrom.hash
+                ? `Config hash at import: ${importedFrom.hash}. The studio never writes back.`
+                : "Copied at import time. The studio never writes back."
+            }
+            data-testid="imported-from"
+          >
+            copy of “{importedFrom.title}”
+          </span>
+        ) : null}
+
         {session && haDashboards.length ? (
           <select
             className="hs-input w-auto"
@@ -512,8 +576,9 @@ export function BuilderApp({
           </section>
 
           {showEditor ? (
-            <section className="min-h-0 border-t">
+            <section className="grid min-h-0 grid-rows-[minmax(0,1fr)_auto] border-t">
               <YamlEditor value={yaml} onChange={setYaml} />
+              <LintBar issues={lint} />
             </section>
           ) : null}
         </div>

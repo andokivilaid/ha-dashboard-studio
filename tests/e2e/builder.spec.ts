@@ -208,3 +208,108 @@ test.describe("builder (mock mode)", () => {
     await expect(page).toHaveScreenshot("builder-dark.png");
   });
 });
+
+test.describe("configuration linting", () => {
+  async function typeYaml(page: import("@playwright/test").Page, yaml: string) {
+    await page.goto("/builder?template=blank");
+    await stabilise(page);
+    const editor = page.locator(".cm-content");
+    await expect(editor).toBeVisible();
+    await editor.click();
+    await page.keyboard.press("ControlOrMeta+a");
+    await page.keyboard.insertText(yaml);
+    await page.waitForTimeout(500);
+  }
+
+  test("reports a clean dashboard as clean", async ({ page }) => {
+    await typeYaml(
+      page,
+      [
+        "views:",
+        "  - title: Home",
+        "    path: home",
+        "    type: sections",
+        "    sections:",
+        "      - type: grid",
+        "        cards:",
+        "          - type: tile",
+        "            entity: light.living_room_ceiling",
+      ].join("\n"),
+    );
+    await expect(page.locator('[data-testid="lint-bar"]')).toContainText(
+      "No configuration problems",
+    );
+  });
+
+  test("catches a Bubble Card pop-up that is not last", async ({ page }) => {
+    await typeYaml(
+      page,
+      [
+        "views:",
+        "  - title: Home",
+        "    path: home",
+        "    cards:",
+        "      - type: custom:bubble-card",
+        "        card_type: pop-up",
+        "        hash: '#living-room'",
+        "      - type: tile",
+        "        entity: light.living_room_ceiling",
+      ].join("\n"),
+    );
+    const bar = page.locator('[data-testid="lint-bar"]');
+    await expect(bar).toContainText("error");
+    await expect(bar).toContainText("must be the last cards");
+  });
+
+  test("catches a pop-up with no hash to open it", async ({ page }) => {
+    await typeYaml(
+      page,
+      [
+        "views:",
+        "  - title: Home",
+        "    path: home",
+        "    cards:",
+        "      - type: custom:bubble-card",
+        "        card_type: pop-up",
+      ].join("\n"),
+    );
+    await expect(page.locator('[data-testid="lint-bar"]')).toContainText("needs a `hash:`");
+  });
+
+  test("catches an entity that does not exist", async ({ page }) => {
+    await typeYaml(
+      page,
+      [
+        "views:",
+        "  - title: Home",
+        "    path: home",
+        "    cards:",
+        "      - type: tile",
+        "        entity: light.definitely_not_real",
+      ].join("\n"),
+    );
+    await expect(page.locator('[data-testid="lint-bar"]')).toContainText(
+      "light.definitely_not_real",
+    );
+  });
+
+  test("accepts any bundled custom card in mock mode", async ({ page }) => {
+    await typeYaml(
+      page,
+      [
+        "views:",
+        "  - title: Home",
+        "    path: home",
+        "    type: sections",
+        "    sections:",
+        "      - type: grid",
+        "        cards:",
+        "          - type: custom:mushroom-light-card",
+        "            entity: light.living_room_ceiling",
+      ].join("\n"),
+    );
+    await expect(page.locator('[data-testid="lint-bar"]')).toContainText(
+      "No configuration problems",
+    );
+  });
+});

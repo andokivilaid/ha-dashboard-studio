@@ -22,7 +22,8 @@ CURRENT BEST PRACTICE
   alarm_control_panel -> \`alarm-modes\`; humidifier -> \`humidifier-target-humidity\`.
 - Put presence, weather, alarm state and whole-home power in view-level \`badges:\` as \`{type: entity, entity: ...}\`.
 - Control card width with \`grid_options: {columns: N}\` where N is 1-12 of a 12-column grid, or \`columns: full\`. Use \`full\` for graphs, media and markdown.
-- Group by room or by function, never by integration. Order sections by how often a person touches them.
+- Group by room or by function, never by integration. Prefer the structure the user already maintains: floor, then area, then registry labels. Order sections by how often a person touches them.
+- Put aggregates in view-level \`badges:\` and give the alarming ones \`visibility:\` conditions, so a badge appears only when it has something to say — "3 windows open", "washing machine running", "someone home" — instead of permanently reading zero.
 - Sensible extra cards: \`weather-forecast\`, \`history-graph\`, \`gauge\`, \`media-control\`, \`picture-glance\` for cameras, \`todo-list\`, \`map\` for presence, \`area\` for room overviews.
 - Give every view a \`title\`, a \`path\` (lowercase, hyphenated) and an \`icon\` (mdi:...).
 
@@ -33,7 +34,9 @@ ENTITY SELECTION
 
 STYLE
 - Keep it calm: 3-7 cards per section, consistent icon usage, no duplicated entity across sections unless deliberate.
-- Only use \`custom:\` cards if the user asks for them or if they already appear in the current YAML. Available in this preview: mushroom-* cards, bubble-card, button-card, mini-graph-card, apexcharts-card, auto-entities, layout-card.
+- Use a \`custom:\` card only when it is listed under AVAILABLE CUSTOM CARDS below, or already appears in the current YAML. If a card you want is not listed, use the nearest built-in card and say in the prose that installing it from HACS would do better. Never assume a card is installed.
+- When you do use them: \`custom:auto-entities\` for lists that should heal themselves as entities come and go (give it a \`filter.include\` on domain, area or label rather than a fixed list); \`custom:mini-graph-card\` for a compact sparkline where \`history-graph\` would be too heavy; \`custom:mushroom-*\` for touch-first layouts; \`custom:card-mod\` only for a specific visual effect, never as a default.
+- Bubble Card has two hard rules. Every \`card_type: pop-up\` needs a \`hash:\` beginning with \`#\`, because the pop-up opens by navigating to that hash. And pop-ups must be the LAST entries in the view's own \`cards:\` list, after every visible card — a pop-up placed earlier pushes the rest of the layout out. In a sections view that means the pop-ups sit in the view's \`cards:\`, while everything visible lives in \`sections:\`.
 - Never emit Jinja templates unless asked; they are not evaluated in the preview.`;
 
 export const CRITIC_SYSTEM = `You are a demanding UI reviewer looking at a screenshot of a rendered Home Assistant dashboard, together with the YAML that produced it.
@@ -54,6 +57,22 @@ Reply with exactly two parts, in order:
 2. If and only if there is at least one issue you can fix by editing the YAML, a single fenced \`\`\`yaml block with the COMPLETE corrected dashboard config. Omit the block entirely when nothing needs changing.
 Keep every entity id that was already there unless removing it is the fix.`;
 
+/** The card vocabulary the target instance can actually load. */
+export function buildAvailableCardsBlock(
+  customCards: string[] | null,
+  opts: { live: boolean } = { live: false },
+): string {
+  if (!customCards?.length) {
+    return opts.live
+      ? "(none — this instance has no recognised HACS card resources, so use built-in cards only)"
+      : "(none)";
+  }
+  const line = customCards.map((c) => `custom:${c}`).join(", ");
+  return opts.live
+    ? `Installed on this instance and renderable here: ${line}`
+    : `Renderable in this preview: ${line}`;
+}
+
 export function buildInventoryBlock(inventory: EntityInventoryItem[], limit = 400): string {
   const trimmed = inventory.slice(0, limit);
   const byDomain = new Map<string, EntityInventoryItem[]>();
@@ -68,6 +87,8 @@ export function buildInventoryBlock(inventory: EntityInventoryItem[], limit = 40
     for (const i of items) {
       const bits = [i.entity_id, `"${i.name}"`];
       if (i.area) bits.push(`area=${i.area}`);
+      if (i.floor) bits.push(`floor=${i.floor}`);
+      if (i.labels?.length) bits.push(`labels=${i.labels.join("/")}`);
       if (i.device_class) bits.push(`class=${i.device_class}`);
       if (i.unit) bits.push(`unit=${i.unit}`);
       bits.push(`state=${i.state}`);
@@ -93,16 +114,21 @@ export function buildGeneratorUserMessage(opts: {
   inventory: string;
   areas: string;
   currentYaml?: string | null;
+  availableCards?: string;
+  /** Problems found in the previous attempt, for a correction turn. */
+  lint?: string;
 }): string {
   const parts = [
     `ENTITY INVENTORY\n${opts.inventory}`,
     `AREAS\n${opts.areas}`,
   ];
+  if (opts.availableCards) parts.push(`AVAILABLE CUSTOM CARDS\n${opts.availableCards}`);
   if (opts.currentYaml?.trim()) {
     parts.push(
       `CURRENT DASHBOARD YAML (edit this; keep what the user did not ask to change)\n\`\`\`yaml\n${opts.currentYaml.trim()}\n\`\`\``,
     );
   }
+  if (opts.lint?.trim()) parts.push(opts.lint.trim());
   parts.push(`USER REQUEST\n${opts.request}`);
   return parts.join("\n\n");
 }

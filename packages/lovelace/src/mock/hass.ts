@@ -141,6 +141,8 @@ export interface EntityInventoryItem {
   unit?: string;
   area?: string;
   floor?: string;
+  /** Registry labels, which users apply to express cross-area grouping. */
+  labels?: string[];
 }
 
 /** Compact inventory handed to the LLM so it picks real entities. */
@@ -164,6 +166,7 @@ export function buildEntityInventory(
       unit: state.attributes.unit_of_measurement as string | undefined,
       area: area?.name,
       floor: floor?.name,
+      labels: reg?.labels?.length ? reg.labels : undefined,
     });
   }
   return out.sort((a, b) => a.entity_id.localeCompare(b.entity_id));

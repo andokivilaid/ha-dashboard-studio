@@ -108,24 +108,54 @@ export default function ConnectDocsPage() {
         </Trouble>
       </div>
 
-      <h2 className="mt-10 text-[1.15rem] font-semibold">What is read</h2>
-      <ul className="mt-2 space-y-1.5 text-[13.5px] leading-relaxed text-muted">
+      <h2 className="mt-10 text-[1.15rem] font-semibold">What is read, in order</h2>
+      <p className="mt-2 text-[13.5px] leading-relaxed text-muted">
+        After the websocket authenticates, the studio asks for the registries first — so that
+        names, areas, floors and labels resolve before anything is drawn — then the dashboard
+        layer.
+      </p>
+      <ol className="mt-3 space-y-2 text-[13.5px] leading-relaxed text-muted">
         <li>
-          <code>get_states</code>, <code>get_config</code>, <code>auth/current_user</code>
+          <strong className="text-[var(--ink)]">1. Registries.</strong>{" "}
+          <code>config/area_registry/list</code>, <code>config/floor_registry/list</code>,{" "}
+          <code>config/device_registry/list</code>, <code>config/entity_registry/list</code>,{" "}
+          <code>config/label_registry/list</code> — these give grouping and the names you chose,
+          rather than ours guessed from entity ids.
         </li>
         <li>
-          <code>config/entity_registry/list</code>, <code>config/device_registry/list</code>,{" "}
-          <code>config/area_registry/list</code>, <code>config/floor_registry/list</code>
-        </li>
-        <li>
-          <code>lovelace/dashboards/list</code>, <code>lovelace/config</code>,{" "}
-          <code>lovelace/resources</code>
-        </li>
-        <li>
+          <strong className="text-[var(--ink)]">2. State.</strong> <code>get_states</code>,{" "}
+          <code>get_config</code>, <code>auth/current_user</code>,{" "}
           <code>frontend/get_themes</code>, plus a <code>subscribe_entities</code> stream so the
-          preview stays live
+          preview keeps up.
         </li>
-      </ul>
+        <li>
+          <strong className="text-[var(--ink)]">3. Dashboards.</strong>{" "}
+          <code>lovelace/dashboards/list</code> and <code>lovelace/config</code>. The latter
+          returns the config together with a hash; the studio keeps the hash so it can tell you
+          the copy in the editor was taken at a point in time.
+        </li>
+        <li>
+          <strong className="text-[var(--ink)]">4. Resources.</strong>{" "}
+          <code>lovelace/resources</code> lists the HACS modules your instance has registered.
+          The builder uses it twice: to tell you which custom cards in a dashboard you actually
+          have, and to stop the AI generating a card you would have to install first.
+        </li>
+      </ol>
+
+      <div
+        className="hs-card mt-6 flex gap-3 p-4"
+        style={{ borderColor: "color-mix(in srgb, var(--ok) 40%, var(--line))" }}
+      >
+        <ShieldCheck size={18} aria-hidden style={{ color: "var(--ok)", flexShrink: 0, marginTop: 2 }} />
+        <div className="text-[13.5px] leading-relaxed">
+          <strong>Nothing is written, by any route.</strong> Not a service call, not a{" "}
+          <code>lovelace/config/save</code>, and never a direct edit of{" "}
+          <code>.storage/lovelace</code> — the studio has no filesystem access to your instance at
+          all, and the websocket allow-list refuses every write command before it is sent. An
+          imported dashboard is a copy in your browser; exporting it and pasting it in yourself is
+          the only way it reaches your instance.
+        </div>
+      </div>
     </div>
   );
 }

@@ -7,3 +7,5 @@ export * from "./format";
 export * from "./mock/index";
 export * from "./sample-dashboards";
 export * from "./synthesize";
+export * from "./resources";
+export * from "./lint";

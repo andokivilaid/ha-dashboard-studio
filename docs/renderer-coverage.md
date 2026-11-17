@@ -81,6 +81,22 @@ the config names that the demo home lacks:
   your instance's entity list is authoritative, and a missing entity there is
   information, not a gap to paper over.
 
+## Configuration rules checked
+
+`packages/lovelace/src/lint.ts`, reported under the editor and fed back to the
+model after a generation:
+
+| Rule | Severity | What it catches |
+|---|---|---|
+| `bubble-popup-last` | error | A Bubble Card pop-up with a visible card after it. Pop-ups must end the view's `cards:` list or they push the layout around. |
+| `bubble-popup-hash` | error | A pop-up with no `hash:` beginning with `#`. It is opened by navigating to that hash, so without one it can never open. |
+| `bubble-popup-in-section` | warning | A pop-up inside a section grid, where the section sizes it. |
+| `sections-view-empty` | error | `type: sections` with no `sections:`. |
+| `sections-view-loose-cards` | warning | Cards in a sections view's own `cards:` that are not pop-ups. |
+| `custom-card-unavailable` | error | A `custom:` card the target instance has not installed. |
+| `unknown-entity` | error | An entity id that is not in the inventory. |
+| `view-title` / `view-path` | info | A view with no title or no stable URL path. |
+
 ## Known limits
 
 - **Jinja templates are not evaluated.** No backend exists to evaluate them.

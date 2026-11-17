@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { extractYaml, stripYaml, DEFAULT_MODELS, PROVIDER_KEY_HELP } from "@/lib/ai/types";
 import {
   buildAreaBlock,
+  buildAvailableCardsBlock,
   buildGeneratorUserMessage,
   buildInventoryBlock,
   CRITIC_SYSTEM,
@@ -109,5 +110,64 @@ describe("provider defaults", () => {
   it("knows where to send users for a key", () => {
     expect(PROVIDER_KEY_HELP.anthropic.url).toMatch(/console\.anthropic\.com/);
     expect(PROVIDER_KEY_HELP.gemini.url).toMatch(/aistudio\.google\.com/);
+  });
+});
+
+describe("buildAvailableCardsBlock", () => {
+  it("says the vocabulary is the instance's in live mode", () => {
+    const out = buildAvailableCardsBlock(["mushroom-light-card", "bubble-card"], { live: true });
+    expect(out).toContain("Installed on this instance");
+    expect(out).toContain("custom:mushroom-light-card");
+  });
+
+  it("tells the model to stay native when nothing is installed", () => {
+    expect(buildAvailableCardsBlock([], { live: true })).toContain("built-in cards only");
+  });
+
+  it("describes mock mode as a preview capability", () => {
+    expect(buildAvailableCardsBlock(["bubble-card"])).toContain("Renderable in this preview");
+  });
+});
+
+describe("generator prompt — research-derived rules", () => {
+  it("teaches the Bubble Card pop-up constraints", () => {
+    expect(GENERATOR_SYSTEM).toMatch(/pop-ups must be the LAST entries/);
+    expect(GENERATOR_SYSTEM).toMatch(/hash:.*beginning with/);
+  });
+
+  it("requires custom cards to be confirmed available", () => {
+    expect(GENERATOR_SYSTEM).toMatch(/AVAILABLE CUSTOM CARDS/);
+    expect(GENERATOR_SYSTEM).toMatch(/Never assume a card is installed/);
+  });
+
+  it("asks for conditional badge visibility on aggregates", () => {
+    expect(GENERATOR_SYSTEM).toMatch(/visibility:/);
+  });
+
+  it("recommends auto-entities for self-healing lists", () => {
+    expect(GENERATOR_SYSTEM).toMatch(/auto-entities.*heal themselves/s);
+  });
+
+  it("prefers the user's own floor/area/label structure", () => {
+    expect(GENERATOR_SYSTEM).toMatch(/floor, then area, then registry labels/);
+  });
+});
+
+describe("inventory block — grouping signals", () => {
+  it("includes floor and labels when present", () => {
+    const block = buildInventoryBlock([
+      {
+        entity_id: "light.a",
+        name: "A",
+        domain: "light",
+        state: "on",
+        area: "Kitchen",
+        floor: "Ground floor",
+        labels: ["downstairs", "critical"],
+      },
+    ]);
+    expect(block).toContain("area=Kitchen");
+    expect(block).toContain("floor=Ground floor");
+    expect(block).toContain("labels=downstairs/critical");
   });
 });

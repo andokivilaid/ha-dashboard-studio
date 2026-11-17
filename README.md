@@ -125,9 +125,17 @@ areas and three floors, including climate, covers, media, cameras, scenes,
 helpers and deliberately noisy diagnostics so entity-filtering can be tested.
 
 **Live, read-only** — enter your instance URL and a long-lived access token and
-the builder connects *from your browser* over the websocket API, reads states,
-the entity/device/area/floor registries, your themes and your existing Lovelace
-dashboards, and renders them. See [Connecting a real Home
+the builder connects *from your browser* over the websocket API. It reads the
+area, floor, device, entity and **label** registries first, so grouping and
+names come from the structure you already maintain, then your states, themes
+and dashboards.
+
+It also reads `lovelace/resources`, which is what makes live mode more than a
+different set of entities: the studio knows which HACS cards your instance has
+actually installed. A dashboard of yours that uses a card the studio cannot
+draw is labelled as such rather than silently degraded, and the AI is told to
+use only the cards you have — so it does not hand you a config that needs three
+HACS installs before it renders. See [Connecting a real Home
 Assistant](#connecting-a-real-home-assistant).
 
 ### The AI loop
@@ -162,6 +170,20 @@ entity inventory  ──→  generate YAML  ──→  render
   browser is not available — and sends the PNG to a vision model together with
   the YAML. The critique and the exact image the model saw are both shown in
   the chat, so you can disagree with it.
+
+**Configuration linting runs alongside the visual check.** A screenshot cannot
+show that a Bubble Card pop-up has no `hash:` and will therefore never open,
+that pop-ups are not last in the view and are pushing the layout around, that a
+`custom:` card is not installed on the target instance, or that an entity id
+does not exist. Those are checked against the config and reported in the editor,
+and the failures are fed back to the model so it can correct them.
+
+**Configuration linting runs alongside the visual check.** A screenshot cannot
+show that a Bubble Card pop-up has no `hash:` and will therefore never open,
+that pop-ups are not last in the view and are pushing the layout around, that a
+`custom:` card is not installed on the target instance, or that an entity id
+does not exist. Those are checked against the config, reported under the
+editor, and fed back to the model so it can correct them.
 
 Every assistant and critic message carries a **Revert to this version** button.
 The flow is described in more detail in [docs/ai-builder.md](docs/ai-builder.md).
@@ -208,11 +230,17 @@ ha-dashboard-studio/
 │  ├─ types.ts                   the HomeAssistant / Lovelace data model
 │  ├─ yaml.ts                    tolerant parsing of HA's YAML dialect
 │  ├─ analyze.ts                 card/entity/style extraction
+│  ├─ synthesize.ts              state for entities only the author has
+│  ├─ lint.ts                    config rules a screenshot cannot catch
 │  ├─ registry.ts                the HACS bundle catalogue
+│  ├─ resources.ts               installed-on-instance vs renderable-here
 │  └─ mock/                      the deterministic demo home
 ├─ packages/lovelace-render/     React implementation of the HA card set
 └─ packages/catalog/             dashboards, schema, ingester, licence policy
 ```
+
+The design notes, including the websocket sequence and why live mode needs the
+resource list, are in [docs/architecture.md](docs/architecture.md).
 
 ### Why the HACS proxy exists
 
@@ -253,7 +281,7 @@ pnpm catalog:bundle
 
 ```bash
 pnpm typecheck     # tsc across all four packages
-pnpm test          # 194 unit tests (vitest)
+pnpm test          # 243 unit tests (vitest)
 pnpm build
 pnpm test:e2e      # Playwright, incl. visual snapshots
 ```
@@ -306,6 +334,28 @@ Being straight about what this is and is not:
 - **Custom cards you installed yourself are not fetched from your instance.**
   Doing so would mean authenticating to your instance for static assets from
   the browser. Only the bundled registry runs; everything else falls back.
+
+## Prior art
+
+[`homeassistant-ai/ha-mcp`](https://github.com/homeassistant-ai/ha-mcp) solves
+the adjacent problem — an MCP server that lets an agent *operate* a Home
+Assistant, dashboards included, with JSON-patch edits and `config_hash`
+optimistic concurrency. Reading it is what prompted three things here: the order
+the registries are fetched in, keeping the config hash on import even though
+this project never saves, and the rule that `.storage` is never touched
+directly. The studio deliberately stops where ha-mcp starts: it reads, renders
+and hands you YAML, and writing it back is yours to do.
+
+## Prior art
+
+[`homeassistant-ai/ha-mcp`](https://github.com/homeassistant-ai/ha-mcp) solves
+the adjacent problem — an MCP server that lets an agent *operate* a Home
+Assistant, dashboards included, with JSON-patch edits and `config_hash`
+optimistic concurrency. Reading it prompted three things here: the order the
+registries are fetched in, keeping the config hash on import even though this
+project never saves, and the rule that `.storage` is never touched directly.
+The studio deliberately stops where ha-mcp starts: it reads, renders and hands
+you YAML, and writing it back is yours to do.
 
 ## Credits and licensing
 

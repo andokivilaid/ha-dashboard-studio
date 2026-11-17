@@ -8,6 +8,7 @@ import {
   type HassEntities,
 } from "home-assistant-js-websocket";
 import {
+  describeResources,
   formatEntityState,
   type AreaRegistryEntry,
   type DeviceRegistryEntry,
@@ -15,7 +16,9 @@ import {
   type FloorRegistryEntry,
   type HassEntity,
   type HomeAssistant,
+  type InstalledResource,
   type LovelaceConfig,
+  type LovelaceResourceConfig,
 } from "@ha-studio/lovelace";
 
 export interface HaCredentials {
@@ -87,10 +90,21 @@ export interface HaDashboardSummary {
   mode: string;
 }
 
+export interface LabelRegistryEntry {
+  label_id: string;
+  name: string;
+  icon: string | null;
+  color: string | null;
+  description: string | null;
+}
+
 export interface LiveHaSession {
   connection: Connection;
   hass: HomeAssistant;
   dashboards: HaDashboardSummary[];
+  /** HACS modules the instance has registered, reconciled with our registry. */
+  resources: InstalledResource[];
+  labels: LabelRegistryEntry[];
   close: () => void;
 }
 
@@ -130,7 +144,9 @@ export async function connectToHomeAssistant(
 
   const connection = await createConnection({ auth });
 
-  const [states, config, user, entityList, deviceList, areaList, floorList, themes] =
+  // Order mirrors what the frontend itself asks for after auth: the
+  // registries first, so names and grouping resolve, then the dashboard layer.
+  const [states, config, user, entityList, deviceList, areaList, floorList, labelList, themes] =
     await Promise.all([
       guardedSend<HassEntities>(connection, { type: "get_states" }).catch(() => ({}) as HassEntities),
       guardedSend<Record<string, unknown>>(connection, { type: "get_config" }),
@@ -147,14 +163,23 @@ export async function connectToHomeAssistant(
       guardedSend<FloorRegistryEntry[]>(connection, { type: "config/floor_registry/list" }).catch(
         () => [],
       ),
+      guardedSend<LabelRegistryEntry[]>(connection, { type: "config/label_registry/list" }).catch(
+        () => [],
+      ),
       guardedSend<Record<string, unknown>>(connection, { type: "frontend/get_themes" }).catch(
         () => ({}),
       ),
     ]);
 
-  const dashboards = await guardedSend<HaDashboardSummary[]>(connection, {
-    type: "lovelace/dashboards/list",
-  }).catch(() => [] as HaDashboardSummary[]);
+  const [dashboards, rawResources] = await Promise.all([
+    guardedSend<HaDashboardSummary[]>(connection, { type: "lovelace/dashboards/list" }).catch(
+      () => [] as HaDashboardSummary[],
+    ),
+    guardedSend<LovelaceResourceConfig[]>(connection, { type: "lovelace/resources" }).catch(
+      () => [] as LovelaceResourceConfig[],
+    ),
+  ]);
+  const resources = describeResources(rawResources ?? []);
 
   const refuse = (what: string) => Promise.reject(new ReadOnlyViolation(what));
 
@@ -225,6 +250,8 @@ export async function connectToHomeAssistant(
     connection,
     hass,
     dashboards: dashboards ?? [],
+    resources,
+    labels: labelList ?? [],
     close: () => {
       unsubscribe?.();
       connection.close();
@@ -232,21 +259,43 @@ export async function connectToHomeAssistant(
   };
 }
 
+export interface FetchedLovelaceConfig {
+  config: LovelaceConfig;
+  /**
+   * Home Assistant returns a hash alongside the config, which its own frontend
+   * uses for optimistic-concurrency on save. The studio never saves, but the
+   * hash still tells us whether the dashboard changed after we imported it, so
+   * the UI can say "this is a copy taken at a point in time" with evidence
+   * rather than hope.
+   */
+  hash: string | null;
+  fetchedAt: string;
+}
+
 /** Fetches one of the user's existing Lovelace dashboards, read-only. */
 export async function fetchLovelaceConfig(
   connection: Connection,
   urlPath: string | null,
-): Promise<LovelaceConfig> {
-  return guardedSend<LovelaceConfig>(connection, {
-    type: "lovelace/config",
-    url_path: urlPath,
-  });
+): Promise<FetchedLovelaceConfig> {
+  const raw = await guardedSend<LovelaceConfig & { hash?: string; config?: LovelaceConfig }>(
+    connection,
+    { type: "lovelace/config", url_path: urlPath },
+  );
+  // Depending on version, HA answers either with the config itself or with
+  // `{config, hash}`. Accept both rather than guessing from the version string.
+  const nested = raw && typeof raw === "object" && "config" in raw ? raw.config : undefined;
+  return {
+    config: (nested ?? raw) as LovelaceConfig,
+    hash: typeof raw?.hash === "string" ? raw.hash : null,
+    fetchedAt: new Date().toISOString(),
+  };
 }
 
-export async function fetchLovelaceResources(
+/** Re-reads the hash only, to detect drift since an import. */
+export async function lovelaceConfigHash(
   connection: Connection,
-): Promise<Array<{ url: string; type: string }>> {
-  return guardedSend<Array<{ url: string; type: string }>>(connection, {
-    type: "lovelace/resources",
-  }).catch(() => []);
+  urlPath: string | null,
+): Promise<string | null> {
+  const { hash } = await fetchLovelaceConfig(connection, urlPath);
+  return hash;
 }
