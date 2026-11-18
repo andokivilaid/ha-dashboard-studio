@@ -313,3 +313,58 @@ test.describe("configuration linting", () => {
     );
   });
 });
+
+test.describe("resizable panes", () => {
+  test("the chat panel and YAML editor resize by drag and keyboard, and persist", async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/builder");
+    const chat = page.getByTestId("chat-pane");
+    const editor = page.getByTestId("editor-pane");
+    await expect(chat).toBeVisible();
+    const chatBefore = (await chat.boundingBox())!.width;
+    const editorBefore = (await editor.boundingBox())!.height;
+
+    // Drag the chat edge 150px right.
+    const v = (await page.getByTestId("chat-splitter").boundingBox())!;
+    await page.mouse.move(v.x + v.width / 2, v.y + 200);
+    await page.mouse.down();
+    await page.mouse.move(v.x + v.width / 2 + 150, v.y + 200, { steps: 8 });
+    await page.mouse.up();
+    await expect.poll(async () => (await chat.boundingBox())!.width).toBeGreaterThan(chatBefore + 120);
+
+    // Drag the editor edge 120px up.
+    const h = (await page.getByTestId("editor-splitter").boundingBox())!;
+    await page.mouse.move(h.x + 300, h.y + h.height / 2);
+    await page.mouse.down();
+    await page.mouse.move(h.x + 300, h.y + h.height / 2 - 120, { steps: 8 });
+    await page.mouse.up();
+    await expect.poll(async () => (await editor.boundingBox())!.height).toBeGreaterThan(editorBefore + 90);
+
+    // Keyboard: Home shrinks the chat to its minimum.
+    await page.getByTestId("chat-splitter").focus();
+    await page.keyboard.press("Home");
+    await expect(page.getByTestId("chat-splitter")).toHaveAttribute("aria-valuenow", "280");
+
+    // Sizes survive a reload.
+    const editorAfter = (await editor.boundingBox())!.height;
+    await page.reload();
+    await expect.poll(async () => (await chat.boundingBox())!.width).toBeLessThan(chatBefore - 60);
+    await expect.poll(async () => Math.abs((await editor.boundingBox())!.height - editorAfter)).toBeLessThan(4);
+
+    // Double-click restores the default.
+    await page.getByTestId("chat-splitter").dblclick();
+    await expect(page.getByTestId("chat-splitter")).toHaveAttribute("aria-valuenow", "380");
+  });
+
+  test("the preview always keeps room when the editor is dragged to the top", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 800 });
+    await page.goto("/builder");
+    const h = (await page.getByTestId("editor-splitter").boundingBox())!;
+    await page.mouse.move(h.x + 300, h.y + 4);
+    await page.mouse.down();
+    await page.mouse.move(h.x + 300, 0, { steps: 10 });
+    await page.mouse.up();
+    const preview = (await page.getByTestId("preview-pane").boundingBox())!;
+    expect(preview.height).toBeGreaterThanOrEqual(150);
+  });
+});

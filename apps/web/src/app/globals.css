@@ -123,6 +123,30 @@ body {
 
 @layer components {
 
+  /* Pane resize handles: an 8px hit area centred on the 1px border, with a
+     visible accent line on hover, focus and drag. */
+  .hs-splitter {
+    position: absolute;
+    z-index: 20;
+    touch-action: none;
+    outline: none;
+  }
+  .hs-splitter--v { top: 0; bottom: 0; right: -4px; width: 8px; cursor: col-resize; }
+  .hs-splitter--h { left: 0; right: 0; top: -4px; height: 8px; cursor: row-resize; }
+  .hs-splitter::after {
+    content: "";
+    position: absolute;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 120ms ease;
+  }
+  .hs-splitter--v::after { top: 0; bottom: 0; left: 3px; width: 2px; }
+  .hs-splitter--h::after { left: 0; right: 0; top: 3px; height: 2px; }
+  .hs-splitter:hover::after,
+  .hs-splitter:focus-visible::after,
+  .hs-splitter[data-active]::after { opacity: 1; }
+  .hs-splitter:focus-visible::after { box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 35%, transparent); }
+
 
   .hs-nav {
     position: sticky;

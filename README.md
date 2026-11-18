@@ -118,6 +118,11 @@ A three-pane workspace: chat on the left, live render in the middle, YAML
 editor below. Everything is driven by the same renderer the gallery uses, so
 what you see is what a real instance would show.
 
+The chat panel and the YAML editor are resizable: drag their edge, or focus the
+handle and use the arrow keys (Shift for bigger steps, Home/End for the limits,
+Enter or double-click to reset). Sizes are remembered per browser, and the
+preview always keeps at least 160px of height.
+
 ### Two data modes
 
 **Mock** (default) — a deterministic demo home with 120+ entities across nine
@@ -337,17 +342,6 @@ Being straight about what this is and is not:
 - **Custom cards you installed yourself are not fetched from your instance.**
   Doing so would mean authenticating to your instance for static assets from
   the browser. Only the bundled registry runs; everything else falls back.
-
-## Prior art
-
-[`homeassistant-ai/ha-mcp`](https://github.com/homeassistant-ai/ha-mcp) solves
-the adjacent problem — an MCP server that lets an agent *operate* a Home
-Assistant, dashboards included, with JSON-patch edits and `config_hash`
-optimistic concurrency. Reading it is what prompted three things here: the order
-the registries are fetched in, keeping the config hash on import even though
-this project never saves, and the rule that `.storage` is never touched
-directly. The studio deliberately stops where ha-mcp starts: it reads, renders
-and hands you YAML, and writing it back is yours to do.
 
 ## Prior art
 

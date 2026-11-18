@@ -34,6 +34,7 @@ import {
 import { DashboardRenderer, type CardPath } from "@ha-studio/lovelace-render";
 import { YamlEditor } from "./yaml-editor";
 import { LintBar } from "./lint-bar";
+import { Splitter, usePersistedSize } from "./splitter";
 import { ChatPanel, type ChatMessage } from "./chat-panel";
 import { ConnectDialog } from "./connect-dialog";
 import { SettingsDialog } from "./settings-dialog";
@@ -66,6 +67,14 @@ type DeviceId = (typeof DEVICES)[number]["id"];
 let messageSeq = 0;
 const nextId = () => `m${++messageSeq}`;
 
+/** Pane limits (px). The preview always keeps at least PREVIEW_MIN of height. */
+const CHAT_DEFAULT = 380;
+const CHAT_MIN = 280;
+const CHAT_MAX = 760;
+const EDITOR_DEFAULT = 320;
+const EDITOR_MIN = 120;
+const PREVIEW_MIN = 160;
+
 export function BuilderApp({
   initialYaml,
   initialTitle,
@@ -80,6 +89,9 @@ export function BuilderApp({
   const [viewIndex, setViewIndex] = useState(0);
   const [showEditor, setShowEditor] = useState(true);
   const [showChat, setShowChat] = useState(true);
+  const [chatWidth, setChatWidth] = usePersistedSize("hs.builder.chatWidth", CHAT_DEFAULT);
+  const [editorHeight, setEditorHeight] = usePersistedSize("hs.builder.editorHeight", EDITOR_DEFAULT);
+  const rightPaneRef = useRef<HTMLDivElement>(null);
   const [selected, setSelected] = useState<CardPath | null>(null);
   const [copied, setCopied] = useState(false);
 
@@ -517,10 +529,25 @@ export function BuilderApp({
 
       {/* ------------------------------ Panes ------------------------------ */}
       <div className="grid min-h-0 flex-1 lg:grid-cols-[var(--chat)_minmax(0,1fr)]"
-        style={{ ["--chat" as string]: showChat ? "380px" : "0px" } as never}
+        style={{ ["--chat" as string]: showChat ? `min(${chatWidth}px, 60vw)` : "0px" } as never}
       >
         {showChat ? (
-          <aside className="min-h-0 border-b lg:border-b-0 lg:border-r" style={{ height: "calc(100vh - 7.5rem)" }}>
+          <aside
+            className="relative min-h-0 border-b lg:border-b-0 lg:border-r"
+            style={{ height: "calc(100vh - 7.5rem)" }}
+            data-testid="chat-pane"
+          >
+            <Splitter
+              orientation="vertical"
+              label="Resize chat panel"
+              value={chatWidth}
+              min={CHAT_MIN}
+              max={() => Math.min(CHAT_MAX, window.innerWidth * 0.6)}
+              defaultValue={CHAT_DEFAULT}
+              onChange={setChatWidth}
+              className="hidden lg:block"
+              testId="chat-splitter"
+            />
             <ChatPanel
               messages={messages}
               input={input}
@@ -540,8 +567,16 @@ export function BuilderApp({
         ) : null}
 
         <div
+          ref={rightPaneRef}
           className="grid min-h-0 grid-rows-[minmax(0,1fr)] lg:grid-rows-[minmax(0,1fr)_var(--editor)]"
-          style={{ ["--editor" as string]: showEditor ? "min(38vh, 360px)" : "0px", height: "calc(100vh - 7.5rem)" } as never}
+          style={
+            {
+              ["--editor" as string]: showEditor
+                ? `min(${editorHeight}px, calc(100% - ${PREVIEW_MIN}px))`
+                : "0px",
+              height: "calc(100vh - 7.5rem)",
+            } as never
+          }
         >
           <section
             className="min-h-0 overflow-auto"
@@ -576,7 +611,22 @@ export function BuilderApp({
           </section>
 
           {showEditor ? (
-            <section className="grid min-h-0 grid-rows-[minmax(0,1fr)_auto] border-t">
+            <section
+              className="relative grid min-h-0 grid-rows-[minmax(0,1fr)_auto] border-t"
+              data-testid="editor-pane"
+            >
+              <Splitter
+                orientation="horizontal"
+                invert
+                label="Resize YAML editor"
+                value={editorHeight}
+                min={EDITOR_MIN}
+                max={() => (rightPaneRef.current?.clientHeight ?? 800) - PREVIEW_MIN}
+                defaultValue={EDITOR_DEFAULT}
+                onChange={setEditorHeight}
+                className="hidden lg:block"
+                testId="editor-splitter"
+              />
               <YamlEditor value={yaml} onChange={setYaml} />
               <LintBar issues={lint} />
             </section>
